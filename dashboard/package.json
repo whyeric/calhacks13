@@ -1,0 +1,24 @@
+{
+  "name": "errand-line-data",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "convex dev",
+    "codegen": "convex codegen --typecheck disable",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "deploy": "convex deploy"
+  },
+  "dependencies": {
+    "convex": "^1.31.0"
+  },
+  "devDependencies": {
+    "@edge-runtime/vm": "^5.0.0",
+    "@types/node": "^22.0.0",
+    "convex-test": "^0.0.65",
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.0",
+    "vitest": "^5.0.5"
+  }
+}

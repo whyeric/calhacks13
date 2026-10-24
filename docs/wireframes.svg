@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1320" viewBox="0 0 1920 1320">
+<rect width="1920" height="1320" fill="#f1f4f2"/>
+<style>text{font-family:Arial,sans-serif;fill:#17372e}.title{font-size:30px;font-weight:700}.body{font-size:18px}.muted{font-size:16px;fill:#576b64}</style>
+<text x="48" y="52" class="title">Errand Line / Family dashboard wireframes</text>
+<text x="48" y="83" class="muted">Phase 0 design draft · fictional sample data · import into Figma and share before #86</text>
+<g id="live-calls">
+<rect x="48" y="116" width="592" height="432" rx="12" fill="white" stroke="#bac9c1"/>
+<rect x="48" y="116" width="592" height="58" rx="12" fill="#173f34"/>
+<text x="72" y="154" font-family="Arial" font-size="24" font-weight="700" style="fill:white">Live calls</text>
+<text x="72" y="216" font-family="Arial" font-size="22" font-weight="700">Margaret · connected</text>
+<text x="72" y="261" class="body">AI phone assistant / caller identity</text>
+<text x="72" y="304" class="body">Margaret: I need paper towels and my coffee.</text>
+<text x="72" y="347" class="body">Errand Line: Your usual medium roast?</text>
+<text x="72" y="390" class="body">Transcript sharing: off for chat-only calls</text>
+<text x="72" y="433" class="body">Scam check: clear    Response time: 720 ms</text>
+<rect x="72" y="482" width="544" height="42" rx="6" fill="#e9f1ec"/>
+<text x="88" y="509" class="body">Live transcript · seed data only</text>
+</g>
+<g id="orders">
+<rect x="664" y="116" width="592" height="432" rx="12" fill="white" stroke="#bac9c1"/>
+<rect x="664" y="116" width="592" height="58" rx="12" fill="#173f34"/>
+<text x="688" y="154" font-family="Arial" font-size="24" font-weight="700" style="fill:white">Orders</text>
+<text x="688" y="216" font-family="Arial" font-size="22" font-weight="700">Order history</text>
+<text x="688" y="261" class="body">Paper towels + coffee</text>
+<text x="688" y="304" class="body">$21.45    Walmart    Paid</text>
+<text x="688" y="347" class="body">Today, 10:24 AM</text>
+<text x="688" y="390" class="body">Items, quantities, prices and delivery address</text>
+<text x="688" y="433" class="body">Status history and payment reference</text>
+<rect x="688" y="482" width="544" height="42" rx="6" fill="#e9f1ec"/>
+<text x="704" y="509" class="body">Select an order to inspect details</text>
+</g>
+<g id="alerts">
+<rect x="1280" y="116" width="592" height="432" rx="12" fill="white" stroke="#bac9c1"/>
+<rect x="1280" y="116" width="592" height="58" rx="12" fill="#173f34"/>
+<text x="1304" y="154" font-family="Arial" font-size="24" font-weight="700" style="fill:white">Alerts</text>
+<text x="1304" y="216" font-family="Arial" font-size="22" font-weight="700">Family notifications</text>
+<text x="1304" y="261" class="body">SCAM · Gift card request blocked</text>
+<text x="1304" y="304" class="body">Excerpt: Someone said I need gift cards.</text>
+<text x="1304" y="347" class="body">Call to Dana: answered</text>
+<text x="1304" y="390" class="body">WELLBEING · Please call Margaret</text>
+<text x="1304" y="433" class="body">Call to Dana: no answer · still open</text>
+<rect x="1304" y="482" width="544" height="42" rx="6" fill="#e9f1ec"/>
+<text x="1320" y="509" class="body">Acknowledge alert</text>
+</g>
+<g id="approvals">
+<rect x="48" y="580" width="592" height="432" rx="12" fill="white" stroke="#bac9c1"/>
+<rect x="48" y="580" width="592" height="58" rx="12" fill="#173f34"/>
+<text x="72" y="618" font-family="Arial" font-size="24" font-weight="700" style="fill:white">Approvals</text>
+<text x="72" y="680" font-family="Arial" font-size="22" font-weight="700">One order needs a decision</text>
+<text x="72" y="725" class="body">Big pack of paper towels · $62.00</text>
+<text x="72" y="768" class="body">Exceeds the $50 per-order limit</text>
+<text x="72" y="811" class="body">Family alert call: ringing</text>
+<text x="72" y="854" class="body">First dashboard or spoken response wins</text>
+<text x="72" y="897" class="body">Recent: Dana approved at 10:21 AM</text>
+<rect x="72" y="946" width="544" height="42" rx="6" fill="#e9f1ec"/>
+<text x="88" y="973" class="body">Approve       Decline</text>
+</g>
+<g id="memory">
+<rect x="664" y="580" width="592" height="432" rx="12" fill="white" stroke="#bac9c1"/>
+<rect x="664" y="580" width="592" height="58" rx="12" fill="#173f34"/>
+<text x="688" y="618" font-family="Arial" font-size="24" font-weight="700" style="fill:white">Memory</text>
+<text x="688" y="680" font-family="Arial" font-size="22" font-weight="700">What Errand Line remembers</text>
+<text x="688" y="725" class="body">Lily had a piano recital on Saturday</text>
+<text x="688" y="768" class="body">Evidence: “Lily has her piano recital Saturday.”</text>
+<text x="688" y="811" class="body">Source: seeded call · View evidence</text>
+<text x="688" y="854" class="body">Follow-up: How did the recital go?</text>
+<text x="688" y="897" class="body">Tyler is at college in Ohio · Family fact</text>
+<rect x="688" y="946" width="544" height="42" rx="6" fill="#e9f1ec"/>
+<text x="704" y="973" class="body">View source       Forget fact</text>
+</g>
+<g id="settings">
+<rect x="1280" y="580" width="592" height="432" rx="12" fill="white" stroke="#bac9c1"/>
+<rect x="1280" y="580" width="592" height="58" rx="12" fill="#173f34"/>
+<text x="1304" y="618" font-family="Arial" font-size="24" font-weight="700" style="fill:white">Settings</text>
+<text x="1304" y="680" font-family="Arial" font-size="22" font-weight="700">Family choices</text>
+<text x="1304" y="725" class="body">Per-order limit: $50     Monthly budget: $200</text>
+<text x="1304" y="768" class="body">Approved store: Walmart</text>
+<text x="1304" y="811" class="body">Favorites: usual medium-roast coffee</text>
+<text x="1304" y="854" class="body">Family contact: Dana · daughter</text>
+<text x="1304" y="897" class="body">Chat sharing: off     Mood sharing: off</text>
+<rect x="1304" y="946" width="544" height="42" rx="6" fill="#e9f1ec"/>
+<text x="1320" y="973" class="body">Save changes for the next order</text>
+</g>
+<g id="developer-panel"><rect x="48" y="1060" width="1824" height="212" rx="12" fill="white" stroke="#bac9c1"/>
+<text x="72" y="1104" class="title">Developer panel / Latency and cost</text>
+<text x="72" y="1148" class="body">Voice-to-voice p50</text>
+<text x="72" y="1190" class="title">720 ms</text>
+<text x="72" y="1225" class="muted">Target ≤ 800 ms</text>
+<text x="520" y="1148" class="body">Voice-to-voice p95</text>
+<text x="520" y="1190" class="title">1.3 s</text>
+<text x="520" y="1225" class="muted">Target ≤ 1.5 s</text>
+<text x="968" y="1148" class="body">First-turn cache hit</text>
+<text x="968" y="1190" class="title">96%</text>
+<text x="968" y="1225" class="muted">Target ≥ 95%</text>
+<text x="1416" y="1148" class="body">Claude cost per call</text>
+<text x="1416" y="1190" class="title">$0.03</text>
+<text x="1416" y="1225" class="muted">Target ≤ $0.05</text>
+<text x="72" y="1252" class="muted">Illustrative values only · stage timings, sample counts and per-call usage appear in the expanded view</text></g></svg>
