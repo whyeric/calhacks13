@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Status** | Draft v2.2, for team review |
+| **Status** | Draft v2.3, for team review |
 | **Event** | Cal Hacks 13.0 · submission due Sun Oct 25, 2026, 09:00 PT |
 | **Branch** | `errand-line` |
 | **Last updated** | Fri Oct 23, 2026 |
@@ -14,8 +14,10 @@
 - We self-host the Line SDK agent and call Claude through the Anthropic Python SDK. Line's `LlmAgent` routes through LiteLLM, and Cartesia's Managed Agents don't let us build the Claude request, so neither one gives us the caching and pre-warm that latency and cost depend on.
 - The agent reaches Convex only through authenticated HTTP actions. Money and memory run in internal functions, and `place_order` is transactional and idempotent.
 - The dashboard runs on Vercel, with sign-in checked inside Convex.
-- Margaret's line is a free Cartesia number, and family alerts are outbound calls from a small Cartesia agent. Texts are optional (P1), because US carriers block texts from unregistered senders. Twilio is needed only for optional texts and harness calls (§10.6).
+- Margaret's line is a free Cartesia number, and family alerts are outbound calls from a small Cartesia agent. Twilio is needed only for optional voice harness calls (§16.3).
 - Four human acceptance gates, one at the end of each build phase, with real-phone tests and recorded results (§19.4).
+
+**New in v2.3:** family notifications use calls and the dashboard. SMS alerts and text-message approvals are outside the prototype scope, including stretch goals.
 
 ## Contents
 
@@ -198,7 +200,6 @@ These personas are illustrative. The family member is the buyer and the caller i
 3. A spoken PIN for calls from new numbers.
 4. Spanish, through a handoff to a Spanish-speaking agent.
 5. Price compare across two stores.
-6. **Texts (optional).** Text alerts and YES/NO approvals as well as calls (APR-5). Build this only if a team member already has a registered sender (§10.6). Otherwise it waits until after the hackathon.
 
 **P2:**
 - More stores and delivery tracking.
@@ -288,7 +289,6 @@ All requirements are P0 unless marked otherwise. Each feature lists the tests in
 | APR-2 | Call each family contact (§10.6). The alert call states the items, the total and the limit it breaks, then asks for a spoken yes or no. The dashboard shows Approve and Decline buttons. |
 | APR-3 | The first response wins, and the order records who approved it. |
 | APR-4 | **Approved:** pay, then confirm to the caller. **Declined:** tell the caller kindly. Whether the caller holds or gets a call back is an open question (§21). |
-| APR-5 *(P1, optional)* | With a registered sender, also text the request with "Reply YES to approve or NO to decline" and a dashboard link. |
 
 **Tests:** T3.
 
@@ -396,7 +396,7 @@ The household memory block comes after the static sections. Nothing that changes
 | Payments | Visa Intelligent Commerce sandbox | Pays with an agent token, called from a Convex action. **Fallback:** Capital One Nessie, or a mock with the same limits |
 | Database and functions | Convex | Stores the nine tables (§13), runs `place_order` and serves reactive queries. Money and memory logic are internal functions (§10.6) |
 | Family dashboard | Next.js on Vercel + Convex, Clerk sign-in | Live feed, approvals, memory and settings |
-| Family alerts | Alert agent: a Cartesia Managed Agent that places outbound calls | Reads the alert, takes a spoken yes or no on approvals, and can transfer the family member to the caller. **Optional (P1):** Twilio texts |
+| Family alerts | Alert agent: a Cartesia Managed Agent that places outbound calls | Reads the alert, takes a spoken yes or no on approvals, and can transfer the family member to the caller |
 | Test calls | Twilio (optional) | Harness calls that play recorded caller audio to our number (§16.3) |
 
 ```
@@ -481,7 +481,7 @@ SPEC.md
 | Voice agent | One always-on container in a US region: Fly.io (one machine, auto-stop off) or a DigitalOcean droplet behind Caddy for TLS. Registered with Cartesia as the agent's `self_hosted_deployment_url` | It holds per-call state and a live connection for the whole call, so it can't be serverless. One warm process reuses connections to Claude and Convex (§12.3) |
 | Convex | Convex Cloud (one production deployment, one dev deployment per person) | Managed. HTTP actions are served at the deployment's `.convex.site` URL |
 | Dashboard | Vercel | Standard Next.js + Convex deploy. Preview URLs for design review |
-| Speech, phone number and alert calls | Cartesia | Managed. Twilio only for optional texts and harness calls |
+| Speech, phone number and alert calls | Cartesia | Managed. Twilio only for optional voice harness calls |
 
 **Why we call Claude ourselves.** The latency and cost design (§11.3, §12.3) depends on exact control of each Claude request: `cache_control` breakpoints, the `max_tokens: 0` pre-warm with matching thinking and effort settings, passing thinking blocks back unchanged, and handling `stop_reason: "refusal"`.
 - Line's `LlmAgent` routes requests through LiteLLM. We'd be relying on LiteLLM to pass all of this through correctly for a model released on Oct 7.
@@ -500,7 +500,6 @@ Anyone with a Convex deployment URL can call its public functions, and that URL 
 |---|---|---|
 | Agent → Convex | HTTP actions in `convex/http.ts`: `/agent/household`, `/agent/turn`, `/agent/order`, `/agent/forget`, `/agent/alert`, `/agent/call-end`. Each one calls an `internal.*` function | `Authorization: Bearer <AGENT_SECRET>`, compared in constant time. Anything else gets a 401 |
 | Alert agent → Convex | `/alert/decision`, called by the alert agent's webhook tool with the family member's yes or no | `Authorization: Bearer <ALERT_SECRET>`, stored as a secret on the webhook tool. It is separate from `AGENT_SECRET`, so the alert agent can record decisions and do nothing else |
-| Twilio → Convex *(optional)* | `/twilio/sms` (YES/NO replies, APR-5) | Twilio request signature (HMAC-SHA1 with the auth token), checked before any write |
 | Dashboard → Convex | Public queries and mutations | Every function checks `ctx.auth.getUserIdentity()` against the household's family contacts. Proposed provider: Clerk, through Convex's Clerk integration. A gate in Next.js alone doesn't protect the data, because the browser calls Convex directly |
 
 **`place_order` shape.** `place_order` is an internal action with three steps:
@@ -518,21 +517,20 @@ The agent sends an idempotency key, `callId:toolUseId`. A retried request return
 - It doesn't need Claude's prompt caching, so a managed agent is enough here. Use Claude if Cartesia's managed catalog offers it (§21).
 - The ring timeout is configurable from 5 to 80 seconds. An unanswered call leaves the alert open on the dashboard, and the approval timeout (§21) decides what the caller hears.
 
-| Alert type | Weekend channel | With optional texts (P1) |
-|---|---|---|
-| `scam`, `wellbeing` | Alert call right away, plus the dashboard | Also a text |
-| `approval_needed` | Alert call with a spoken yes or no, plus the dashboard buttons | Also a text with YES/NO reply |
-| `connect_nudge` | Alert call | A text instead of a call |
-| `order_placed`, `payment_failed` | Dashboard only | A text |
-
-**Texts are optional.** US carriers block every text from a local number that isn't attached to an approved A2P 10DLC campaign (Twilio error 30034), and registration takes days. We build texts (APR-5) only if a team member already has an approved campaign or a verified toll-free number. Nothing in the demo depends on them.
+| Alert type | Prototype channel |
+|---|---|
+| `scam`, `wellbeing` | Alert call right away, plus the dashboard |
+| `approval_needed` | Alert call with a spoken yes or no, plus the dashboard buttons |
+| `connect_nudge` | Alert call |
+| `order_placed`, `payment_failed` | Dashboard only |
 
 ### 10.7 Secrets and configuration
 
 | Where | Variables |
 |---|---|
 | Agent host | `ANTHROPIC_API_KEY`, `CARTESIA_API_KEY`, `APIFY_TOKEN`, `CONVEX_SITE_URL`, `AGENT_SECRET` |
-| Convex environment | `ANTHROPIC_API_KEY`, `AGENT_SECRET`, `ALERT_SECRET`, `CARTESIA_API_KEY`, `ALERT_AGENT_ID`, `ALERT_FROM_NUMBER_ID`, Visa sandbox credentials, the Clerk issuer domain. Optional texts: `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_FROM` |
+| Convex environment | `ANTHROPIC_API_KEY`, `AGENT_SECRET`, `ALERT_SECRET`, `CARTESIA_API_KEY`, `ALERT_AGENT_ID`, `ALERT_FROM_NUMBER_ID`, Visa sandbox credentials, the Clerk issuer domain |
+| Optional voice-call harness | `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_FROM` |
 | Cartesia (alert agent's webhook tool) | `ALERT_SECRET`, stored as a tool secret |
 | Vercel | `NEXT_PUBLIC_CONVEX_URL` and the Clerk keys |
 | Both Claude call sites | `CLAUDE_MODEL_*` and `CLAUDE_EFFORT_*` per role (conversation, scam, memory), defaulting to `claude-haiku-5-5` and the efforts in §12.4. The escalation rule then becomes a config change, not a code change |
@@ -749,7 +747,7 @@ All tables live in Convex. Money is stored as integer cents, phone numbers in E.
 | `calls.outcome` | `ordered` · `awaiting_approval` · `declined_scam` · `no_order` · `unknown_caller` |
 | `orders.status` | `pending` → `awaiting_approval` → `approved` / `declined` → `paid` / `failed` |
 | `alerts.type` | `scam` · `approval_needed` · `order_placed` · `payment_failed` · `wellbeing` · `connect_nudge` |
-| `alerts.channel` | `call` · `dashboard` · `sms` (optional) |
+| `alerts.channel` | `call` · `dashboard` |
 | `alerts.delivery` | `queued` · `ringing` · `answered` · `no_answer` · `sent` · `failed` |
 | `alerts.decision` | `approved` · `declined` (approval calls only) |
 | `memory_facts.status` | `active` · `superseded` · `forgotten` |
@@ -792,7 +790,7 @@ Chat privacy never hides a scam: scam alerts and their excerpts always go to the
 
 ### 14.6 Data handling
 - API keys live in environment variables on the agent host and Vercel, and in Convex environment settings (§10.7). They never go in the repo.
-- Requests to Convex from the agent and from the alert agent carry separate shared secrets. Twilio signatures are verified if optional texts are on (§10.6).
+- Requests to Convex from the agent and from the alert agent carry separate shared secrets (§10.6).
 - This weekend uses seeded demo data only, with no real older adults' data.
 - The retention policy for transcripts and memory is an open question (§21).
 
@@ -879,7 +877,7 @@ These calls are both test cases and the demo script. Prices are demo data from t
 - **Margaret:** Not much. Dana's been so busy, I haven't heard from her in a while.
 - **Agent:** That sounds a bit lonely. Would you like me to let Dana know you'd love a call this week?
 - **Margaret:** That would be nice.
-- **Agent:** I'll send her a note. What else is on your mind today?
+- **Agent:** I'll give her a call. What else is on your mind today?
 - **Alert call to Dana:** "Hi Dana, it's Errand Line. Margaret called to chat today and said she'd love to hear from you this week."
 
 *Pass when:*
@@ -984,14 +982,14 @@ One project, entered for about a dozen prizes, with each sponsor doing a real jo
 |---|---|---|
 | **A. Voice and latency** | Person 1 | Self-hosted agent container and its Cartesia registration; the Cartesia number; speech rules and turn-taking; tool wiring; context builder, caching and pre-warm; turn timings; latency harness; end-of-turn tuning |
 | **B. Shopping and payment** | Person 2 | Apify search and cached fixtures; favorites; `place_order` (hard rule, limits, pay or approval); Visa sandbox with the fallback ready |
-| **C. Family app and data** | Person 3 | Figma screens; Convex schema and HTTP actions; Clerk sign-in; dashboard on Vercel (Live calls, Orders, Alerts, Approvals, Memory, Settings, latency panel); the alert agent and alert calls (approvals, nudges, scam and wellbeing alerts); optional texts (P1) |
+| **C. Family app and data** | Person 3 | Figma screens; Convex schema and HTTP actions; Clerk sign-in; dashboard on Vercel (Live calls, Orders, Alerts, Approvals, Memory, Settings, latency panel); the alert agent and alert calls (approvals, nudges, scam and wellbeing alerts) |
 | **D. Safety, memory and story** | Person 4 | Scam classifier, rules and ladder; memory writer and validation; forget flow; companion and wellbeing prompts; test scripts; pitch, slides, demo video, Devpost write-up |
 
 ### 19.2 Timeline (all times PT)
 
 | Phase | When | Deliverables | Checkpoint |
 |---|---|---|---|
-| **0. Foundations** | Fri 21:00 – Sat 01:00 | Accounts and keys (Cartesia, Anthropic, Apify, Visa, Convex, Vercel, Clerk; Twilio only if harness calls or texts need it); repo scaffold; Convex schema and authenticated HTTP actions; seeded household and memory; Cartesia number; agent container up over HTTPS and registered with Cartesia; the agent answers the phone; alert agent places a test call; Figma wireframes; sponsor questions settled (§21) | **Gate 1 (§19.4):** a call rings through to our self-hosted agent with caller ID, and a test alert call reaches Dana's phone |
+| **0. Foundations** | Fri 21:00 – Sat 01:00 | Accounts and keys (Cartesia, Anthropic, Apify, Visa, Convex, Vercel, Clerk; Twilio only for optional voice harness calls); repo scaffold; Convex schema and authenticated HTTP actions; seeded household and memory; Cartesia number; agent container up over HTTPS and registered with Cartesia; the agent answers the phone; alert agent places a test call; Figma wireframes; sponsor questions settled (§21) | **Gate 1 (§19.4):** a call rings through to our self-hosted agent with caller ID, and a test alert call reaches Dana's phone |
 | **1. Core loop** | Sat 01:00 – 12:00 | F1 with cached search; `place_order` with limits and sandbox or mock payment; memory read path with caching and pre-warm; templated opening; turn logging; dashboard Live calls and Orders | **Sat 09:00:** latency and cost baseline on Haiku 5.5 (§12.5). **Gate 2, Sat 12:00:** one order works start to finish, with the memory opener, and money moves only within limits |
 | **2. Safety and memory** | Sat 12:00 – 18:00 | Scam guard (hard rule, classifier, ladder, alerts); approvals by alert call and dashboard; memory writer and forget; companion behaviors and connect nudge; wellbeing protocol | **Gate 3, Sat 18:00:** every P0 feature exists; safety and memory pass human review; test sets run on Haiku, and the escalation rule (§12.4) is applied per role |
 | **3. Speed and polish** | Sat 18:00 – 22:00 | Latency tuned to targets; Memory and latency panels; Figma polish; first pass of the full test matrix; hosted deployment | **Gate 4, Sat 22:00:** the full demo works (Calls 1–3) on hosted infrastructure; deploy freeze |
@@ -1069,7 +1067,6 @@ When Gate 4 passes, the deploy freeze starts: only fixes for failed rows ship af
 | Visa sandbox access arrives late | Medium | High | Nessie or a mock with the same limits, built in parallel | B |
 | Caller ID doesn't reach our self-hosted agent on a Cartesia number, which breaks household lookup (VO-2) | Low | High | Verify Friday night (Gate 1); fall back to importing a Twilio number; backup video | A |
 | Family alert calls go unanswered or reach voicemail | Medium | Medium | Every alert also appears on the dashboard; try the next family contact; the approval timeout decides what the caller hears (§21) | C |
-| Texts are blocked because no one has a registered A2P 10DLC sender (Twilio 30034) | High | Low | Texts are optional (P1). The demo uses alert calls (§10.6) | C |
 | Our custom `Agent` mishandles Line's interruption events (barge-in keeps talking, or a cancelled Claude stream keeps running) | Medium | High | Build the barge-in path first, on Friday night; cancel the Claude stream on interruption; test L3 early | A |
 | The self-hosted agent goes down during the demo | Low | High | Health check with automatic restart, a single deploy freeze after Sat 22:00, and the backup video | A |
 | Latency misses the target with long memory | Medium | High | Lower the memory cap (summaries instead of full transcripts), fillers, templated openers | A |
@@ -1093,7 +1090,6 @@ Settle these tonight or by the time listed, because each one can change the buil
 - [ ] **Cartesia number** (A, Fri night): get a Cartesia number, assign the self-hosted agent to it, and confirm the caller's number reaches our agent, because VO-2 depends on it. Check the account's number-slot limit.
 - [ ] **Cartesia self-hosting** (A, Fri night): register the agent's URL as `self_hosted_deployment_url`, confirm a call reaches our custom `Agent`, and check which interruption events it receives (§10.5).
 - [ ] **Alert agent** (C, Fri night): build the Managed Agent, place a test call with `dynamic_variables`, and confirm its webhook tool reaches `/alert/decision` with `ALERT_SECRET`. Is Claude in Cartesia's managed catalog? If it is, use it, so Claude runs every call.
-- [ ] **Optional texts** (C, any time): does anyone already have an approved A2P 10DLC campaign or a verified toll-free number? Only then build texts (P1).
 - [ ] **Harness calls** (A, Sat 09:00): keep a Twilio account ($20 upgrade) to place harness calls with recorded audio (§16.3), or run the latency set by hand from a teammate's phone.
 - [ ] **Agent region** (A, Fri night): measure round trips to Cartesia and `api.anthropic.com` from each candidate region (§10.5).
 - [ ] **Cartesia end-of-turn detection** (A, Sat 09:00): which options exist (silence threshold, semantic detection), and how should they be tuned for slower speakers?
@@ -1110,7 +1106,6 @@ Settle these tonight or by the time listed, because each one can change the buil
 
 ## 22. After the hackathon
 - Stay self-hosted. Cartesia stops hosting Line SDK agents on Dec 1, 2026, and its Managed Agents don't let us build our own Claude requests (§10.5).
-- Register an A2P 10DLC campaign so families can choose texts as well as calls.
 - Weekly check-in calls driven by memory.
 - A spoken PIN, more stores and delivery tracking.
 - Spanish, a family invite flow and self-serve signup.
@@ -1132,5 +1127,4 @@ Settle these tonight or by the time listed, because each one can change the buil
 - [Cartesia Twilio integration](https://docs.cartesia.ai/line/integrations/telephony/twilio/integration.md), [Cartesia Line SDK overview](https://docs.cartesia.ai/line/sdk/overview.md) and [cartesia-line on PyPI](https://pypi.org/project/cartesia-line/0.2.19/)
 - [Migrate from the Line SDK](https://docs.cartesia.ai/agents/migrate-from-line-sdk.md) (Cartesia): the Dec 1, 2026 hosting cutoff, self-hosted agents, and the Managed Agents LLM catalog
 - [Cartesia numbers](https://docs.cartesia.ai/line/integrations/telephony/cartesia-numbers.md) and [outbound calling](https://docs.cartesia.ai/line/integrations/telephony/outbound-dialing.md) (Cartesia)
-- [Twilio error 30034](https://www.twilio.com/docs/api/errors/30034): messages from an unregistered A2P 10DLC number are blocked
 - [Claude models overview](https://platform.claude.com/docs/en/about-claude/models/overview.md), [Claude Haiku 5.5 overview](https://platform.claude.com/docs/en/models/haiku-5-5/overview), [Haiku 5.5 migration guide](https://platform.claude.com/docs/en/models/haiku-5-5/migration-guide), [Pricing](https://platform.claude.com/docs/en/about-claude/pricing.md) and [Prompt caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching.md) (Anthropic)

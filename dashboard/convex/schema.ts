@@ -149,11 +149,7 @@ export default defineSchema({
     callId: v.optional(v.id("calls")),
     orderId: v.optional(v.id("orders")),
     type: alertType,
-    channel: v.union(
-      v.literal("call"),
-      v.literal("dashboard"),
-      v.literal("sms"),
-    ),
+    channel: v.union(v.literal("call"), v.literal("dashboard")),
     delivery,
     message: v.string(),
     transcriptExcerpt: v.optional(v.string()),

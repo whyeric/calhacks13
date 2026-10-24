@@ -8,5 +8,10 @@
   "cartesia_key_verified": true,
   "inbound_number_provisioned": true,
   "inbound_agent_routed": false,
-  "phone_calls_tested": false
+  "phone_calls_tested": false,
+  "notification_channels": [
+    "call",
+    "dashboard"
+  ],
+  "sms_endpoint_status": 404
 }

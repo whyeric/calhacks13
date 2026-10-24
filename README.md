@@ -4,6 +4,8 @@ A phone assistant for everyday errands, company and family protection. Product r
 
 This branch implements **GitHub milestone 1: Phase 0 · Foundations**. It includes the self-hosted Cartesia Line agent, direct Claude streaming, authenticated Convex HTTP actions, the nine-table schema, repeatable demo seed, alert-call transport, tests, container configuration and wireframes. The Next.js application is a later milestone (#86).
 
+Prototype notifications use voice calls and the dashboard. Approvals use spoken responses or dashboard buttons.
+
 **Start here: [setup and deployment](docs/setup.md).** The current completion evidence and remaining account/phone checks are in [milestone status](docs/milestone-1.md). No real payment implementation is enabled in this phase.
 
 ```text

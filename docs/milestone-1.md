@@ -21,6 +21,7 @@ Branch: `codex/milestone-1-foundations`, based on `errand-line` at `fed8106` (al
 | #121 Gate 1 | Instructions and automated support checks | Independent reviewer must perform/sign all four real acceptance rows below |
 | #2 Visa access | Credential placeholders and decision checklist | Sponsor response, sandbox access, judging criteria, mTLS requirement; no access claimed |
 | #3 Apify proxy check | Account/run checklist | Claim credits, run actual Actor, record success/latency/fields, save genuine sample output |
+| #91 Text messaging | Removed from the prototype, including stretch goals, at the user's request; schema and spec allow call/dashboard notifications only | No implementation planned |
 
 ## Verification evidence
 
