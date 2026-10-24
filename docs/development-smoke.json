@@ -1,0 +1,17 @@
+{
+  "environment": "development",
+  "auth_smoke": "401/401/200; alert route rejects agent credential",
+  "caller_seeded": true,
+  "family_contact_count": 0,
+  "memory_fact_count": 5,
+  "followup_count": 1,
+  "cartesia_key_verified": true,
+  "inbound_number_provisioned": true,
+  "inbound_agent_routed": false,
+  "phone_calls_tested": false,
+  "notification_channels": [
+    "call",
+    "dashboard"
+  ],
+  "sms_endpoint_status": 404
+}

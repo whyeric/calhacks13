@@ -1,0 +1,275 @@
+{
+  "_note": "Fictional cached second-store (Target-style) search results for price compare (#66). Integer cents; demo-only store item ids. Not live data.",
+  "store": "Target",
+  "entries": [
+    {
+      "key": "paper towels",
+      "synonyms": [
+        "paper towel",
+        "kitchen towels",
+        "kitchen roll",
+        "towels"
+      ],
+      "results": [
+        {
+          "name": "Paper towels, 6-roll pack",
+          "size": "6 rolls",
+          "priceCents": 849,
+          "storeItemId": "demo-target-paper-towels-6"
+        },
+        {
+          "name": "Paper towels, 12-roll pack",
+          "size": "12 rolls",
+          "priceCents": 1599,
+          "storeItemId": "demo-target-paper-towels-12"
+        }
+      ]
+    },
+    {
+      "key": "coffee",
+      "synonyms": [
+        "ground coffee",
+        "medium roast coffee",
+        "medium roast",
+        "decaf coffee",
+        "decaf"
+      ],
+      "results": [
+        {
+          "name": "Medium-roast coffee, big can",
+          "size": "48 oz can",
+          "priceCents": 1199,
+          "storeItemId": "demo-target-coffee-big"
+        },
+        {
+          "name": "Decaf medium-roast coffee",
+          "size": "30.5 oz can",
+          "priceCents": 1099,
+          "storeItemId": "demo-target-coffee-decaf"
+        }
+      ]
+    },
+    {
+      "key": "milk",
+      "synonyms": [
+        "whole milk",
+        "gallon of milk",
+        "2% milk",
+        "skim milk"
+      ],
+      "results": [
+        {
+          "name": "Whole milk, one gallon",
+          "size": "1 gallon",
+          "priceCents": 369,
+          "storeItemId": "demo-target-milk-gallon"
+        },
+        {
+          "name": "Whole milk, half gallon",
+          "size": "half gallon",
+          "priceCents": 239,
+          "storeItemId": "demo-target-milk-half-gallon"
+        }
+      ]
+    },
+    {
+      "key": "bread",
+      "synonyms": [
+        "loaf of bread",
+        "white bread",
+        "wheat bread",
+        "sandwich bread"
+      ],
+      "results": [
+        {
+          "name": "White sandwich bread",
+          "size": "20 oz loaf",
+          "priceCents": 129,
+          "storeItemId": "demo-target-bread-white"
+        },
+        {
+          "name": "Whole wheat bread",
+          "size": "20 oz loaf",
+          "priceCents": 259,
+          "storeItemId": "demo-target-bread-wheat"
+        }
+      ]
+    },
+    {
+      "key": "bananas",
+      "synonyms": [
+        "banana",
+        "bunch of bananas"
+      ],
+      "results": [
+        {
+          "name": "Bananas, about six",
+          "size": "about 2 lb bunch",
+          "priceCents": 159,
+          "storeItemId": "demo-target-bananas-bunch"
+        },
+        {
+          "name": "Organic bananas, about six",
+          "size": "about 2 lb bunch",
+          "priceCents": 239,
+          "storeItemId": "demo-target-bananas-organic"
+        }
+      ]
+    },
+    {
+      "key": "eggs",
+      "synonyms": [
+        "egg",
+        "dozen eggs",
+        "a dozen eggs",
+        "large eggs"
+      ],
+      "results": [
+        {
+          "name": "Large white eggs, one dozen",
+          "size": "12 count",
+          "priceCents": 279,
+          "storeItemId": "demo-target-eggs-12"
+        },
+        {
+          "name": "Large white eggs, eighteen",
+          "size": "18 count",
+          "priceCents": 429,
+          "storeItemId": "demo-target-eggs-18"
+        }
+      ]
+    },
+    {
+      "key": "dish soap",
+      "synonyms": [
+        "dishwashing liquid",
+        "dish detergent",
+        "dish liquid",
+        "dishwashing soap"
+      ],
+      "results": [
+        {
+          "name": "Dish soap, original scent",
+          "size": "19.4 fl oz",
+          "priceCents": 239,
+          "storeItemId": "demo-target-dish-soap-small"
+        },
+        {
+          "name": "Dish soap, original scent, large",
+          "size": "38 fl oz",
+          "priceCents": 429,
+          "storeItemId": "demo-target-dish-soap-large"
+        }
+      ]
+    },
+    {
+      "key": "toilet paper",
+      "synonyms": [
+        "bathroom tissue",
+        "toilet tissue",
+        "tp"
+      ],
+      "results": [
+        {
+          "name": "Toilet paper, 12 double rolls",
+          "size": "12 rolls",
+          "priceCents": 1349,
+          "storeItemId": "demo-target-toilet-paper-12"
+        },
+        {
+          "name": "Toilet paper, 24 double rolls",
+          "size": "24 rolls",
+          "priceCents": 2299,
+          "storeItemId": "demo-target-toilet-paper-24"
+        }
+      ]
+    },
+    {
+      "key": "orange juice",
+      "synonyms": [
+        "oj",
+        "juice"
+      ],
+      "results": [
+        {
+          "name": "Orange juice, no pulp",
+          "size": "52 fl oz",
+          "priceCents": 329,
+          "storeItemId": "demo-target-oj-52"
+        },
+        {
+          "name": "Orange juice, no pulp, large",
+          "size": "89 fl oz",
+          "priceCents": 569,
+          "storeItemId": "demo-target-oj-89"
+        }
+      ]
+    },
+    {
+      "key": "butter",
+      "synonyms": [
+        "salted butter",
+        "unsalted butter",
+        "stick butter"
+      ],
+      "results": [
+        {
+          "name": "Salted butter, four sticks",
+          "size": "1 lb",
+          "priceCents": 429,
+          "storeItemId": "demo-target-butter-salted"
+        },
+        {
+          "name": "Unsalted butter, four sticks",
+          "size": "1 lb",
+          "priceCents": 469,
+          "storeItemId": "demo-target-butter-unsalted"
+        }
+      ]
+    },
+    {
+      "key": "tea",
+      "synonyms": [
+        "tea bags",
+        "black tea",
+        "green tea"
+      ],
+      "results": [
+        {
+          "name": "Black tea bags",
+          "size": "100 count",
+          "priceCents": 419,
+          "storeItemId": "demo-target-tea-black"
+        },
+        {
+          "name": "Green tea bags",
+          "size": "40 count",
+          "priceCents": 249,
+          "storeItemId": "demo-target-tea-green"
+        }
+      ]
+    },
+    {
+      "key": "chicken soup",
+      "synonyms": [
+        "soup",
+        "chicken noodle soup",
+        "canned soup"
+      ],
+      "results": [
+        {
+          "name": "Chicken noodle soup, can",
+          "size": "10.75 oz",
+          "priceCents": 119,
+          "storeItemId": "demo-target-soup-chicken-1"
+        },
+        {
+          "name": "Chicken noodle soup, four cans",
+          "size": "4 x 10.75 oz",
+          "priceCents": 489,
+          "storeItemId": "demo-target-soup-chicken-4"
+        }
+      ]
+    }
+  ]
+}

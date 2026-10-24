@@ -1,0 +1,35 @@
+{
+  "name": "errand-line-data",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "dev:convex": "convex dev",
+    "build": "next build",
+    "start": "next start",
+    "codegen": "convex codegen --typecheck disable",
+    "typecheck": "next typegen && tsc --noEmit && tsc --noEmit -p convex",
+    "test": "vitest run",
+    "deploy": "convex deploy"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.3.0",
+    "convex": "^1.31.0",
+    "next": "^16.4.3",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@edge-runtime/vm": "^5.0.0",
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "convex-test": "^0.0.65",
+    "prettier": "^3.6.2",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.9.0",
+    "vitest": "^5.0.5"
+  }
+}

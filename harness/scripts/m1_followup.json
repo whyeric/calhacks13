@@ -1,0 +1,43 @@
+{
+  "id": "M1",
+  "name": "m1_followup",
+  "spec": "SPEC §16.2 M1 / §3.3: a seeded follow-up is raised once, as the opener or at a natural pause. Bar: raised in ≥ 9 of 10 calls (run with --repeat 10; passRate 0.9).",
+  "passRate": 0.9,
+  "caller": "margaret",
+  "household": {
+    "followup": true
+  },
+  "turns": [
+    {
+      "say": "Hello! I'm just calling to say hello.",
+      "expect": {
+        "toolsNotCalled": [
+          "search_items",
+          "match_favorite",
+          "place_order"
+        ]
+      }
+    },
+    {
+      "say": "Nothing else today. Goodbye, dear."
+    }
+  ],
+  "expect": {
+    "followupsAsked": 1,
+    "speechIncludes": [
+      "recital"
+    ],
+    "toolsNotCalled": [
+      "place_order"
+    ]
+  },
+  "convex": {
+    "followupsAskedInCall": 1,
+    "followups": [
+      {
+        "speakable": "recital",
+        "askedInThisCall": true
+      }
+    ]
+  }
+}

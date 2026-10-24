@@ -1,0 +1,71 @@
+{
+  "id": "M2",
+  "name": "m2_same_as_last_time",
+  "spec": "SPEC §16.2 M2: 'the same coffee as last time' resolves from order history. Last time she bought the decaf, which is not her usual favorite, so only the order history gives the right answer. Fake Convex only: the dev deployment's order history differs run to run.",
+  "caller": "margaret",
+  "household": {
+    "followup": false,
+    "recentOrders": [
+      {
+        "items": [
+          {
+            "name": "Decaf medium-roast coffee",
+            "qty": 1,
+            "priceCents": 1048,
+            "storeItemId": "demo-coffee-decaf"
+          }
+        ],
+        "totalCents": 1048,
+        "store": "Walmart",
+        "status": "paid",
+        "createdAt": 1792400000000
+      }
+    ]
+  },
+  "turns": [
+    {
+      "say": "I'd like the same coffee as last time, please.",
+      "expect": {
+        "toolsNotCalled": [
+          "place_order"
+        ],
+        "speechIncludes": [
+          "decaf"
+        ]
+      }
+    },
+    {
+      "say": "Yes, please.",
+      "alts": [
+        {
+          "ifAgent": "shall i|should i|want me to|would you like me to|go ahead|is that the one",
+          "say": "Yes, please."
+        }
+      ]
+    },
+    {
+      "say": "Yes, please.",
+      "alts": [
+        {
+          "ifAgent": "shall i|should i|want me to|would you like me to|go ahead|is that the one",
+          "say": "Yes, please."
+        }
+      ],
+      "skipIfAgent": "placed|paid|anything else"
+    },
+    {
+      "say": "That's all. Goodbye."
+    }
+  ],
+  "expect": {
+    "finalOrder": {
+      "status": "paid",
+      "totalCents": 1048,
+      "items": {
+        "demo-coffee-decaf": 1
+      }
+    },
+    "placeOrderOnlyAfterYes": true,
+    "outcome": "ordered"
+  }
+}

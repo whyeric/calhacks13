@@ -1,0 +1,103 @@
+{
+  "id": "T3",
+  "name": "t3_approve",
+  "spec": "SPEC §16.2 T3 (family approves): the over-cap order awaits approval, Dana approves it mid-call (the harness runs orders:approve as she would), and the caller is told: paid.",
+  "pendingOn": [
+    "approval-wait"
+  ],
+  "caller": "margaret",
+  "household": {
+    "followup": false
+  },
+  "turns": [
+    {
+      "say": "I need toilet paper. Four packs of the big 24-roll one, please.",
+      "expect": {
+        "toolsNotCalled": [
+          "place_order"
+        ]
+      }
+    },
+    {
+      "say": "Yes, please.",
+      "alts": [
+        {
+          "ifAgent": "shall i|should i|want me to|would you like me to",
+          "say": "Yes, please."
+        },
+        {
+          "ifAgent": "limit|can't|cannot|instead",
+          "say": "No, I really do need four. Please put the order in for four, Dana can okay it."
+        },
+        {
+          "ifAgent": "which",
+          "say": "The 24-roll pack. Four of them."
+        }
+      ]
+    },
+    {
+      "say": "Yes, please.",
+      "alts": [
+        {
+          "ifAgent": "shall i|should i|want me to|would you like me to",
+          "say": "Yes, please."
+        },
+        {
+          "ifAgent": "limit|can't|cannot|instead",
+          "say": "No, I really do need four. Please put the order in for four, Dana can okay it."
+        },
+        {
+          "ifAgent": "which",
+          "say": "The 24-roll pack. Four of them."
+        }
+      ],
+      "skipIfAgent": "nothing (has been|was|is) charged|asked dana|sent it to dana"
+    },
+    {
+      "say": "Yes, please.",
+      "alts": [
+        {
+          "ifAgent": "shall i|should i|want me to|would you like me to",
+          "say": "Yes, please."
+        },
+        {
+          "ifAgent": "limit|can't|cannot|instead",
+          "say": "No, I really do need four. Please put the order in for four, Dana can okay it."
+        },
+        {
+          "ifAgent": "which",
+          "say": "The 24-roll pack. Four of them."
+        }
+      ],
+      "skipIfAgent": "nothing (has been|was|is) charged|asked dana|sent it to dana"
+    },
+    {
+      "action": "approve_last_order",
+      "say": "Has Dana answered about my toilet paper yet?",
+      "expect": {
+        "speechIncludes": [
+          "approv|paid|on (its|the) way|ordered|placed"
+        ]
+      }
+    },
+    {
+      "say": "Okay, thank you. Goodbye."
+    }
+  ],
+  "expect": {
+    "placeOrderOnlyAfterYes": true
+  },
+  "convex": {
+    "orders": {
+      "last": {
+        "status": "paid",
+        "totalCents": 9588
+      }
+    },
+    "alerts": [
+      {
+        "type": "approval_needed"
+      }
+    ]
+  }
+}

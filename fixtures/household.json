@@ -1,0 +1,18 @@
+{
+  "callerName": "Margaret", "preferredName": "Margaret", "timezone": "America/Los_Angeles",
+  "deliveryAddress": "123 Demo Lane, Berkeley, CA 94704 (fictional demo address)",
+  "familyName": "Dana", "relation": "daughter",
+  "limits": { "perOrderCapCents": 5000, "monthlyBudgetCents": 20000, "approvedStores": ["Walmart"] },
+  "favorites": [
+    { "name": "Medium-roast coffee, big can", "aliases": ["my usual", "my coffee", "usual coffee"], "store": "Walmart", "storeItemId": "demo-coffee-big", "usualQty": 1 },
+    { "name": "Decaf medium-roast coffee", "aliases": ["coffee", "medium roast"], "store": "Walmart", "storeItemId": "demo-coffee-decaf", "usualQty": 1 }
+  ],
+  "facts": [
+    { "text": "Granddaughter Lily had a piano recital on Saturday.", "category": "event", "evidence": "Lily has her piano recital on Saturday." },
+    { "text": "Margaret likes medium-roast coffee in the big can.", "category": "preference", "evidence": "I like medium-roast coffee, the big can." },
+    { "text": "Grandson Tyler is at college in Ohio.", "category": "family", "evidence": "Tyler is at college in Ohio." },
+    { "text": "Margaret planted tomatoes last month.", "category": "interest", "evidence": "I planted tomatoes last month." },
+    { "text": "Dana has been busy lately.", "category": "family", "evidence": "Dana has been so busy lately." }
+  ],
+  "followup": "How did Lily's recital go on Saturday?"
+}

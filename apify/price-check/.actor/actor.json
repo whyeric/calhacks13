@@ -1,0 +1,30 @@
+{
+  "actorSpecification": 1,
+  "name": "errand-line-price-check",
+  "title": "Grocery Price Check (Walmart)",
+  "description": "Looks up current Walmart prices for a list of everyday items and returns the top matches with price in integer cents, size and item ID. Built for Errand Line, a phone ordering assistant for older adults.",
+  "version": "0.1",
+  "buildTag": "latest",
+  "input": "./input_schema.json",
+  "dockerfile": "../Dockerfile",
+  "storages": {
+    "dataset": {
+      "actorSpecification": 1,
+      "views": {
+        "overview": {
+          "title": "Prices",
+          "transformation": {
+            "fields": ["query", "store", "name", "size", "priceCents", "price", "usItemId", "inStock", "url"]
+          },
+          "display": {
+            "component": "table",
+            "properties": {
+              "priceCents": { "label": "Price (cents)", "format": "number" },
+              "url": { "label": "Link", "format": "link" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

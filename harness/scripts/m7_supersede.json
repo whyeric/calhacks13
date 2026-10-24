@@ -1,0 +1,54 @@
+{
+  "id": "M7",
+  "name": "m7_supersede",
+  "spec": "SPEC §16.2 M7: 'Lily's recital moved to next week' supersedes the old fact and reschedules the follow-up.",
+  "caller": "margaret",
+  "household": {
+    "followup": true
+  },
+  "turns": [
+    {
+      "say": "Oh, it hasn't happened yet. Lily's recital moved to next week.",
+      "expect": {
+        "toolsNotCalled": [
+          "search_items",
+          "match_favorite",
+          "place_order"
+        ]
+      }
+    },
+    {
+      "say": "Yes, I'm looking forward to it. That's all for today. Goodbye."
+    }
+  ],
+  "expect": {
+    "toolsNotCalled": [
+      "search_items",
+      "match_favorite",
+      "place_order"
+    ]
+  },
+  "convex": {
+    "waitForMemory": true,
+    "facts": {
+      "status": [
+        {
+          "text": "recital",
+          "status": "superseded"
+        }
+      ],
+      "added": [
+        {
+          "text": "recital",
+          "evidence": true
+        }
+      ]
+    },
+    "followupsAdded": [
+      {
+        "speakable": "recital",
+        "notBeforeAfterCall": true
+      }
+    ]
+  }
+}

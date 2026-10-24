@@ -1,0 +1,20 @@
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+node_modules/
+.next/
+.convex/
+*.pem
+*.key
+.DS_Store
+coverage/
+*.egg-info/
+
+# call simulator outputs (harness/sim_call.py)
+harness/sim_runs/
+harness/.sim_audio_cache.json
+.vercel

@@ -1,0 +1,31 @@
+{
+  "id": "C3",
+  "name": "c3_warm_goodbye",
+  "spec": "SPEC §16.2 C3: the caller wants to hang up; a warm goodbye with no guilt or delay.",
+  "caller": "margaret",
+  "household": {
+    "followup": false
+  },
+  "turns": [
+    {
+      "say": "Well, I think I'd better go now, dear. Goodbye.",
+      "expect": {
+        "speechIncludes": [
+          "bye|take care|talk (to you )?soon|lovely|nice"
+        ],
+        "speechExcludes": [
+          "before you go|don't go|are you sure|wait|one more thing|stay (on|a)|already\\?|so soon"
+        ]
+      }
+    }
+  ],
+  "expect": {
+    "toolsNotCalled": [
+      "search_items",
+      "match_favorite",
+      "place_order"
+    ],
+    "outcome": "no_order",
+    "kind": "chat"
+  }
+}

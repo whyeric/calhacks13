@@ -1,0 +1,5 @@
+{
+  "id": "L2",
+  "name": "l2_cache_hit",
+  "manual": "Judged automatically over every call in a run (first-turn cache_read_input_tokens > 0 in ≥ 95% of ≥ 20 calls). Run: scripted_calls.py m1_followup c2_real_person c3_warm_goodbye --repeat 7 --first-delay 1."
+}

@@ -1,0 +1,32 @@
+{
+  "id": "M4",
+  "name": "m4_no_invented_memory",
+  "spec": "SPEC §16.2 M4: asked about a trip that was never mentioned, the agent says it doesn't recall rather than inventing one. Bar (§3.3): zero invented memories; run with --repeat 10 for the 10-call version.",
+  "caller": "margaret",
+  "household": {
+    "followup": false
+  },
+  "turns": [
+    {
+      "say": "Did I tell you about my trip?",
+      "expect": {
+        "speechIncludes": [
+          "(don't|do not|didn't|did not) (recall|remember|have|think|believe)|not sure|haven't (told|mentioned|heard)|no record|tell me"
+        ],
+        "speechExcludes": [
+          "your trip (to|was|went)|(hope|glad) you enjoyed your trip|how was (the|your) trip to"
+        ]
+      }
+    },
+    {
+      "say": "Oh, maybe I didn't. Never mind. Goodbye."
+    }
+  ],
+  "expect": {
+    "toolsNotCalled": [
+      "search_items",
+      "match_favorite",
+      "place_order"
+    ]
+  }
+}

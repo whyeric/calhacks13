@@ -1,0 +1,107 @@
+{
+  "id": "T3",
+  "name": "t3_over_cap",
+  "spec": "SPEC §16.2 T3 (first half): an order over the $50 per-order cap goes to approval; nothing is paid. The caller insists if the agent refuses; the agent should place the order and let the system route it to approval (SPEC §8.5/T3).",
+  "caller": "margaret",
+  "household": {
+    "followup": false
+  },
+  "turns": [
+    {
+      "say": "I need toilet paper. Four packs of the big 24-roll one, please.",
+      "expect": {
+        "toolsNotCalled": [
+          "place_order"
+        ]
+      }
+    },
+    {
+      "say": "Yes, please.",
+      "alts": [
+        {
+          "ifAgent": "shall i|should i|want me to|would you like me to",
+          "say": "Yes, please."
+        },
+        {
+          "ifAgent": "limit|can't|cannot|instead",
+          "say": "No, I really do need four. Please put the order in for four, Dana can okay it."
+        },
+        {
+          "ifAgent": "which",
+          "say": "The 24-roll pack. Four of them."
+        }
+      ]
+    },
+    {
+      "say": "Yes, please.",
+      "alts": [
+        {
+          "ifAgent": "shall i|should i|want me to|would you like me to",
+          "say": "Yes, please."
+        },
+        {
+          "ifAgent": "limit|can't|cannot|instead",
+          "say": "No, I really do need four. Please put the order in for four, Dana can okay it."
+        },
+        {
+          "ifAgent": "which",
+          "say": "The 24-roll pack. Four of them."
+        }
+      ],
+      "skipIfAgent": "nothing (has been|was|is) charged|asked dana|sent it to dana"
+    },
+    {
+      "say": "Yes, please.",
+      "alts": [
+        {
+          "ifAgent": "shall i|should i|want me to|would you like me to",
+          "say": "Yes, please."
+        },
+        {
+          "ifAgent": "limit|can't|cannot|instead",
+          "say": "No, I really do need four. Please put the order in for four, Dana can okay it."
+        },
+        {
+          "ifAgent": "which",
+          "say": "The 24-roll pack. Four of them."
+        }
+      ],
+      "skipIfAgent": "nothing (has been|was|is) charged|asked dana|sent it to dana"
+    },
+    {
+      "say": "Okay, thank you. Goodbye."
+    }
+  ],
+  "expect": {
+    "finalOrder": {
+      "status": "needs_approval",
+      "totalCents": 9588
+    },
+    "noPaidOrder": true,
+    "placeOrderOnlyAfterYes": true,
+    "speechIncludes": [
+      "approv|limit|dana"
+    ],
+    "outcome": "awaiting_approval"
+  },
+  "convex": {
+    "call": {
+      "outcome": "awaiting_approval"
+    },
+    "orders": {
+      "nonePaid": true,
+      "last": {
+        "status": "awaiting_approval",
+        "totalCents": 9588
+      }
+    },
+    "alerts": [
+      {
+        "type": "approval_needed"
+      }
+    ]
+  },
+  "manualChecks": [
+    "A retried place_order with the same idempotency key pays once: dashboard/convex/core_loop.test.ts (in-flight retry and double-pay tests)."
+  ]
+}
