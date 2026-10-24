@@ -1,0 +1,101 @@
+@import "tailwindcss";
+
+/* Calm, warm, high-contrast palette. Light by default, dark via the OS. */
+:root {
+  --canvas: #f7f3ec;
+  --surface: #fffdf9;
+  --surface-2: #f0ebe1;
+  --ink: #1b2620;
+  --muted: #4f5d55;
+  --line: #d8d0c2;
+  --accent: #1d5a48;
+  --accent-strong: #173f34;
+  --accent-soft: #e1eee7;
+  --on-accent: #ffffff;
+  --warn: #8a4b00;
+  --warn-soft: #fbecd2;
+  --danger: #a3261b;
+  --danger-soft: #fbe3df;
+  --info: #1f4e86;
+  --info-soft: #e1ebf7;
+  --caller: #fff4dd;
+  --agent: #e6f0ea;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --canvas: #141a17;
+    --surface: #1c2420;
+    --surface-2: #232d28;
+    --ink: #f2efe8;
+    --muted: #b6c0b9;
+    --line: #36423c;
+    --accent: #7cc8a8;
+    --accent-strong: #9adbbe;
+    --accent-soft: #1f3a30;
+    --on-accent: #0d1a14;
+    --warn: #f5c16c;
+    --warn-soft: #3a2c14;
+    --danger: #ff9a8f;
+    --danger-soft: #3d1d1a;
+    --info: #9cc3f2;
+    --info-soft: #1b2b40;
+    --caller: #33291a;
+    --agent: #1f3a30;
+    color-scheme: dark;
+  }
+}
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-soft: var(--accent-soft);
+  --color-on-accent: var(--on-accent);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --color-caller: var(--caller);
+  --color-agent: var(--agent);
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+}
+
+html {
+  font-size: 112.5%; /* 18px base for comfortable reading */
+}
+
+body {
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Base layer, so components' own focus rings (utilities) still win. */
+@layer base {
+  :focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
