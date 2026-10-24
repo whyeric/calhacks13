@@ -1,7 +1,0 @@
-.DS_Store
-node_modules
-dist
-dist-preview
-.env.local
-.claude
-.agents
