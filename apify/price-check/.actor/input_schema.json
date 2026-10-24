@@ -1,0 +1,36 @@
+{
+  "title": "Grocery Price Check input",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "queries": {
+      "title": "Items to price",
+      "type": "array",
+      "description": "Short product searches, one per item, e.g. \"paper towels\" or \"medium roast coffee\".",
+      "editor": "stringList",
+      "prefill": ["paper towels", "medium roast coffee"]
+    },
+    "searchTerms": {
+      "title": "Search terms (alias)",
+      "type": "array",
+      "description": "Same as queries; accepted so callers that send searchTerms work unchanged.",
+      "editor": "stringList"
+    },
+    "maxItems": {
+      "title": "Results per item",
+      "type": "integer",
+      "description": "How many priced results to return for each item (1-20).",
+      "default": 5,
+      "minimum": 1,
+      "maximum": 20
+    },
+    "proxyConfiguration": {
+      "title": "Proxy configuration",
+      "type": "object",
+      "description": "Walmart blocks many datacenter IPs; residential proxies are recommended.",
+      "editor": "proxy",
+      "prefill": { "useApifyProxy": true, "apifyProxyGroups": ["RESIDENTIAL"] },
+      "default": { "useApifyProxy": true, "apifyProxyGroups": ["RESIDENTIAL"] }
+    }
+  }
+}
