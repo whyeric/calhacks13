@@ -164,18 +164,27 @@ These personas are illustrative. The family member is the buyer and the caller i
 
 **P0** ships this weekend. **P1** is a stretch goal; we mention it in the pitch and build it only if ahead. **P2** comes after the hackathon. Workstreams A–D are defined in §19.1.
 
-| # | Feature | Priority | Workstream |
-|---|---|---|---|
-| F1 | Voice ordering by phone | P0 | A |
-| F2 | Memory and continuity | P0 | A (read path), D (write path) |
-| F3 | Companion conversation | P0 | D |
-| F4 | "My usual" | P0 | B |
-| F5 | Family limits | P0 | B |
-| F6 | One-tap approval | P0 | C |
-| F7 | Scam guard | P0 | D |
-| F8 | Wellbeing safety net (minimal) | P0 | D |
-| F9 | Live family dashboard | P0 | C |
-| F10 | Latency instrumentation | P0 | A |
+**Importance.** Every GitHub issue carries one of these labels. When time runs short, finish the lower numbers first.
+
+| Importance | Meaning | Maps to |
+|---|---|---|
+| **1 · demo-critical** | The live demo (Calls 1 and 2 on the big screen) or the Devpost submission fails without it. Includes blockers such as accounts, schema and the phone line. | P0 |
+| **2 · prototype** | Needed for every P0 feature to genuinely work: what judges can probe in Q&A and what sponsor prizes require. A simple version is fine. | P0 |
+| **3 · polish** | Raises quality and scores: speed targets, edge cases, design. Cut first if behind (see the cut order below). | P0 |
+| **4 · nice-to-have** | Stretch goals. Only if every checkpoint is green. | P1 |
+
+| # | Feature | Priority | Importance | Workstream |
+|---|---|---|---|---|
+| F1 | Voice ordering by phone | P0 | 1 · demo-critical | A |
+| F2 | Memory and continuity | P0 | 1 · demo-critical (read path, memory opener, Memory panel); 2 · prototype (memory writer, forget) | A (read path), D (write path) |
+| F3 | Companion conversation | P0 | 2 · prototype | D |
+| F4 | "My usual" | P0 | 1 · demo-critical | B |
+| F5 | Family limits | P0 | 2 · prototype | B |
+| F6 | One-tap approval | P0 | 2 · prototype | C |
+| F7 | Scam guard | P0 | 1 · demo-critical | D |
+| F8 | Wellbeing safety net (minimal) | P0 | 2 · prototype (911/988 lines); 3 · polish (mood notes) | D |
+| F9 | Live family dashboard | P0 | 1 · demo-critical (Live calls, Orders, Memory and latency panels); 2 · prototype (other screens) | C |
+| F10 | Latency instrumentation | P0 | 1 · demo-critical (streaming, turn logging); 3 · polish (tuning to targets) | A |
 
 **P1, in build order:**
 1. Memory-driven check-in calls: "Want your usual coffee? And how did the tomatoes do?"
