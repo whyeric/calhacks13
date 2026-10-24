@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 import { convexTest } from "convex-test";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import schema from "./schema";
@@ -87,6 +88,26 @@ describe("service authentication", () => {
 });
 
 describe("seed and call lifecycle", () => {
+  test("caller-only setup never invents a family contact or allows an alert destination", async () => {
+    const t = convexTest(schema, modules);
+    const { householdId } = await t.mutation(internal.seed.demo, {
+      callerPhone: seed.callerPhone,
+      familyPhone: "",
+    });
+    const context = await t.query(internal.households.lookup, {
+      callerPhone: seed.callerPhone,
+    });
+    expect(context?.household.familyContacts).toEqual([]);
+    expect(context?.facts).toHaveLength(5);
+    await expect(
+      t.mutation(internal.alerts.create, {
+        householdId,
+        type: "scam",
+        message: "Test alert",
+        recipient: seed.familyPhone,
+      }),
+    ).rejects.toThrow("Recipient is not an approved family contact");
+  });
   test("seed is repeatable and reset restores five evidenced facts without duplicates", async () => {
     const t = convexTest(schema, modules);
     const first = await t.mutation(internal.seed.demo, seed);

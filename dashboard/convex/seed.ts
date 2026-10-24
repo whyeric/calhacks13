@@ -11,14 +11,15 @@ export const demo = internalMutation({
   },
   handler: async (ctx, args) => {
     const callerPhone = args.callerPhone ?? process.env.DEMO_CALLER_PHONE;
-    const familyPhone = args.familyPhone ?? process.env.DEMO_FAMILY_PHONE;
+    const familyPhone =
+      (args.familyPhone ?? process.env.DEMO_FAMILY_PHONE) || undefined;
     if (
       !callerPhone ||
-      !familyPhone ||
-      ![callerPhone, familyPhone].every((p) => /^\+[1-9]\d{7,14}$/.test(p))
+      !/^\+[1-9]\d{7,14}$/.test(callerPhone) ||
+      (familyPhone !== undefined && !/^\+[1-9]\d{7,14}$/.test(familyPhone))
     )
       throw new ConvexError(
-        "Set DEMO_CALLER_PHONE and DEMO_FAMILY_PHONE to team phones in E.164",
+        "Set DEMO_CALLER_PHONE in E.164; DEMO_FAMILY_PHONE is optional and must be E.164 when provided",
       );
     const existing = await ctx.db
       .query("households")
@@ -70,14 +71,16 @@ export const demo = internalMutation({
       callerPhone,
       timezone: fixture.timezone,
       deliveryAddress: fixture.deliveryAddress,
-      familyContacts: [
-        {
-          name: fixture.familyName,
-          phone: familyPhone,
-          relation: fixture.relation,
-          ...(authSubject ? { authSubject } : {}),
-        },
-      ],
+      familyContacts: familyPhone
+        ? [
+            {
+              name: fixture.familyName,
+              phone: familyPhone,
+              relation: fixture.relation,
+              ...(authSubject ? { authSubject } : {}),
+            },
+          ]
+        : [],
       sharing: { chatTranscripts: false, moodNotes: false },
     });
     await ctx.db.insert("limits", { householdId, ...fixture.limits });

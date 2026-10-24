@@ -30,6 +30,15 @@ npx convex dev --once
 
 Follow the CLI browser login, create a project named Errand Line, and choose a cloud development deployment. This writes ignored `.env.local` configuration and refreshes generated types. Keep generated source files in Git.
 
+Before the first push can finish, explicitly initialize the optional Clerk issuer:
+
+```sh
+npx convex env set CLERK_JWT_ISSUER_DOMAIN ""
+npx convex dev --once
+```
+
+Convex treats a missing environment variable referenced in `auth.config.ts` as a deployment error, even inside a conditional. An explicit empty value registers no sign-in providers; family queries remain denied. Replace it with the real Clerk issuer when configuring family sign-in. Do not use an invented issuer URL.
+
 In the Convex dashboard's development deployment settings, add `AGENT_SECRET`, `ALERT_SECRET`, `CARTESIA_API_KEY`, `ALERT_AGENT_ID`, `ALERT_FROM_NUMBER_ID`, `DEMO_CALLER_PHONE`, `DEMO_FAMILY_PHONE`, and later `CLERK_JWT_ISSUER_DOMAIN` / `DEMO_FAMILY_AUTH_SUBJECT`. Phone values must use E.164 (`+` followed by country code and number). Set `ALERT_RING_TIMEOUT_SECONDS` to 30, or another integer from 5 through 80. Keep agent and alert secrets identical to their respective service copies, but different from each other.
 
 Copy the deployment's **HTTP Actions URL** ending in `.convex.site` into `agent/.env` as `CONVEX_SITE_URL`. This is different from the `.convex.cloud` client URL used later by Next.js.
@@ -38,7 +47,7 @@ Copy the deployment's **HTTP Actions URL** ending in `.convex.site` into `agent/
 npx convex run seed:demo '{}'
 ```
 
-The seed creates Margaret, Dana, $50 per-order / $200 monthly limits, two favorites, five facts with transcript evidence, and Lily's recital follow-up. Sharing starts off. Repeating the command does not duplicate data. For an intentional rehearsal reset of that household and all its calls, orders, alerts and memory:
+The seed creates Margaret, $50 per-order / $200 monthly limits, two favorites, five facts with transcript evidence, and Lily's recital follow-up. `DEMO_CALLER_PHONE` is required; `DEMO_FAMILY_PHONE` is optional for caller-only testing. Dana is added as a contact only when a family number is configured. Without it, alert destinations and family dashboard access remain denied. Sharing starts off. Repeating the command does not duplicate data. For an intentional rehearsal reset of that household and all its calls, orders, alerts and memory:
 
 ```sh
 npx convex run seed:demo '{"reset":true}'
