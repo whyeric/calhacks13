@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Status** | Draft v2.3, for team review |
+| **Status** | Draft v2.4, for team review |
 | **Event** | Cal Hacks 13.0 · submission due Sun Oct 25, 2026, 09:00 PT |
 | **Branch** | `errand-line` |
 | **Last updated** | Fri Oct 23, 2026 |
@@ -18,6 +18,8 @@
 - Four human acceptance gates, one at the end of each build phase, with real-phone tests and recorded results (§19.4).
 
 **New in v2.3:** family notifications use calls and the dashboard. SMS alerts and text-message approvals are outside the prototype scope, including stretch goals.
+
+**New in v2.4:** the Cal Hacks demo may run the Python voice agent on a laptop behind an HTTPS tunnel. Keep the laptop awake and the tunnel running during calls. Fly.io or another always-on host is an optional follow-up, not a prototype prerequisite; Cartesia, Claude and Convex remain cloud services.
 
 ## Contents
 
@@ -478,7 +480,7 @@ SPEC.md
 
 | Piece | Runs on | Why |
 |---|---|---|
-| Voice agent | One always-on container in a US region: Fly.io (one machine, auto-stop off) or a DigitalOcean droplet behind Caddy for TLS. Registered with Cartesia as the agent's `self_hosted_deployment_url` | It holds per-call state and a live connection for the whole call, so it can't be serverless. One warm process reuses connections to Claude and Convex (§12.3) |
+| Voice agent | For the Cal Hacks demo: a laptop Python process behind an HTTPS tunnel, registered as `self_hosted_deployment_url`. Optional later: an always-on Fly.io container or DigitalOcean droplet | Holds per-call state and a live connection for the whole call. Keep the laptop awake and connected; one warm process reuses connections to Claude and Convex (§12.3) |
 | Convex | Convex Cloud (one production deployment, one dev deployment per person) | Managed. HTTP actions are served at the deployment's `.convex.site` URL |
 | Dashboard | Vercel | Standard Next.js + Convex deploy. Preview URLs for design review |
 | Speech, phone number and alert calls | Cartesia | Managed. Twilio only for optional voice harness calls |
@@ -490,7 +492,7 @@ SPEC.md
 
 **Hosting deadline.** Cartesia stops hosting Line SDK agents on Dec 1, 2026. Self-hosted agents keep working, which is another reason to self-host from the start.
 
-**Region.** In Phase 0, measure the round trip to Cartesia and to `api.anthropic.com` from each candidate region, and pick the region with the lowest total. The 50 ms network budget in §12.2 assumes this.
+**Region.** For an optional hosted deployment, measure round trips to Cartesia and `api.anthropic.com` from candidate regions and pick the lowest combined result. For the local demo, measure latency on the actual venue network; the 50 ms network budget in §12.2 is a target, not a guarantee for laptop routing.
 
 ### 10.6 Service boundaries and auth
 
@@ -800,7 +802,7 @@ Chat privacy never hides a scam: scam alerts and their excerpts always go to the
 |---|---|
 | Latency | Meet the targets in §12.1 |
 | Demo reliability | Cached search results, a fallback payment rail, a recorded backup video, and 10 of 10 rehearsal runs |
-| Deployment | By Sat 22:00 nothing runs on a laptop: the agent is in its container, Convex is on Convex Cloud and the dashboard is on Vercel (§10.5) |
+| Deployment | For the Cal Hacks demo, the agent may run on an awake laptop behind an HTTPS tunnel. Convex is on Convex Cloud; the family dashboard can be deployed to Vercel (§10.5). Always-on voice hosting is optional |
 | Accessibility | Slower speech rate and repeats on request. Works on landlines and flip phones with no keypad input required |
 | Privacy | §14 |
 | Security | Secrets kept in the environment, agent and alert-agent requests authenticated with separate secrets, and dashboard sign-in checked inside Convex (§10.6) |
@@ -989,10 +991,10 @@ One project, entered for about a dozen prizes, with each sponsor doing a real jo
 
 | Phase | When | Deliverables | Checkpoint |
 |---|---|---|---|
-| **0. Foundations** | Fri 21:00 – Sat 01:00 | Accounts and keys (Cartesia, Anthropic, Apify, Visa, Convex, Vercel, Clerk; Twilio only for optional voice harness calls); repo scaffold; Convex schema and authenticated HTTP actions; seeded household and memory; Cartesia number; agent container up over HTTPS and registered with Cartesia; the agent answers the phone; alert agent places a test call; Figma wireframes; sponsor questions settled (§21) | **Gate 1 (§19.4):** a call rings through to our self-hosted agent with caller ID, and a test alert call reaches Dana's phone |
+| **0. Foundations** | Fri 21:00 – Sat 01:00 | Accounts and keys (Cartesia, Anthropic, Apify, Visa, Convex, Vercel, Clerk; Twilio only for optional voice harness calls); repo scaffold; Convex schema and authenticated HTTP actions; seeded household and memory; Cartesia number; agent running behind HTTPS locally or on a host and registered with Cartesia; the agent answers the phone; alert agent places a test call; Figma wireframes; sponsor questions settled (§21) | **Gate 1 (§19.4):** a call rings through to our self-hosted agent with caller ID, and a test alert call reaches Dana's phone |
 | **1. Core loop** | Sat 01:00 – 12:00 | F1 with cached search; `place_order` with limits and sandbox or mock payment; memory read path with caching and pre-warm; templated opening; turn logging; dashboard Live calls and Orders | **Sat 09:00:** latency and cost baseline on Haiku 5.5 (§12.5). **Gate 2, Sat 12:00:** one order works start to finish, with the memory opener, and money moves only within limits |
 | **2. Safety and memory** | Sat 12:00 – 18:00 | Scam guard (hard rule, classifier, ladder, alerts); approvals by alert call and dashboard; memory writer and forget; companion behaviors and connect nudge; wellbeing protocol | **Gate 3, Sat 18:00:** every P0 feature exists; safety and memory pass human review; test sets run on Haiku, and the escalation rule (§12.4) is applied per role |
-| **3. Speed and polish** | Sat 18:00 – 22:00 | Latency tuned to targets; Memory and latency panels; Figma polish; first pass of the full test matrix; hosted deployment | **Gate 4, Sat 22:00:** the full demo works (Calls 1–3) on hosted infrastructure; deploy freeze |
+| **3. Speed and polish** | Sat 18:00 – 22:00 | Latency tuned to targets; Memory and latency panels; Figma polish; first pass of the full test matrix; local-tunnel or hosted demo setup | **Gate 4, Sat 22:00:** the full demo works (Calls 1–3) on the selected demo setup; deploy freeze |
 | **4. Harden** | Sat 22:00 – Sun 06:00 | Fix failures; 10 of 10 rehearsals; stretch goals only if everything is green; record the video | **Sun 06:00:** 10 of 10 rehearsals logged, video recorded |
 | **5. Submit** | Sun 06:00 – 08:30 | Devpost write-up, screenshots, repo cleanup | **Sun 08:30:** submitted, ahead of the 09:00 deadline |
 
@@ -1051,7 +1053,7 @@ Rehearsals (10 of 10) and the submission already have their own pass bars (§19.
 
 | # | Do this | Expected result |
 |---|---|---|
-| 4.1 | Close every laptop. Run Calls 1 and 2 on the demo phones, on the venue floor | Both meet their "Pass when" conditions (§16.1) on hosted infrastructure, and Dana's phone rings in Call 2 |
+| 4.1 | Keep the demo laptop awake with the agent and tunnel running, or use the optional hosted agent. Run Calls 1 and 2 on the demo phones, on the venue floor | Both meet their "Pass when" conditions (§16.1) on the selected demo setup, and Dana's phone rings in Call 2 |
 | 4.2 | Run Call 3 (§16.1) with chat sharing off | No product is offered, and one follow-up is asked. The nudge call reaches Dana only after "yes," and the transcript is hidden on the dashboard |
 | 4.3 | Open the dashboard in a signed-out private window, and call a Convex query from the browser console | No data and no transcripts |
 | 4.4 | Make three calls speaking slowly, with long pauses mid-sentence | No cut-offs. Write down the count |

@@ -2,7 +2,7 @@
 
 ## 1. Accounts and local secrets
 
-For the first phone test, create an [Anthropic Console](https://console.anthropic.com/) account with API credit, a [Cartesia](https://play.cartesia.ai/) account with Agents and a US number, a [Convex](https://dashboard.convex.dev/) account, and a [Fly.io](https://fly.io/) account with billing. Use two consenting team members' phones, one as Margaret and one as Dana. Apify, Visa, Vercel and Clerk accounts are also tracked in #6; they do not block the minimal inbound voice test. Clerk is needed before any family query can return private data.
+For the first phone test, use an [Anthropic Console](https://console.anthropic.com/) account with API credit, a [Cartesia](https://play.cartesia.ai/) account with Agents and a US number, and a [Convex](https://dashboard.convex.dev/) account. The Python voice service can run on your laptop for the Cal Hacks demo; Fly.io is optional. Start with one consenting team member's phone as Margaret; add Dana's phone later for alert-call tests. Apify, Visa, Vercel and Clerk accounts are also tracked in #6; they do not block the minimal inbound voice test. Clerk is needed before any family query can return private data.
 
 Copy `.env.example` to `agent/.env` if the file does not already exist. Preserve existing values. Fill these names first:
 
@@ -57,7 +57,31 @@ The seed is an **internal mutation**, callable by the authenticated Convex CLI/d
 
 Create the production deployment from Convex, configure its environment independently, then run `npx convex deploy` when ready. Record dev/prod URLs in the private team configuration, never deploy keys.
 
-## 3. Local voice service and always-on host
+## 3. Run the Cal Hacks demo locally
+
+Install `cloudflared` using `brew install cloudflared` on macOS. The current workspace also has a verified temporary binary at `/tmp/errand-line-demo/cloudflared`, which the launcher uses if no installed binary is on PATH. The temporary binary may disappear after a reboot; installing it normally makes restarts repeatable.
+
+The saved `agent/.env` needs `CARTESIA_AGENT_ID`, `CARTESIA_PHONE_NUMBER_ID` and `CARTESIA_PHONE_NUMBER` in addition to the keys and Convex URL above. The existing demo agent and number are already configured on the current machine; preserve those private local values.
+
+From the repository root:
+
+```sh
+agent/.venv/bin/python harness/local_demo.py
+```
+
+The launcher starts the agent on `127.0.0.1:8010`, creates a Cloudflare Quick Tunnel, waits for its HTTPS health check, registers that URL with the existing Cartesia agent, and assigns the existing phone number. It reads the configuration back from Cartesia before printing the number to call. It never dials out or provisions additional phone numbers.
+
+Keep the terminal running, the laptop lid open, and the network connected. On macOS, you can prevent idle sleep for the command's lifetime:
+
+```sh
+caffeinate -i agent/.venv/bin/python harness/local_demo.py
+```
+
+Press Ctrl+C to stop the agent and tunnel. A restarted tunnel gets a new hostname; rerunning the same command updates Cartesia automatically. Allow up to 90 seconds for a new hostname to resolve. Call charges from Cartesia and Claude API usage still apply; this avoids a separate voice-server hosting account. See [Cloudflare Quick Tunnels](https://developers.cloudflare.com/tunnel/get-started/quick-tunnels/).
+
+The tunnel carries call metadata, including caller ID, and conversation events between Cartesia and the laptop. The automated smoke check uses an invented number with no household context; a real-phone test uses the caller's actual number. If the venue DNS resolver is slow to recognize a new hostname, the launcher can use curl's encrypted public-DNS health probe without disabling HTTPS certificate verification.
+
+To run just the agent for development, without a tunnel or phone routing:
 
 ```sh
 cd agent
@@ -65,7 +89,9 @@ uv sync --frozen
 uv run python main.py
 ```
 
-`GET /status` is the SDK health check. Missing required configuration prevents startup. The SDK serves `POST /chats` and `/ws`; Cartesia connects speech and telephony to these endpoints. A local tunnel can be used for initial testing, but the acceptance gate needs a stable HTTPS host.
+`GET /status` is the SDK health check. Missing required configuration prevents startup. The SDK serves `POST /chats` and `/ws`; Cartesia connects speech and telephony to these endpoints. The local tunnel is the approved Cal Hacks demo setup. Phone acceptance still requires an actual call.
+
+### Optional always-on hosting after the local demo
 
 For Fly.io, install its CLI and sign in, then from `agent/`:
 
@@ -87,7 +113,7 @@ Redeploy with `fly deploy` after `uv sync` updates the lockfile. Verify `/status
 
 ## 4. Cartesia inbound number
 
-Create a Line SDK / self-hosted agent in Cartesia. Register the Fly HTTPS URL as its `self_hosted_deployment_url`, configure a voice in the Playground, and assign the US phone number to it. Confirm the current account's number-slot allowance in the dashboard. Keep the self-hosted service URL restricted using any authentication/network controls Cartesia currently supports; the stock Line SDK does not authenticate incoming WebSocket sessions by itself. Do not publish the service URL as an end-user API.
+Create a Line SDK / self-hosted agent in Cartesia once, configure a voice, and save its ID plus the existing number ID in the ignored `agent/.env`. The local demo launcher registers the current tunnel URL as `self_hosted_deployment_url` and assigns the number. An optional hosted deployment can use the same registration field later. Keep the temporary service URL out of public demo materials: the stock Line SDK does not authenticate incoming WebSocket sessions by itself. The public phone number is the caller entry point.
 
 Call from Margaret's seeded phone. The agent must greet, identify itself as AI, and answer “Hello, who is this?” Check `calls.callerPhone` in Convex against the actual phone. Repeat from a second number: it must produce an unknown-caller record with no household memory. Caller ID is never substituted with the demo number. The custom agent talks directly to Anthropic; Line handles speech and interrupts on `UserTurnStarted`.
 

@@ -8,6 +8,14 @@ Prototype notifications use voice calls and the dashboard. Approvals use spoken 
 
 **Start here: [setup and deployment](docs/setup.md).** The current completion evidence and remaining account/phone checks are in [milestone status](docs/milestone-1.md). No real payment implementation is enabled in this phase.
 
+For the Cal Hacks demo, run the voice agent on your laptop through an HTTPS tunnel; no Fly.io account is required. With the saved local service configuration and `cloudflared` installed:
+
+```sh
+agent/.venv/bin/python harness/local_demo.py
+```
+
+Keep the laptop awake and this command running. It starts the agent and tunnel, updates the existing Cartesia agent URL, and assigns the existing demo number. Restarting it refreshes the temporary hostname automatically; Ctrl+C stops both processes.
+
 ```text
 agent/              Python voice service; managed with uv
   prompts/          Static prompt text

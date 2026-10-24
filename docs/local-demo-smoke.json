@@ -1,0 +1,12 @@
+{
+  "local_server": "passed",
+  "public_https_tunnel": "passed",
+  "streamed_websocket_greeting": "passed",
+  "live_claude_reply": "passed",
+  "cartesia_number_assignment": "verified",
+  "physical_phone_test": "pending",
+  "test_identity": "invented unknown caller; no household context",
+  "mode": "laptop behind HTTPS tunnel",
+  "convex_call_closed": true,
+  "convex_logged_turn_count": 3
+}
