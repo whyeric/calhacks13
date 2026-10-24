@@ -1,0 +1,2914 @@
+{
+  "generatedAt": "2026-10-24T07:51:42+00:00",
+  "mode": "fake-convex",
+  "measures": "LLM stage only (turn end -> first text chunk incl. tool rounds); excludes end-of-turn detection, STT, TTS, telephony and network",
+  "model": "claude-haiku-5-5",
+  "effort": "low",
+  "delays": {
+    "firstDelayS": 3.0,
+    "replyDelayS": 1.0
+  },
+  "scripts": [
+    "call1",
+    "l1_latency"
+  ],
+  "summary": {
+    "calls": 11,
+    "callsPassed": 11,
+    "turns": 56,
+    "conversationalTurns": 44,
+    "toolTurns": 12,
+    "errorTurns": [],
+    "llmStage": {
+      "allTurnsFirstChunk": {
+        "n": 56,
+        "p50": 767.05,
+        "p95": 2111.275,
+        "max": 6311.2
+      },
+      "conversationalFirstChunk": {
+        "n": 44,
+        "p50": 772.7,
+        "p95": 1748.2200000000003,
+        "max": 6311.2
+      },
+      "toolTurnFirstChunk": {
+        "n": 12,
+        "p50": 761.15,
+        "p95": 2322.8599999999988,
+        "max": 3125.2
+      },
+      "toolTurnResultText": {
+        "n": 12,
+        "p50": 1963.7,
+        "p95": 3658.48,
+        "max": 3759.9
+      },
+      "firstRequestTtft": {
+        "n": 56,
+        "p50": 766.7,
+        "p95": 2111.1,
+        "max": 6310.9
+      },
+      "turnTotal": {
+        "n": 56,
+        "p50": 1077.25,
+        "p95": 3561.875,
+        "max": 6551.1
+      },
+      "toolExecution": {
+        "n": 12,
+        "p50": 0.30000000000000004,
+        "p95": 1.1349999999999998,
+        "max": 1.3
+      },
+      "toolRoundWall": {
+        "n": 12,
+        "p50": 0.8,
+        "p95": 1.5899999999999999,
+        "max": 1.7
+      }
+    },
+    "projectedVoiceToVoice": {
+      "note": "LLM stage + 500 ms \u00a712.2 non-LLM budget (not measured)",
+      "allTurns": {
+        "n": 56,
+        "p50": 1267.0500000000002,
+        "p95": 2611.275,
+        "max": 6811.2
+      },
+      "toolTurnResult": {
+        "n": 12,
+        "p50": 2463.7,
+        "p95": 4158.48,
+        "max": 4259.9
+      }
+    },
+    "firstTurnCacheHitRate": 1.0,
+    "firstTurnCacheHits": 11,
+    "firstTurnCacheKnown": 11,
+    "costPerCall": {
+      "n": 11,
+      "p50": 0.000752,
+      "p95": 0.001226,
+      "max": 0.001361,
+      "mean": 0.0008231818181818183
+    },
+    "totalCostUsd": 0.009055,
+    "targets": [
+      {
+        "metric": "LLM stage, conversational turn, p50 (vs \u00a712.2 300 ms Claude budget)",
+        "value": 772.7,
+        "target": 300,
+        "unit": "ms",
+        "ratio": 2.5756666666666668,
+        "pass": false
+      },
+      {
+        "metric": "Projected voice-to-voice, all turns, p50 (\u00a712.1)",
+        "value": 1267.0500000000002,
+        "target": 800,
+        "unit": "ms",
+        "ratio": 1.5838125000000003,
+        "pass": false
+      },
+      {
+        "metric": "Projected voice-to-voice, all turns, p95 (\u00a712.1)",
+        "value": 2611.275,
+        "target": 1500,
+        "unit": "ms",
+        "ratio": 1.74085,
+        "pass": false
+      },
+      {
+        "metric": "Tool turn -> filler, LLM stage + 500, p50",
+        "value": 1261.15,
+        "target": 800,
+        "unit": "ms",
+        "ratio": 1.5764375000000002,
+        "pass": false
+      },
+      {
+        "metric": "Tool turn -> filler, LLM stage + 500, p95",
+        "value": 2822.8599999999988,
+        "target": 1500,
+        "unit": "ms",
+        "ratio": 1.881906666666666,
+        "pass": false
+      },
+      {
+        "metric": "Tool turn -> result, LLM stage + 500, p50",
+        "value": 2463.7,
+        "target": 2500,
+        "unit": "ms",
+        "ratio": 0.9854799999999999,
+        "pass": true
+      },
+      {
+        "metric": "Tool turn -> result, LLM stage + 500, p95",
+        "value": 4158.48,
+        "target": 4000,
+        "unit": "ms",
+        "ratio": 1.03962,
+        "pass": false
+      },
+      {
+        "metric": "First-turn cache hit rate (L2)",
+        "value": 1.0,
+        "target": 0.95,
+        "unit": "rate",
+        "ratio": 0.95,
+        "pass": true
+      },
+      {
+        "metric": "Claude cost per call, max",
+        "value": 0.001361,
+        "target": 0.05,
+        "unit": "usd",
+        "ratio": 0.027219999999999998,
+        "pass": true
+      }
+    ],
+    "largestMiss": {
+      "metric": "LLM stage, conversational turn, p50 (vs \u00a712.2 300 ms Claude budget)",
+      "value": 772.7,
+      "target": 300,
+      "unit": "ms",
+      "ratio": 2.5756666666666668,
+      "pass": false
+    }
+  },
+  "calls": [
+    {
+      "name": "call1",
+      "suite": "call1",
+      "caller": "margaret",
+      "turns": [
+        {
+          "idx": 1,
+          "caller": "It was wonderful, she played beautifully.",
+          "agent": "How wonderful, I'm so glad it went well for her. What can I help you with today?",
+          "tools": [],
+          "toolMs": 0,
+          "expect": {
+            "toolsNotCalled": [
+              "place_order"
+            ]
+          },
+          "firstChunkMs": 627.9,
+          "firstModelTextMs": 627.9,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 625.0,
+          "requestStartMs": 2.9,
+          "turnMs": 738.6,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 28,
+            "cacheRead": 6345,
+            "cacheWrite": 56,
+            "cacheWrite5m": 56,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 8.5e-05,
+          "cacheReadFirstRequest": 6345
+        },
+        {
+          "idx": 2,
+          "caller": "I need paper towels and my coffee.",
+          "agent": "Let me check. Your usual medium-roast coffee, the big forty-eight ounce can, is twelve dollars and forty-eight cents. Is that the one you want?",
+          "tools": [
+            {
+              "name": "match_favorite",
+              "input": {
+                "utterance": "my coffee"
+              },
+              "result": {
+                "status": "match",
+                "favorite": {
+                  "name": "Medium-roast coffee, big can",
+                  "storeItemId": "demo-coffee-big",
+                  "store": "Walmart",
+                  "qty": 1,
+                  "priceCents": 1248,
+                  "size": "48 oz can"
+                }
+              },
+              "ms": 1.2
+            },
+            {
+              "name": "match_favorite",
+              "input": {
+                "utterance": "paper towels"
+              },
+              "result": {
+                "status": "none"
+              },
+              "ms": 0.1
+            }
+          ],
+          "toolMs": 1.3,
+          "expect": {
+            "toolsNotCalled": [
+              "place_order"
+            ],
+            "speechIncludes": [
+              "coffee|towel"
+            ]
+          },
+          "firstChunkMs": 1530.6,
+          "firstModelTextMs": 2596.0,
+          "resultTextMs": 2596.0,
+          "firstRequestTtftMs": 1530.4,
+          "requestStartMs": 0.1,
+          "turnMs": 2776.7,
+          "toolWallMs": 1.7,
+          "rounds": 2,
+          "stopReasons": [
+            "tool_use",
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 6,
+            "output": 295,
+            "cacheRead": 12844,
+            "cacheWrite": 442,
+            "cacheWrite5m": 442,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 0.000332,
+          "cacheReadFirstRequest": 6401
+        },
+        {
+          "idx": 3,
+          "caller": "Yes, my usual coffee. And the small pack of paper towels, please.",
+          "agent": "Let me check. Here are two options for paper towels. There's a six-roll pack for eight dollars and ninety-seven cents, and a twelve-roll pack for fifteen dollars and forty-eight cents. Which one would you like?",
+          "tools": [
+            {
+              "name": "search_items",
+              "input": {
+                "query": "paper towels small pack"
+              },
+              "result": {
+                "status": "ok",
+                "query": "paper towels small pack",
+                "store": "Walmart",
+                "source": "cache",
+                "options": [
+                  {
+                    "name": "Paper towels, 6-roll pack",
+                    "size": "6 rolls",
+                    "priceCents": 897,
+                    "storeItemId": "demo-paper-towels-6"
+                  },
+                  {
+                    "name": "Paper towels, 12-roll pack",
+                    "size": "12 rolls",
+                    "priceCents": 1548,
+                    "storeItemId": "demo-paper-towels-12"
+                  }
+                ]
+              },
+              "ms": 0.1
+            }
+          ],
+          "toolMs": 0.1,
+          "expect": {
+            "toolsNotCalled": [
+              "place_order"
+            ]
+          },
+          "firstChunkMs": 608.4,
+          "firstModelTextMs": 2048.8,
+          "resultTextMs": 2048.8,
+          "firstRequestTtftMs": 608.1,
+          "requestStartMs": 0.3,
+          "turnMs": 2225.2,
+          "toolWallMs": 0.3,
+          "rounds": 2,
+          "stopReasons": [
+            "tool_use",
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 6,
+            "output": 125,
+            "cacheRead": 13763,
+            "cacheWrite": 297,
+            "cacheWrite5m": 297,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 0.000238,
+          "cacheReadFirstRequest": 6843
+        },
+        {
+          "idx": 4,
+          "caller": "The small one.",
+          "agent": "The six-roll pack it is. So that's your big can of medium-roast coffee, twelve dollars and forty-eight cents, and the six-roll paper towels, eight dollars and ninety-seven cents. The total is twenty-one dollars and forty-five cents, arriving tomorrow. Shall I order it?",
+          "tools": [],
+          "toolMs": 0,
+          "expect": {
+            "toolsNotCalled": [
+              "place_order"
+            ]
+          },
+          "firstChunkMs": 1056.2,
+          "firstModelTextMs": 1056.2,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 1055.9,
+          "requestStartMs": 0.3,
+          "turnMs": 1412.3,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 190,
+            "cacheRead": 7140,
+            "cacheWrite": 78,
+            "cacheWrite5m": 78,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 0.000177,
+          "cacheReadFirstRequest": 7140
+        },
+        {
+          "idx": 5,
+          "caller": "Yes, please.",
+          "agent": "Let me check. Your order is all set, Margaret. It should arrive tomorrow, and Dana can see it too. Is there anything else I can help you with?",
+          "tools": [
+            {
+              "name": "place_order",
+              "input": {
+                "items": [
+                  {
+                    "storeItemId": "demo-coffee-big",
+                    "qty": 1
+                  },
+                  {
+                    "storeItemId": "demo-paper-towels-6",
+                    "qty": 1
+                  }
+                ],
+                "store": "Walmart"
+              },
+              "result": {
+                "status": "paid",
+                "orderId": "fake-order-1",
+                "totalCents": 2145,
+                "paymentRef": "mock-pay-1"
+              },
+              "ms": 0.8
+            }
+          ],
+          "toolMs": 0.8,
+          "expect": {
+            "toolsCalled": [
+              "place_order"
+            ]
+          },
+          "firstChunkMs": 684.1,
+          "firstModelTextMs": 1861.5,
+          "resultTextMs": 1861.5,
+          "firstRequestTtftMs": 683.8,
+          "requestStartMs": 0.3,
+          "turnMs": 1864.8,
+          "toolWallMs": 1.1,
+          "rounds": 2,
+          "stopReasons": [
+            "tool_use",
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 6,
+            "output": 171,
+            "cacheRead": 14636,
+            "cacheWrite": 350,
+            "cacheWrite5m": 350,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 0.000276,
+          "cacheReadFirstRequest": 7218
+        },
+        {
+          "idx": 6,
+          "caller": "No, that's everything. Thank you, goodbye.",
+          "agent": "You're welcome, Margaret. Give Lily my best, and call any time. Goodbye!",
+          "tools": [],
+          "toolMs": 0,
+          "expect": {
+            "toolsNotCalled": [
+              "place_order"
+            ]
+          },
+          "firstChunkMs": 572.1,
+          "firstModelTextMs": 572.0,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 571.9,
+          "requestStartMs": 0.1,
+          "turnMs": 704.8,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 32,
+            "cacheRead": 7568,
+            "cacheWrite": 65,
+            "cacheWrite5m": 65,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 0.0001,
+          "cacheReadFirstRequest": 7568
+        }
+      ],
+      "error": null,
+      "callId": "fake-call-3333331974",
+      "model": "claude-haiku-5-5",
+      "effort": "low",
+      "opening": "Hi Margaret, it's Errand Line, your AI assistant. How did Lily's recital go on Saturday?",
+      "callEnd": {
+        "callId": "fake-call-3333331974",
+        "kind": "order",
+        "outcome": "ordered"
+      },
+      "prewarm": [
+        {
+          "usage": {
+            "input": 4,
+            "output": 0,
+            "cacheRead": 5568,
+            "cacheWrite": 777,
+            "cacheWrite5m": 777,
+            "cacheWrite1h": 0
+          },
+          "ms": 924.2,
+          "error": null,
+          "doneBeforeFirstTurn": true
+        }
+      ],
+      "firstTurnCacheRead": 6345,
+      "costUsd": 0.001361,
+      "fake": {
+        "orders": [
+          {
+            "status": "paid",
+            "totalCents": 2145,
+            "store": "Walmart",
+            "items": [
+              {
+                "name": "Medium-roast coffee, big can",
+                "storeItemId": "demo-coffee-big",
+                "qty": 1,
+                "priceCents": 1248
+              },
+              {
+                "name": "Paper towels, 6-roll pack",
+                "storeItemId": "demo-paper-towels-6",
+                "qty": 1,
+                "priceCents": 897
+              }
+            ]
+          }
+        ],
+        "followupsAsked": 1,
+        "turnsLogged": 13,
+        "callEnds": [
+          {
+            "callId": "fake-call-3333331974",
+            "kind": "order",
+            "outcome": "ordered"
+          }
+        ],
+        "httpErrors": []
+      },
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "l1_chat_garden",
+      "suite": "l1_latency",
+      "caller": "margaret",
+      "turns": [
+        {
+          "idx": 1,
+          "caller": "It went really well, thank you for asking.",
+          "agent": "I'm so glad to hear that, Margaret. Please tell Lily well done from me. What can I help you with today?",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 522.9,
+          "firstModelTextMs": 522.9,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 522.6,
+          "requestStartMs": 0.3,
+          "turnMs": 809.5,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 38,
+            "cacheRead": 6345,
+            "cacheWrite": 54,
+            "cacheWrite5m": 54,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 9e-05,
+          "cacheReadFirstRequest": 6345
+        },
+        {
+          "idx": 2,
+          "caller": "I've been out in the garden this morning. The tomatoes are coming along.",
+          "agent": "That sounds lovely, Margaret. Tomatoes take a lot of care, so it's good to see them coming along. Is there anything you need for the garden or the house today?",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 739.9,
+          "firstModelTextMs": 739.9,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 739.5,
+          "requestStartMs": 0.3,
+          "turnMs": 1022.5,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 55,
+            "cacheRead": 6399,
+            "cacheWrite": 63,
+            "cacheWrite5m": 63,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 0.0001,
+          "cacheReadFirstRequest": 6399
+        },
+        {
+          "idx": 3,
+          "caller": "Do you think it will rain this week?",
+          "agent": "I'm sorry, Margaret, I don't have weather information. You could check your local weather on the radio, the TV, or a weather app, or ask Dana. Is there anything you'd like me to pick up for you today?",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 673.4,
+          "firstModelTextMs": 673.3,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 673.2,
+          "requestStartMs": 0.2,
+          "turnMs": 1030.9,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 69,
+            "cacheRead": 6462,
+            "cacheWrite": 68,
+            "cacheWrite5m": 68,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 0.000108,
+          "cacheReadFirstRequest": 6462
+        },
+        {
+          "idx": 4,
+          "caller": "Are you a real person?",
+          "agent": "No, Margaret, I'm not a real person. I'm an AI assistant your family set up to help with errands and keep you company. Is there anything you'd like me to help you order today?",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 624.7,
+          "firstModelTextMs": 624.7,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 624.4,
+          "requestStartMs": 0.3,
+          "turnMs": 942.7,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 57,
+            "cacheRead": 6530,
+            "cacheWrite": 78,
+            "cacheWrite5m": 78,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 0.000104,
+          "cacheReadFirstRequest": 6530
+        },
+        {
+          "idx": 5,
+          "caller": "Well, it was nice talking. Goodbye now.",
+          "agent": "Goodbye, Margaret. It was lovely talking with you, and I hope the tomatoes do well. Call any time.",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 6311.2,
+          "firstModelTextMs": 6311.2,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 6310.9,
+          "requestStartMs": 0.3,
+          "turnMs": 6551.1,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 41,
+            "cacheRead": 6608,
+            "cacheWrite": 76,
+            "cacheWrite5m": 76,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 9.6e-05,
+          "cacheReadFirstRequest": 6608
+        }
+      ],
+      "error": null,
+      "callId": "fake-call-a84f6ecfb7",
+      "model": "claude-haiku-5-5",
+      "effort": "low",
+      "opening": "Hi Margaret, it's Errand Line, your AI assistant. How did Lily's recital go on Saturday?",
+      "callEnd": {
+        "callId": "fake-call-a84f6ecfb7",
+        "kind": "chat",
+        "outcome": "no_order"
+      },
+      "prewarm": [
+        {
+          "usage": {
+            "input": 4,
+            "output": 0,
+            "cacheRead": 6125,
+            "cacheWrite": 220,
+            "cacheWrite5m": 220,
+            "cacheWrite1h": 0
+          },
+          "ms": 610.6,
+          "error": null,
+          "doneBeforeFirstTurn": true
+        }
+      ],
+      "firstTurnCacheRead": 6345,
+      "costUsd": 0.000587,
+      "fake": {
+        "orders": [],
+        "followupsAsked": 1,
+        "turnsLogged": 11,
+        "callEnds": [
+          {
+            "callId": "fake-call-a84f6ecfb7",
+            "kind": "chat",
+            "outcome": "no_order"
+          }
+        ],
+        "httpErrors": []
+      },
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "l1_milk_order",
+      "suite": "l1_latency",
+      "caller": "margaret",
+      "turns": [
+        {
+          "idx": 1,
+          "caller": "I'd like a gallon of milk, please.",
+          "agent": "Let me check. I found two options at Walmart. The first is whole milk, one gallon, for three dollars and forty-eight cents. The second is whole milk, half gallon, for two dollars and twenty-eight cents. Which one would you like?",
+          "tools": [
+            {
+              "name": "match_favorite",
+              "input": {
+                "utterance": "gallon of milk"
+              },
+              "result": {
+                "status": "none"
+              },
+              "ms": 0.1
+            },
+            {
+              "name": "search_items",
+              "input": {
+                "query": "gallon of milk"
+              },
+              "result": {
+                "status": "ok",
+                "query": "gallon of milk",
+                "store": "Walmart",
+                "source": "cache",
+                "options": [
+                  {
+                    "name": "Whole milk, one gallon",
+                    "size": "1 gallon",
+                    "priceCents": 348,
+                    "storeItemId": "demo-milk-gallon"
+                  },
+                  {
+                    "name": "Whole milk, half gallon",
+                    "size": "half gallon",
+                    "priceCents": 228,
+                    "storeItemId": "demo-milk-half-gallon"
+                  }
+                ]
+              },
+              "ms": 0.1
+            }
+          ],
+          "toolMs": 0.2,
+          "expect": null,
+          "firstChunkMs": 1666.4,
+          "firstModelTextMs": 3575.5,
+          "resultTextMs": 3575.5,
+          "firstRequestTtftMs": 1666.0,
+          "requestStartMs": 0.3,
+          "turnMs": 3772.1,
+          "toolWallMs": 0.9,
+          "rounds": 3,
+          "stopReasons": [
+            "tool_use",
+            "tool_use",
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 8,
+            "output": 182,
+            "cacheRead": 19153,
+            "cacheWrite": 328,
+            "cacheWrite5m": 328,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 0.000324,
+          "cacheReadFirstRequest": 6328
+        },
+        {
+          "idx": 2,
+          "caller": "Yes, the gallon.",
+          "agent": "Here's your order: one gallon of whole milk from Walmart, for a total of three dollars and forty-eight cents, arriving tomorrow. Shall I order it?",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 827.5,
+          "firstModelTextMs": 827.5,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 827.2,
+          "requestStartMs": 0.3,
+          "turnMs": 1049.6,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 56,
+            "cacheRead": 6656,
+            "cacheWrite": 85,
+            "cacheWrite5m": 85,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 0.000106,
+          "cacheReadFirstRequest": 6656
+        },
+        {
+          "idx": 3,
+          "caller": "Yes, please order it.",
+          "agent": "Let me check. Your gallon of whole milk is ordered and paid for, and Dana can see it on her dashboard. Is there anything else I can help you with?",
+          "tools": [
+            {
+              "name": "place_order",
+              "input": {
+                "items": [
+                  {
+                    "storeItemId": "demo-milk-gallon",
+                    "qty": 1
+                  }
+                ],
+                "store": "Walmart"
+              },
+              "result": {
+                "status": "paid",
+                "orderId": "fake-order-1",
+                "totalCents": 348,
+                "paymentRef": "mock-pay-1"
+              },
+              "ms": 0.5
+            }
+          ],
+          "toolMs": 0.5,
+          "expect": null,
+          "firstChunkMs": 762.4,
+          "firstModelTextMs": 2726.3,
+          "resultTextMs": 2726.3,
+          "firstRequestTtftMs": 762.0,
+          "requestStartMs": 0.3,
+          "turnMs": 2954.0,
+          "toolWallMs": 0.7,
+          "rounds": 2,
+          "stopReasons": [
+            "tool_use",
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 6,
+            "output": 145,
+            "cacheRead": 13548,
+            "cacheWrite": 188,
+            "cacheWrite5m": 188,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 0.000232,
+          "cacheReadFirstRequest": 6741
+        },
+        {
+          "idx": 4,
+          "caller": "No, that's all for today.",
+          "agent": "Thank you, Margaret. Your milk will arrive tomorrow. Call any time.",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 797.0,
+          "firstModelTextMs": 796.9,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 796.7,
+          "requestStartMs": 0.3,
+          "turnMs": 798.2,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 31,
+            "cacheRead": 6929,
+            "cacheWrite": 57,
+            "cacheWrite5m": 57,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 9.2e-05,
+          "cacheReadFirstRequest": 6929
+        },
+        {
+          "idx": 5,
+          "caller": "Thank you, bye.",
+          "agent": "Goodbye, Margaret. Take care.",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 771.7,
+          "firstModelTextMs": 771.7,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 771.4,
+          "requestStartMs": 0.3,
+          "turnMs": 773.1,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 17,
+            "cacheRead": 6986,
+            "cacheWrite": 41,
+            "cacheWrite5m": 41,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 8.4e-05,
+          "cacheReadFirstRequest": 6986
+        }
+      ],
+      "error": null,
+      "callId": "fake-call-fc5fcec3fd",
+      "model": "claude-haiku-5-5",
+      "effort": "low",
+      "opening": "Hi Margaret, it's Errand Line, your AI assistant. What can I do for you today?",
+      "callEnd": {
+        "callId": "fake-call-fc5fcec3fd",
+        "kind": "order",
+        "outcome": "ordered"
+      },
+      "prewarm": [
+        {
+          "usage": {
+            "input": 4,
+            "output": 0,
+            "cacheRead": 5568,
+            "cacheWrite": 760,
+            "cacheWrite5m": 760,
+            "cacheWrite1h": 0
+          },
+          "ms": 2582.1,
+          "error": null,
+          "doneBeforeFirstTurn": true
+        }
+      ],
+      "firstTurnCacheRead": 6328,
+      "costUsd": 0.000989,
+      "fake": {
+        "orders": [
+          {
+            "status": "paid",
+            "totalCents": 348,
+            "store": "Walmart",
+            "items": [
+              {
+                "name": "Whole milk, one gallon",
+                "storeItemId": "demo-milk-gallon",
+                "qty": 1,
+                "priceCents": 348
+              }
+            ]
+          }
+        ],
+        "followupsAsked": 0,
+        "turnsLogged": 11,
+        "callEnds": [
+          {
+            "callId": "fake-call-fc5fcec3fd",
+            "kind": "order",
+            "outcome": "ordered"
+          }
+        ],
+        "httpErrors": []
+      },
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "l1_chat_weather",
+      "suite": "l1_latency",
+      "caller": "margaret",
+      "turns": [
+        {
+          "idx": 1,
+          "caller": "Oh, nothing really, I just wanted to chat.",
+          "agent": "Of course, I'd be glad to chat with you. How have you been doing today?",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 1354.6,
+          "firstModelTextMs": 1354.5,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 1354.2,
+          "requestStartMs": 0.3,
+          "turnMs": 1452.3,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 26,
+            "cacheRead": 6328,
+            "cacheWrite": 53,
+            "cacheWrite5m": 53,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 8.3e-05,
+          "cacheReadFirstRequest": 6328
+        },
+        {
+          "idx": 2,
+          "caller": "It's been so gray and rainy here.",
+          "agent": "That sounds dreary. Rainy days can make the whole house feel quiet. Is there something cozy you like to do on days like this?",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 776.3,
+          "firstModelTextMs": 776.3,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 776.0,
+          "requestStartMs": 0.3,
+          "turnMs": 961.1,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 43,
+            "cacheRead": 6381,
+            "cacheWrite": 40,
+            "cacheWrite5m": 40,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 9.1e-05,
+          "cacheReadFirstRequest": 6381
+        },
+        {
+          "idx": 3,
+          "caller": "I've been reading a mystery novel.",
+          "agent": "That sounds like a lovely way to spend a rainy day. Who is the author, or what's the mystery about?",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 1081.2,
+          "firstModelTextMs": 1081.1,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 1080.9,
+          "requestStartMs": 0.2,
+          "turnMs": 1205.2,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 36,
+            "cacheRead": 6421,
+            "cacheWrite": 57,
+            "cacheWrite5m": 57,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 9e-05,
+          "cacheReadFirstRequest": 6421
+        },
+        {
+          "idx": 4,
+          "caller": "My daughter Dana is coming on Sunday.",
+          "agent": "That's wonderful, Margaret. It sounds like you'll have some good company this weekend. Are you two planning anything special while she's visiting?",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 1214.0,
+          "firstModelTextMs": 1214.0,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 1213.9,
+          "requestStartMs": 0.1,
+          "turnMs": 1367.6,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 47,
+            "cacheRead": 6478,
+            "cacheWrite": 54,
+            "cacheWrite5m": 54,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 9.5e-05,
+          "cacheReadFirstRequest": 6478
+        },
+        {
+          "idx": 5,
+          "caller": "Alright dear, I'll let you go. Bye.",
+          "agent": "Goodbye, Margaret. Enjoy your mystery and your time with Dana on Sunday. Call any time.",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 728.6,
+          "firstModelTextMs": 728.5,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 728.2,
+          "requestStartMs": 0.3,
+          "turnMs": 862.5,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 40,
+            "cacheRead": 6532,
+            "cacheWrite": 66,
+            "cacheWrite5m": 66,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 9.4e-05,
+          "cacheReadFirstRequest": 6532
+        }
+      ],
+      "error": null,
+      "callId": "fake-call-29ebdf445c",
+      "model": "claude-haiku-5-5",
+      "effort": "low",
+      "opening": "Hi Margaret, it's Errand Line, your AI assistant. What can I do for you today?",
+      "callEnd": {
+        "callId": "fake-call-29ebdf445c",
+        "kind": "chat",
+        "outcome": "no_order"
+      },
+      "prewarm": [
+        {
+          "usage": {
+            "input": 4,
+            "output": 0,
+            "cacheRead": 6328,
+            "cacheWrite": 0,
+            "cacheWrite5m": 0,
+            "cacheWrite1h": 0
+          },
+          "ms": 1637.3,
+          "error": null,
+          "doneBeforeFirstTurn": true
+        }
+      ],
+      "firstTurnCacheRead": 6328,
+      "costUsd": 0.000517,
+      "fake": {
+        "orders": [],
+        "followupsAsked": 0,
+        "turnsLogged": 11,
+        "callEnds": [
+          {
+            "callId": "fake-call-29ebdf445c",
+            "kind": "chat",
+            "outcome": "no_order"
+          }
+        ],
+        "httpErrors": []
+      },
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "l1_bread_eggs",
+      "suite": "l1_latency",
+      "caller": "margaret",
+      "turns": [
+        {
+          "idx": 1,
+          "caller": "I need a loaf of bread and some eggs.",
+          "agent": "Let me check. For bread, we have white sandwich bread, 20 ounce loaf, one dollar and forty-two cents, or whole wheat, 20 ounce loaf, two dollars and forty-eight cents. Which would you like?",
+          "tools": [
+            {
+              "name": "search_items",
+              "input": {
+                "query": "loaf of bread"
+              },
+              "result": {
+                "status": "ok",
+                "query": "loaf of bread",
+                "store": "Walmart",
+                "source": "cache",
+                "options": [
+                  {
+                    "name": "White sandwich bread",
+                    "size": "20 oz loaf",
+                    "priceCents": 142,
+                    "storeItemId": "demo-bread-white"
+                  },
+                  {
+                    "name": "Whole wheat bread",
+                    "size": "20 oz loaf",
+                    "priceCents": 248,
+                    "storeItemId": "demo-bread-wheat"
+                  }
+                ]
+              },
+              "ms": 0.1
+            },
+            {
+              "name": "search_items",
+              "input": {
+                "query": "eggs"
+              },
+              "result": {
+                "status": "ok",
+                "query": "eggs",
+                "store": "Walmart",
+                "source": "cache",
+                "options": [
+                  {
+                    "name": "Large white eggs, one dozen",
+                    "size": "12 count",
+                    "priceCents": 298,
+                    "storeItemId": "demo-eggs-12"
+                  },
+                  {
+                    "name": "Large white eggs, eighteen",
+                    "size": "18 count",
+                    "priceCents": 418,
+                    "storeItemId": "demo-eggs-18"
+                  }
+                ]
+              },
+              "ms": 0.0
+            }
+          ],
+          "toolMs": 0.1,
+          "expect": null,
+          "firstChunkMs": 693.1,
+          "firstModelTextMs": 1637.8,
+          "resultTextMs": 1637.8,
+          "firstRequestTtftMs": 692.8,
+          "requestStartMs": 0.3,
+          "turnMs": 1951.1,
+          "toolWallMs": 1.5,
+          "rounds": 2,
+          "stopReasons": [
+            "tool_use",
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 6,
+            "output": 173,
+            "cacheRead": 12706,
+            "cacheWrite": 496,
+            "cacheWrite5m": 496,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 0.000276,
+          "cacheReadFirstRequest": 6328
+        },
+        {
+          "idx": 2,
+          "caller": "White bread, and a dozen eggs.",
+          "agent": "Here's your order: one 20 ounce loaf of white sandwich bread, one dollar and forty-two cents, and one dozen large white eggs, two dollars and ninety-eight cents. The total is four dollars and forty cents, arriving tomorrow. Shall I order it?",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 1023.3,
+          "firstModelTextMs": 1023.2,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 1022.9,
+          "requestStartMs": 0.3,
+          "turnMs": 1378.2,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 129,
+            "cacheRead": 6824,
+            "cacheWrite": 89,
+            "cacheWrite5m": 89,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 0.000144,
+          "cacheReadFirstRequest": 6824
+        },
+        {
+          "idx": 3,
+          "caller": "Yes, that's right, go ahead.",
+          "agent": "Let me check. Your order is placed and paid. The bread and eggs should arrive tomorrow, and your family can see it too. Is there anything else I can help you with?",
+          "tools": [
+            {
+              "name": "place_order",
+              "input": {
+                "items": [
+                  {
+                    "storeItemId": "demo-bread-white",
+                    "qty": 1
+                  },
+                  {
+                    "storeItemId": "demo-eggs-12",
+                    "qty": 1
+                  }
+                ],
+                "store": "Walmart"
+              },
+              "result": {
+                "status": "paid",
+                "orderId": "fake-order-1",
+                "totalCents": 440,
+                "paymentRef": "mock-pay-1"
+              },
+              "ms": 1.0
+            }
+          ],
+          "toolMs": 1.0,
+          "expect": null,
+          "firstChunkMs": 642.5,
+          "firstModelTextMs": 1713.7,
+          "resultTextMs": 1713.7,
+          "firstRequestTtftMs": 642.2,
+          "requestStartMs": 0.3,
+          "turnMs": 1893.0,
+          "toolWallMs": 1.5,
+          "rounds": 2,
+          "stopReasons": [
+            "tool_use",
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 6,
+            "output": 171,
+            "cacheRead": 13972,
+            "cacheWrite": 292,
+            "cacheWrite5m": 292,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 0.000262,
+          "cacheReadFirstRequest": 6913
+        },
+        {
+          "idx": 4,
+          "caller": "No, nothing else.",
+          "agent": "Thank you, Margaret. Call any time.",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 586.9,
+          "firstModelTextMs": 586.9,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 586.5,
+          "requestStartMs": 0.4,
+          "turnMs": 782.7,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 17,
+            "cacheRead": 7205,
+            "cacheWrite": 58,
+            "cacheWrite5m": 58,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 8.8e-05,
+          "cacheReadFirstRequest": 7205
+        },
+        {
+          "idx": 5,
+          "caller": "Thanks so much, goodbye.",
+          "agent": "Goodbye, Margaret. Take care.",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 605.9,
+          "firstModelTextMs": 605.8,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 605.4,
+          "requestStartMs": 0.4,
+          "turnMs": 799.8,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 17,
+            "cacheRead": 7263,
+            "cacheWrite": 33,
+            "cacheWrite5m": 33,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 8.6e-05,
+          "cacheReadFirstRequest": 7263
+        }
+      ],
+      "error": null,
+      "callId": "fake-call-52fe25db84",
+      "model": "claude-haiku-5-5",
+      "effort": "low",
+      "opening": "Hi Margaret, it's Errand Line, your AI assistant. What can I do for you today?",
+      "callEnd": {
+        "callId": "fake-call-52fe25db84",
+        "kind": "order",
+        "outcome": "ordered"
+      },
+      "prewarm": [
+        {
+          "usage": {
+            "input": 4,
+            "output": 0,
+            "cacheRead": 6109,
+            "cacheWrite": 219,
+            "cacheWrite5m": 219,
+            "cacheWrite1h": 0
+          },
+          "ms": 884.5,
+          "error": null,
+          "doneBeforeFirstTurn": true
+        }
+      ],
+      "firstTurnCacheRead": 6328,
+      "costUsd": 0.000945,
+      "fake": {
+        "orders": [
+          {
+            "status": "paid",
+            "totalCents": 440,
+            "store": "Walmart",
+            "items": [
+              {
+                "name": "White sandwich bread",
+                "storeItemId": "demo-bread-white",
+                "qty": 1,
+                "priceCents": 142
+              },
+              {
+                "name": "Large white eggs, one dozen",
+                "storeItemId": "demo-eggs-12",
+                "qty": 1,
+                "priceCents": 298
+              }
+            ]
+          }
+        ],
+        "followupsAsked": 0,
+        "turnsLogged": 11,
+        "callEnds": [
+          {
+            "callId": "fake-call-52fe25db84",
+            "kind": "order",
+            "outcome": "ordered"
+          }
+        ],
+        "httpErrors": []
+      },
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "l1_chat_recital",
+      "suite": "l1_latency",
+      "caller": "margaret",
+      "turns": [
+        {
+          "idx": 1,
+          "caller": "Oh, Lily was marvelous. She played Chopin.",
+          "agent": "How lovely, Margaret. Chopin is a wonderful thing for a young pianist to play. What can I help you with today?",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 551.6,
+          "firstModelTextMs": 551.5,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 551.4,
+          "requestStartMs": 0.1,
+          "turnMs": 828.6,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 41,
+            "cacheRead": 6345,
+            "cacheWrite": 62,
+            "cacheWrite5m": 62,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 9.2e-05,
+          "cacheReadFirstRequest": 6345
+        },
+        {
+          "idx": 2,
+          "caller": "She's only nine, can you believe it?",
+          "agent": "Nine years old and playing Chopin, that's really something. You must be very proud of her. Is there anything I can help you order today?",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 668.3,
+          "firstModelTextMs": 668.3,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 668.2,
+          "requestStartMs": 0.1,
+          "turnMs": 1019.9,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 41,
+            "cacheRead": 6407,
+            "cacheWrite": 55,
+            "cacheWrite5m": 55,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 9.2e-05,
+          "cacheReadFirstRequest": 6407
+        },
+        {
+          "idx": 3,
+          "caller": "I used to play the piano myself, years ago.",
+          "agent": "That's wonderful, Margaret. It sounds like music has been a big part of your life. Is there anything you'd like me to help you order today?",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 726.3,
+          "firstModelTextMs": 726.3,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 726.0,
+          "requestStartMs": 0.3,
+          "turnMs": 904.9,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 45,
+            "cacheRead": 6462,
+            "cacheWrite": 57,
+            "cacheWrite5m": 57,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 9.5e-05,
+          "cacheReadFirstRequest": 6462
+        },
+        {
+          "idx": 4,
+          "caller": "Maybe I'll start again. What do you think?",
+          "agent": "That sounds like a lovely idea, Margaret. I'm an AI assistant, so I can't say what's best for you, but many people find returning to an instrument very rewarding. Your family or your doctor might be good people to talk it over with. Is there anything I can help you order today?",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 756.7,
+          "firstModelTextMs": 756.7,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 756.3,
+          "requestStartMs": 0.4,
+          "turnMs": 1229.3,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 88,
+            "cacheRead": 6519,
+            "cacheWrite": 62,
+            "cacheWrite5m": 62,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 0.000117,
+          "cacheReadFirstRequest": 6519
+        },
+        {
+          "idx": 5,
+          "caller": "Thank you, that's sweet. Goodbye.",
+          "agent": "Goodbye, Margaret. Lily sounds like a wonderful young pianist. Call any time.",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 930.7,
+          "firstModelTextMs": 930.7,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 930.4,
+          "requestStartMs": 0.3,
+          "turnMs": 1284.7,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 35,
+            "cacheRead": 6581,
+            "cacheWrite": 107,
+            "cacheWrite5m": 107,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 9.7e-05,
+          "cacheReadFirstRequest": 6581
+        }
+      ],
+      "error": null,
+      "callId": "fake-call-44b6c5af4c",
+      "model": "claude-haiku-5-5",
+      "effort": "low",
+      "opening": "Hi Margaret, it's Errand Line, your AI assistant. How did Lily's recital go on Saturday?",
+      "callEnd": {
+        "callId": "fake-call-44b6c5af4c",
+        "kind": "chat",
+        "outcome": "no_order"
+      },
+      "prewarm": [
+        {
+          "usage": {
+            "input": 4,
+            "output": 0,
+            "cacheRead": 6125,
+            "cacheWrite": 220,
+            "cacheWrite5m": 220,
+            "cacheWrite1h": 0
+          },
+          "ms": 699.3,
+          "error": null,
+          "doneBeforeFirstTurn": true
+        }
+      ],
+      "firstTurnCacheRead": 6345,
+      "costUsd": 0.000582,
+      "fake": {
+        "orders": [],
+        "followupsAsked": 1,
+        "turnsLogged": 11,
+        "callEnds": [
+          {
+            "callId": "fake-call-44b6c5af4c",
+            "kind": "chat",
+            "outcome": "no_order"
+          }
+        ],
+        "httpErrors": []
+      },
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "l1_tea_question",
+      "suite": "l1_latency",
+      "caller": "margaret",
+      "turns": [
+        {
+          "idx": 1,
+          "caller": "Do you sell tea?",
+          "agent": "Let me check. Yes, we have two options. Black tea bags, 100 count, are three ninety-eight. Green tea bags, 40 count, are two sixty-eight. Which one would you like?",
+          "tools": [
+            {
+              "name": "search_items",
+              "input": {
+                "query": "tea"
+              },
+              "result": {
+                "status": "ok",
+                "query": "tea",
+                "store": "Walmart",
+                "source": "cache",
+                "options": [
+                  {
+                    "name": "Black tea bags",
+                    "size": "100 count",
+                    "priceCents": 398,
+                    "storeItemId": "demo-tea-black"
+                  },
+                  {
+                    "name": "Green tea bags",
+                    "size": "40 count",
+                    "priceCents": 268,
+                    "storeItemId": "demo-tea-green"
+                  }
+                ]
+              },
+              "ms": 0.1
+            }
+          ],
+          "toolMs": 0.1,
+          "expect": null,
+          "firstChunkMs": 796.7,
+          "firstModelTextMs": 1644.4,
+          "resultTextMs": 1644.4,
+          "firstRequestTtftMs": 796.5,
+          "requestStartMs": 0.1,
+          "turnMs": 1880.8,
+          "toolWallMs": 0.5,
+          "rounds": 2,
+          "stopReasons": [
+            "tool_use",
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 6,
+            "output": 108,
+            "cacheRead": 12699,
+            "cacheWrite": 228,
+            "cacheWrite5m": 228,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 0.00021,
+          "cacheReadFirstRequest": 6328
+        },
+        {
+          "idx": 2,
+          "caller": "Black tea, please.",
+          "agent": "Black tea bags, 100 count, at three ninety-eight. How many boxes would you like, one or more?",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 874.5,
+          "firstModelTextMs": 874.5,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 874.1,
+          "requestStartMs": 0.3,
+          "turnMs": 1007.6,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 36,
+            "cacheRead": 6556,
+            "cacheWrite": 69,
+            "cacheWrite5m": 69,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 9.3e-05,
+          "cacheReadFirstRequest": 6556
+        },
+        {
+          "idx": 3,
+          "caller": "How much is it?",
+          "agent": "The black tea bags, 100 count, cost three dollars and ninety-eight cents. Would you like one box?",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 680.3,
+          "firstModelTextMs": 680.3,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 680.0,
+          "requestStartMs": 0.3,
+          "turnMs": 854.8,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 37,
+            "cacheRead": 6625,
+            "cacheWrite": 43,
+            "cacheWrite5m": 43,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 9.1e-05,
+          "cacheReadFirstRequest": 6625
+        },
+        {
+          "idx": 4,
+          "caller": "Yes, please order one box.",
+          "agent": "Here is your order: one box of black tea bags, 100 count, for three dollars and ninety-eight cents, arriving tomorrow from Walmart. Shall I order it?",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 827.1,
+          "firstModelTextMs": 827.0,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 826.7,
+          "requestStartMs": 0.3,
+          "turnMs": 1011.8,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 97,
+            "cacheRead": 6668,
+            "cacheWrite": 48,
+            "cacheWrite5m": 48,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 0.000122,
+          "cacheReadFirstRequest": 6668
+        },
+        {
+          "idx": 5,
+          "caller": "Lovely, thank you. Bye-bye.",
+          "agent": "Before you go, I haven't placed the tea order yet. If you'd like one box of black tea for three ninety-eight, just say yes and I'll order it. Call any time, Margaret.",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 1388.0,
+          "firstModelTextMs": 1388.0,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 1387.6,
+          "requestStartMs": 0.4,
+          "turnMs": 1642.5,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 183,
+            "cacheRead": 6716,
+            "cacheWrite": 117,
+            "cacheWrite5m": 117,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 0.000174,
+          "cacheReadFirstRequest": 6716
+        }
+      ],
+      "error": null,
+      "callId": "fake-call-069814b630",
+      "model": "claude-haiku-5-5",
+      "effort": "low",
+      "opening": "Hi Margaret, it's Errand Line, your AI assistant. What can I do for you today?",
+      "callEnd": {
+        "callId": "fake-call-069814b630",
+        "kind": "order",
+        "outcome": "no_order"
+      },
+      "prewarm": [
+        {
+          "usage": {
+            "input": 4,
+            "output": 0,
+            "cacheRead": 6328,
+            "cacheWrite": 0,
+            "cacheWrite5m": 0,
+            "cacheWrite1h": 0
+          },
+          "ms": 1263.8,
+          "error": null,
+          "doneBeforeFirstTurn": true
+        }
+      ],
+      "firstTurnCacheRead": 6328,
+      "costUsd": 0.000752,
+      "fake": {
+        "orders": [],
+        "followupsAsked": 0,
+        "turnsLogged": 11,
+        "callEnds": [
+          {
+            "callId": "fake-call-069814b630",
+            "kind": "order",
+            "outcome": "no_order"
+          }
+        ],
+        "httpErrors": []
+      },
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "l1_chat_memory",
+      "suite": "l1_latency",
+      "caller": "margaret",
+      "turns": [
+        {
+          "idx": 1,
+          "caller": "Do you remember what coffee I like?",
+          "agent": "Yes, Margaret. You like medium-roast coffee, the big can. Would you like me to order one for you?",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 1606.1,
+          "firstModelTextMs": 1606.1,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 1605.7,
+          "requestStartMs": 0.4,
+          "turnMs": 1751.2,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 212,
+            "cacheRead": 6328,
+            "cacheWrite": 47,
+            "cacheWrite5m": 47,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 0.000176,
+          "cacheReadFirstRequest": 6328
+        },
+        {
+          "idx": 2,
+          "caller": "That's right. I'm not ordering today though.",
+          "agent": "That's fine, no order today. Is there anything else I can help you with?",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 742.0,
+          "firstModelTextMs": 742.0,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 741.6,
+          "requestStartMs": 0.4,
+          "turnMs": 917.5,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 23,
+            "cacheRead": 6375,
+            "cacheWrite": 230,
+            "cacheWrite5m": 230,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 0.000104,
+          "cacheReadFirstRequest": 6375
+        },
+        {
+          "idx": 3,
+          "caller": "What day is it today?",
+          "agent": "It's Saturday, October 24th, and it's just after midnight here in Pacific time. Is there anything else I can help with?",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 871.9,
+          "firstModelTextMs": 871.9,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 871.5,
+          "requestStartMs": 0.3,
+          "turnMs": 1226.1,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 41,
+            "cacheRead": 6605,
+            "cacheWrite": 33,
+            "cacheWrite5m": 33,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 9.1e-05,
+          "cacheReadFirstRequest": 6605
+        },
+        {
+          "idx": 4,
+          "caller": "I always lose track of the days.",
+          "agent": "That happens to a lot of people, so don't worry about it. I'm glad to tell you the day whenever you like. Is there anything else you need today?",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 1058.9,
+          "firstModelTextMs": 1058.9,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 1058.6,
+          "requestStartMs": 0.3,
+          "turnMs": 1332.1,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 113,
+            "cacheRead": 6638,
+            "cacheWrite": 54,
+            "cacheWrite5m": 54,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 0.00013,
+          "cacheReadFirstRequest": 6638
+        },
+        {
+          "idx": 5,
+          "caller": "Okay, goodbye.",
+          "agent": "Goodbye, Margaret. Call any time.",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 619.0,
+          "firstModelTextMs": 619.0,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 618.9,
+          "requestStartMs": 0.2,
+          "turnMs": 759.0,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 18,
+            "cacheRead": 6692,
+            "cacheWrite": 126,
+            "cacheWrite5m": 126,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 9.2e-05,
+          "cacheReadFirstRequest": 6692
+        }
+      ],
+      "error": null,
+      "callId": "fake-call-668700c755",
+      "model": "claude-haiku-5-5",
+      "effort": "low",
+      "opening": "Hi Margaret, it's Errand Line, your AI assistant. What can I do for you today?",
+      "callEnd": {
+        "callId": "fake-call-668700c755",
+        "kind": "chat",
+        "outcome": "no_order"
+      },
+      "prewarm": [
+        {
+          "usage": {
+            "input": 4,
+            "output": 0,
+            "cacheRead": 6328,
+            "cacheWrite": 0,
+            "cacheWrite5m": 0,
+            "cacheWrite1h": 0
+          },
+          "ms": 726.8,
+          "error": null,
+          "doneBeforeFirstTurn": true
+        }
+      ],
+      "firstTurnCacheRead": 6328,
+      "costUsd": 0.000657,
+      "fake": {
+        "orders": [],
+        "followupsAsked": 0,
+        "turnsLogged": 11,
+        "callEnds": [
+          {
+            "callId": "fake-call-668700c755",
+            "kind": "chat",
+            "outcome": "no_order"
+          }
+        ],
+        "httpErrors": []
+      },
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "l1_soup_order",
+      "suite": "l1_latency",
+      "caller": "margaret",
+      "turns": [
+        {
+          "idx": 1,
+          "caller": "I'm feeling a bit under the weather. I'd like some chicken soup.",
+          "agent": "Let me check. I'm sorry you're not feeling well, Margaret. I found two options: one can of chicken noodle soup, 10.75 ounces, for one dollar and twenty-eight cents, or a four-can pack for four dollars and seventy-eight cents. Which would you like?",
+          "tools": [
+            {
+              "name": "match_favorite",
+              "input": {
+                "utterance": "chicken soup"
+              },
+              "result": {
+                "status": "none"
+              },
+              "ms": 0.1
+            },
+            {
+              "name": "search_items",
+              "input": {
+                "query": "chicken soup"
+              },
+              "result": {
+                "status": "ok",
+                "query": "chicken soup",
+                "store": "Walmart",
+                "source": "cache",
+                "options": [
+                  {
+                    "name": "Chicken noodle soup, can",
+                    "size": "10.75 oz",
+                    "priceCents": 128,
+                    "storeItemId": "demo-soup-chicken-1"
+                  },
+                  {
+                    "name": "Chicken noodle soup, four cans",
+                    "size": "4 x 10.75 oz",
+                    "priceCents": 478,
+                    "storeItemId": "demo-soup-chicken-4"
+                  }
+                ]
+              },
+              "ms": 0.1
+            }
+          ],
+          "toolMs": 0.2,
+          "expect": null,
+          "firstChunkMs": 1308.4,
+          "firstModelTextMs": 2925.1,
+          "resultTextMs": 2925.1,
+          "firstRequestTtftMs": 1308.1,
+          "requestStartMs": 0.3,
+          "turnMs": 3238.4,
+          "toolWallMs": 0.7,
+          "rounds": 3,
+          "stopReasons": [
+            "tool_use",
+            "tool_use",
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 8,
+            "output": 344,
+            "cacheRead": 19322,
+            "cacheWrite": 497,
+            "cacheWrite5m": 497,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 0.000428,
+          "cacheReadFirstRequest": 6328
+        },
+        {
+          "idx": 2,
+          "caller": "The four-pack, please.",
+          "agent": "Just to confirm: four cans of chicken noodle soup, for a total of four dollars and seventy-eight cents, arriving tomorrow. Shall I order it?",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 1073.3,
+          "firstModelTextMs": 1073.3,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 1073.1,
+          "requestStartMs": 0.2,
+          "turnMs": 1262.6,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 134,
+            "cacheRead": 6825,
+            "cacheWrite": 100,
+            "cacheWrite5m": 100,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 0.000148,
+          "cacheReadFirstRequest": 6825
+        },
+        {
+          "idx": 3,
+          "caller": "Yes, go ahead.",
+          "agent": "Let me check. Your four cans of chicken noodle soup are paid for and will arrive tomorrow. Dana can see the order on her dashboard. Is there anything else I can help you with, Margaret?",
+          "tools": [
+            {
+              "name": "place_order",
+              "input": {
+                "items": [
+                  {
+                    "storeItemId": "demo-soup-chicken-4",
+                    "qty": 1
+                  }
+                ],
+                "store": "Walmart"
+              },
+              "result": {
+                "status": "paid",
+                "orderId": "fake-order-1",
+                "totalCents": 478,
+                "paymentRef": "mock-pay-1"
+              },
+              "ms": 0.8
+            }
+          ],
+          "toolMs": 0.8,
+          "expect": null,
+          "firstChunkMs": 759.9,
+          "firstModelTextMs": 1878.6,
+          "resultTextMs": 1878.6,
+          "firstRequestTtftMs": 759.8,
+          "requestStartMs": 0.1,
+          "turnMs": 2022.7,
+          "toolWallMs": 1.2,
+          "rounds": 2,
+          "stopReasons": [
+            "tool_use",
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 6,
+            "output": 160,
+            "cacheRead": 13997,
+            "cacheWrite": 271,
+            "cacheWrite5m": 271,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 0.000254,
+          "cacheReadFirstRequest": 6925
+        },
+        {
+          "idx": 4,
+          "caller": "Thank you, I'll have some tonight.",
+          "agent": "I'm glad it's on its way, Margaret. I hope you feel better soon, and please call your doctor if you feel worse. Call any time.",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 3489.7,
+          "firstModelTextMs": 3489.6,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 3489.3,
+          "requestStartMs": 0.3,
+          "turnMs": 3491.8,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 47,
+            "cacheRead": 7196,
+            "cacheWrite": 78,
+            "cacheWrite5m": 78,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 0.000106,
+          "cacheReadFirstRequest": 7196
+        },
+        {
+          "idx": 5,
+          "caller": "Goodbye.",
+          "agent": "Goodbye, Margaret. Take good care of yourself.",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 773.7,
+          "firstModelTextMs": 773.7,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 773.2,
+          "requestStartMs": 0.5,
+          "turnMs": 862.8,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 22,
+            "cacheRead": 7274,
+            "cacheWrite": 57,
+            "cacheWrite5m": 57,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 9.1e-05,
+          "cacheReadFirstRequest": 7274
+        }
+      ],
+      "error": null,
+      "callId": "fake-call-fb3b2cd964",
+      "model": "claude-haiku-5-5",
+      "effort": "low",
+      "opening": "Hi Margaret, it's Errand Line, your AI assistant. What can I do for you today?",
+      "callEnd": {
+        "callId": "fake-call-fb3b2cd964",
+        "kind": "order",
+        "outcome": "ordered"
+      },
+      "prewarm": [
+        {
+          "usage": {
+            "input": 4,
+            "output": 0,
+            "cacheRead": 6328,
+            "cacheWrite": 0,
+            "cacheWrite5m": 0,
+            "cacheWrite1h": 0
+          },
+          "ms": 928.6,
+          "error": null,
+          "doneBeforeFirstTurn": true
+        }
+      ],
+      "firstTurnCacheRead": 6328,
+      "costUsd": 0.001091,
+      "fake": {
+        "orders": [
+          {
+            "status": "paid",
+            "totalCents": 478,
+            "store": "Walmart",
+            "items": [
+              {
+                "name": "Chicken noodle soup, four cans",
+                "storeItemId": "demo-soup-chicken-4",
+                "qty": 1,
+                "priceCents": 478
+              }
+            ]
+          }
+        ],
+        "followupsAsked": 0,
+        "turnsLogged": 11,
+        "callEnds": [
+          {
+            "callId": "fake-call-fb3b2cd964",
+            "kind": "order",
+            "outcome": "ordered"
+          }
+        ],
+        "httpErrors": []
+      },
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "l1_chat_short",
+      "suite": "l1_latency",
+      "caller": "margaret",
+      "turns": [
+        {
+          "idx": 1,
+          "caller": "Hello? Is this the shopping line?",
+          "agent": "Yes, this is the shopping line. I'm Errand Line, an AI assistant your family set up to help with everyday errands. What would you like to order today?",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 1773.3,
+          "firstModelTextMs": 1773.3,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 1773.2,
+          "requestStartMs": 0.1,
+          "turnMs": 1774.7,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 50,
+            "cacheRead": 6328,
+            "cacheWrite": 48,
+            "cacheWrite5m": 48,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 9.5e-05,
+          "cacheReadFirstRequest": 6328
+        },
+        {
+          "idx": 2,
+          "caller": "I just wanted to see how this works.",
+          "agent": "Of course, I'm glad you called to look. Here's how it works: you tell me what you need, like your coffee or some paper towels, and I find it at Walmart. I read you the choices and the price, and nothing gets ordered until you say yes.\n\nWould you like to try it out with something small, or just ask me questions first?",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 497.3,
+          "firstModelTextMs": 497.3,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 497.0,
+          "requestStartMs": 0.3,
+          "turnMs": 1104.9,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 100,
+            "cacheRead": 6376,
+            "cacheWrite": 63,
+            "cacheWrite5m": 63,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 0.000122,
+          "cacheReadFirstRequest": 6376
+        },
+        {
+          "idx": 3,
+          "caller": "So I can just call and ask for things?",
+          "agent": "Yes, that's right. Just tell me what you need in your own words. I'll read you the options and prices, and I won't place anything until you've heard it all and said yes.\n\nWhat would you like to ask for?",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 543.3,
+          "firstModelTextMs": 543.3,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 543.1,
+          "requestStartMs": 0.2,
+          "turnMs": 1028.7,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 63,
+            "cacheRead": 6439,
+            "cacheWrite": 113,
+            "cacheWrite5m": 113,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 0.00011,
+          "cacheReadFirstRequest": 6439
+        },
+        {
+          "idx": 4,
+          "caller": "That's very handy.",
+          "agent": "I'm glad it sounds helpful, Margaret. Whenever you need something, just let me know.\n\nIs there anything you'd like to try today, or would you rather just chat for a bit?",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 815.8,
+          "firstModelTextMs": 815.8,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 815.5,
+          "requestStartMs": 0.4,
+          "turnMs": 1008.9,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 60,
+            "cacheRead": 6552,
+            "cacheWrite": 71,
+            "cacheWrite5m": 71,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 0.000105,
+          "cacheReadFirstRequest": 6552
+        },
+        {
+          "idx": 5,
+          "caller": "Thank you, goodbye.",
+          "agent": "You're welcome, Margaret. Call any time, and have a lovely day. Goodbye.",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 884.6,
+          "firstModelTextMs": 884.6,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 884.3,
+          "requestStartMs": 0.3,
+          "turnMs": 1005.6,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 32,
+            "cacheRead": 6623,
+            "cacheWrite": 72,
+            "cacheWrite5m": 72,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 9.2e-05,
+          "cacheReadFirstRequest": 6623
+        }
+      ],
+      "error": null,
+      "callId": "fake-call-db6c385c34",
+      "model": "claude-haiku-5-5",
+      "effort": "low",
+      "opening": "Hi Margaret, it's Errand Line, your AI assistant. What can I do for you today?",
+      "callEnd": {
+        "callId": "fake-call-db6c385c34",
+        "kind": "chat",
+        "outcome": "no_order"
+      },
+      "prewarm": [
+        {
+          "usage": {
+            "input": 4,
+            "output": 0,
+            "cacheRead": 6109,
+            "cacheWrite": 219,
+            "cacheWrite5m": 219,
+            "cacheWrite1h": 0
+          },
+          "ms": 636.6,
+          "error": null,
+          "doneBeforeFirstTurn": true
+        }
+      ],
+      "firstTurnCacheRead": 6328,
+      "costUsd": 0.000612,
+      "fake": {
+        "orders": [],
+        "followupsAsked": 0,
+        "turnsLogged": 11,
+        "callEnds": [
+          {
+            "callId": "fake-call-db6c385c34",
+            "kind": "chat",
+            "outcome": "no_order"
+          }
+        ],
+        "httpErrors": []
+      },
+      "failures": [],
+      "passed": true
+    },
+    {
+      "name": "l1_bananas_oj",
+      "suite": "l1_latency",
+      "caller": "margaret",
+      "turns": [
+        {
+          "idx": 1,
+          "caller": "Some bananas and orange juice, please.",
+          "agent": "Let me check. For bananas, there's a bunch of about six for one forty-eight, or organic bunch of about six for two forty-eight. For orange juice, there's a fifty-two ounce carton, no pulp, for three forty-eight, or a large eighty-nine ounce carton for five forty-eight. Which would you like for each?",
+          "tools": [
+            {
+              "name": "search_items",
+              "input": {
+                "query": "bananas"
+              },
+              "result": {
+                "status": "ok",
+                "query": "bananas",
+                "store": "Walmart",
+                "source": "cache",
+                "options": [
+                  {
+                    "name": "Bananas, about six",
+                    "size": "about 2 lb bunch",
+                    "priceCents": 148,
+                    "storeItemId": "demo-bananas-bunch"
+                  },
+                  {
+                    "name": "Organic bananas, about six",
+                    "size": "about 2 lb bunch",
+                    "priceCents": 248,
+                    "storeItemId": "demo-bananas-organic"
+                  }
+                ]
+              },
+              "ms": 0.1
+            },
+            {
+              "name": "search_items",
+              "input": {
+                "query": "orange juice"
+              },
+              "result": {
+                "status": "ok",
+                "query": "orange juice",
+                "store": "Walmart",
+                "source": "cache",
+                "options": [
+                  {
+                    "name": "Orange juice, no pulp",
+                    "size": "52 fl oz",
+                    "priceCents": 348,
+                    "storeItemId": "demo-oj-52"
+                  },
+                  {
+                    "name": "Orange juice, no pulp, large",
+                    "size": "89 fl oz",
+                    "priceCents": 548,
+                    "storeItemId": "demo-oj-89"
+                  }
+                ]
+              },
+              "ms": 0.0
+            }
+          ],
+          "toolMs": 0.1,
+          "expect": null,
+          "firstChunkMs": 3125.2,
+          "firstModelTextMs": 3759.9,
+          "resultTextMs": 3759.9,
+          "firstRequestTtftMs": 3124.8,
+          "requestStartMs": 0.3,
+          "turnMs": 4292.0,
+          "toolWallMs": 0.4,
+          "rounds": 2,
+          "stopReasons": [
+            "tool_use",
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 6,
+            "output": 201,
+            "cacheRead": 12704,
+            "cacheWrite": 502,
+            "cacheWrite5m": 502,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 0.000291,
+          "cacheReadFirstRequest": 6328
+        },
+        {
+          "idx": 2,
+          "caller": "The regular bananas and the small juice.",
+          "agent": "Here's your order: one bunch of regular bananas, about six, for one dollar and forty-eight cents, and one fifty-two ounce carton of no-pulp orange juice, for three dollars and forty-eight cents. The total is four dollars and ninety-six cents, with arrival expected tomorrow. Shall I order it?",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 694.3,
+          "firstModelTextMs": 694.3,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 694.0,
+          "requestStartMs": 0.3,
+          "turnMs": 1048.4,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 168,
+            "cacheRead": 6830,
+            "cacheWrite": 118,
+            "cacheWrite5m": 118,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 0.000167,
+          "cacheReadFirstRequest": 6830
+        },
+        {
+          "idx": 3,
+          "caller": "Yes, please.",
+          "agent": "Let me check. Your order is placed and paid. Your family can see it on their dashboard, and it should arrive tomorrow. Is there anything else I can help you with?",
+          "tools": [
+            {
+              "name": "place_order",
+              "input": {
+                "items": [
+                  {
+                    "storeItemId": "demo-bananas-bunch",
+                    "qty": 1
+                  },
+                  {
+                    "storeItemId": "demo-oj-52",
+                    "qty": 1
+                  }
+                ],
+                "store": "Walmart"
+              },
+              "result": {
+                "status": "paid",
+                "orderId": "fake-order-1",
+                "totalCents": 496,
+                "paymentRef": "mock-pay-1"
+              },
+              "ms": 0.4
+            }
+          ],
+          "toolMs": 0.4,
+          "expect": null,
+          "firstChunkMs": 546.1,
+          "firstModelTextMs": 1297.5,
+          "resultTextMs": 1297.5,
+          "firstRequestTtftMs": 545.9,
+          "requestStartMs": 0.2,
+          "turnMs": 1462.0,
+          "toolWallMs": 0.6,
+          "rounds": 2,
+          "stopReasons": [
+            "tool_use",
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 6,
+            "output": 168,
+            "cacheRead": 14074,
+            "cacheWrite": 326,
+            "cacheWrite5m": 326,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 0.000266,
+          "cacheReadFirstRequest": 6948
+        },
+        {
+          "idx": 4,
+          "caller": "No, that's it.",
+          "agent": "Thank you, Margaret. Call any time.",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 525.2,
+          "firstModelTextMs": 525.2,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 525.0,
+          "requestStartMs": 0.2,
+          "turnMs": 539.6,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 17,
+            "cacheRead": 7274,
+            "cacheWrite": 57,
+            "cacheWrite5m": 57,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 8.9e-05,
+          "cacheReadFirstRequest": 7274
+        },
+        {
+          "idx": 5,
+          "caller": "Bye now.",
+          "agent": "Goodbye, Margaret. Take care.",
+          "tools": [],
+          "toolMs": 0,
+          "expect": null,
+          "firstChunkMs": 564.3,
+          "firstModelTextMs": 564.3,
+          "resultTextMs": null,
+          "firstRequestTtftMs": 564.0,
+          "requestStartMs": 0.3,
+          "turnMs": 601.3,
+          "toolWallMs": 0.0,
+          "rounds": 1,
+          "stopReasons": [
+            "end_turn"
+          ],
+          "errors": [],
+          "usage": {
+            "input": 4,
+            "output": 17,
+            "cacheRead": 7331,
+            "cacheWrite": 26,
+            "cacheWrite5m": 26,
+            "cacheWrite1h": 0
+          },
+          "costUsd": 8.5e-05,
+          "cacheReadFirstRequest": 7331
+        }
+      ],
+      "error": null,
+      "callId": "fake-call-57afb85ba8",
+      "model": "claude-haiku-5-5",
+      "effort": "low",
+      "opening": "Hi Margaret, it's Errand Line, your AI assistant. What can I do for you today?",
+      "callEnd": {
+        "callId": "fake-call-57afb85ba8",
+        "kind": "order",
+        "outcome": "ordered"
+      },
+      "prewarm": [
+        {
+          "usage": {
+            "input": 4,
+            "output": 0,
+            "cacheRead": 6328,
+            "cacheWrite": 0,
+            "cacheWrite5m": 0,
+            "cacheWrite1h": 0
+          },
+          "ms": 1209.1,
+          "error": null,
+          "doneBeforeFirstTurn": true
+        }
+      ],
+      "firstTurnCacheRead": 6328,
+      "costUsd": 0.000962,
+      "fake": {
+        "orders": [
+          {
+            "status": "paid",
+            "totalCents": 496,
+            "store": "Walmart",
+            "items": [
+              {
+                "name": "Bananas, about six",
+                "storeItemId": "demo-bananas-bunch",
+                "qty": 1,
+                "priceCents": 148
+              },
+              {
+                "name": "Orange juice, no pulp",
+                "storeItemId": "demo-oj-52",
+                "qty": 1,
+                "priceCents": 348
+              }
+            ]
+          }
+        ],
+        "followupsAsked": 0,
+        "turnsLogged": 11,
+        "callEnds": [
+          {
+            "callId": "fake-call-57afb85ba8",
+            "kind": "order",
+            "outcome": "ordered"
+          }
+        ],
+        "httpErrors": []
+      },
+      "failures": [],
+      "passed": true
+    }
+  ]
+}

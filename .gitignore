@@ -13,3 +13,8 @@ node_modules/
 .DS_Store
 coverage/
 *.egg-info/
+
+# call simulator outputs (harness/sim_call.py)
+harness/sim_runs/
+harness/.sim_audio_cache.json
+.vercel

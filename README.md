@@ -46,4 +46,6 @@ npm run typecheck
 npm test
 ```
 
+Run the dashboard locally with `cd dashboard && npm install && npm run dev` (and `npm run dev:convex`), then open `/live#key=<DASHBOARD_ACCESS_KEY>`. Milestone 2 status: [docs/milestone-2.md](docs/milestone-2.md).
+
 These checks need no service credentials and never make live phone calls. `harness/provider_spike.py` is an explicit live Claude probe; it consumes a small amount of API credit and outputs token counts only. Real-phone acceptance remains mandatory for #121.
