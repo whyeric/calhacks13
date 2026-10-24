@@ -1,0 +1,86 @@
+{
+  "id": "M3",
+  "name": "m3_forget",
+  "spec": "SPEC §16.2 M3: 'Forget that' marks the fact forgotten, redacts its evidence turn, and the next call never mentions it.",
+  "calls": [
+    {
+      "name": "m3_forget#1",
+      "caller": "margaret",
+      "household": {
+        "followup": false
+      },
+      "turns": [
+        {
+          "say": "I'm a bit tired today. I was out in the garden with my tomatoes all morning.",
+          "expect": {
+            "toolsNotCalled": [
+              "search_items",
+              "match_favorite",
+              "place_order"
+            ]
+          }
+        },
+        {
+          "say": "Actually, please forget what I told you about my tomatoes. I'd rather you didn't remember that.",
+          "expect": {
+            "toolsCalled": [
+              "forget_fact"
+            ]
+          }
+        },
+        {
+          "say": "Thank you. Goodbye."
+        }
+      ],
+      "expect": {
+        "routes": {
+          "/agent/forget": {
+            "min": 1,
+            "includes": "tomato"
+          }
+        }
+      },
+      "convex": {
+        "waitForMemory": true,
+        "facts": {
+          "status": [
+            {
+              "text": "tomato",
+              "status": "forgotten",
+              "evidenceTurnRedacted": true
+            }
+          ]
+        },
+        "turns": {
+          "anyRedacted": true
+        }
+      }
+    },
+    {
+      "name": "m3_forget#2",
+      "caller": "margaret",
+      "household": {
+        "followup": false
+      },
+      "liveNote": "Fake Convex keeps no state between calls, so this half only means something with --live-convex.",
+      "turns": [
+        {
+          "say": "What have I told you about my garden?",
+          "expect": {
+            "speechExcludes": [
+              "tomato"
+            ]
+          }
+        },
+        {
+          "say": "Alright. Goodbye."
+        }
+      ],
+      "expect": {
+        "speechExcludes": [
+          "tomato"
+        ]
+      }
+    }
+  ]
+}

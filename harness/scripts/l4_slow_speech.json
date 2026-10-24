@@ -1,0 +1,5 @@
+{
+  "id": "L4",
+  "name": "l4_slow_speech",
+  "manual": "Needs recorded slow, pausing speech (docs/research/end-of-turn.md, L4 procedure): play ≥ 10 recordings over real calls and count calls with turns.timings.cutOff = 1 (fewer than 1 in 10)."
+}

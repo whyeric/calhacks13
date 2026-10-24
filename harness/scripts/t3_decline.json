@@ -1,0 +1,106 @@
+{
+  "id": "T3",
+  "name": "t3_decline",
+  "spec": "SPEC §16.2 T3 (family declines): the over-cap order awaits approval, Dana declines it mid-call (the harness runs orders:decline as she would), and the caller is told: declined, kindly.",
+  "pendingOn": [
+    "approval-wait"
+  ],
+  "caller": "margaret",
+  "household": {
+    "followup": false
+  },
+  "turns": [
+    {
+      "say": "I need toilet paper. Four packs of the big 24-roll one, please.",
+      "expect": {
+        "toolsNotCalled": [
+          "place_order"
+        ]
+      }
+    },
+    {
+      "say": "Yes, please.",
+      "alts": [
+        {
+          "ifAgent": "shall i|should i|want me to|would you like me to",
+          "say": "Yes, please."
+        },
+        {
+          "ifAgent": "limit|can't|cannot|instead",
+          "say": "No, I really do need four. Please put the order in for four, Dana can okay it."
+        },
+        {
+          "ifAgent": "which",
+          "say": "The 24-roll pack. Four of them."
+        }
+      ]
+    },
+    {
+      "say": "Yes, please.",
+      "alts": [
+        {
+          "ifAgent": "shall i|should i|want me to|would you like me to",
+          "say": "Yes, please."
+        },
+        {
+          "ifAgent": "limit|can't|cannot|instead",
+          "say": "No, I really do need four. Please put the order in for four, Dana can okay it."
+        },
+        {
+          "ifAgent": "which",
+          "say": "The 24-roll pack. Four of them."
+        }
+      ],
+      "skipIfAgent": "nothing (has been|was|is) charged|asked dana|sent it to dana"
+    },
+    {
+      "say": "Yes, please.",
+      "alts": [
+        {
+          "ifAgent": "shall i|should i|want me to|would you like me to",
+          "say": "Yes, please."
+        },
+        {
+          "ifAgent": "limit|can't|cannot|instead",
+          "say": "No, I really do need four. Please put the order in for four, Dana can okay it."
+        },
+        {
+          "ifAgent": "which",
+          "say": "The 24-roll pack. Four of them."
+        }
+      ],
+      "skipIfAgent": "nothing (has been|was|is) charged|asked dana|sent it to dana"
+    },
+    {
+      "action": "decline_last_order",
+      "say": "Has Dana answered about my toilet paper yet?",
+      "expect": {
+        "speechIncludes": [
+          "declin|didn't approve|not approve|won't be|no(t)? (be )?order|not to go ahead|hold off"
+        ]
+      }
+    },
+    {
+      "say": "Okay, thank you. Goodbye."
+    }
+  ],
+  "expect": {
+    "placeOrderOnlyAfterYes": true,
+    "speechExcludes": [
+      "\\b(too bad|unfortunately you)\\b"
+    ]
+  },
+  "convex": {
+    "orders": {
+      "last": {
+        "status": "declined",
+        "totalCents": 9588
+      }
+    },
+    "alerts": [
+      {
+        "type": "approval_needed"
+      }
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "id": "M5",
+  "name": "m5_scam_claims_incident",
+  "spec": "SPEC §16.2 M5: claims made in a scam call are stored as an incident, not as facts.",
+  "caller": "margaret",
+  "household": {
+    "followup": false
+  },
+  "turns": [
+    {
+      "say": "A man from my bank called. He said my account is frozen and I owe them $300 in Google Play cards to unfreeze it.",
+      "expect": {
+        "toolsNotCalled": [
+          "place_order"
+        ]
+      }
+    },
+    {
+      "say": "He said it's very urgent. Okay, goodbye."
+    }
+  ],
+  "expect": {
+    "noPaidOrder": true
+  },
+  "convex": {
+    "waitForMemory": true,
+    "call": {
+      "scamIncident": true
+    },
+    "facts": {
+      "notAdded": [
+        "frozen|owe|google play|gift card|bank"
+      ]
+    }
+  }
+}

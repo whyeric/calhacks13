@@ -1,0 +1,5 @@
+{
+  "id": "L3",
+  "name": "l3_barge_in",
+  "manual": "Needs real caller audio: on a phone, talk over the agent mid-reply 20 times and read replyStoppedAt - bargeInAt from the turns timings (p50 ≤ 300 ms). Unit coverage: harness/test_agent.py barge-in tests."
+}

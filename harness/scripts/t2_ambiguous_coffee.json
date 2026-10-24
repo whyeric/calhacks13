@@ -1,0 +1,68 @@
+{
+  "id": "T2",
+  "name": "t2_ambiguous_coffee",
+  "spec": "SPEC §16.2 T2: 'coffee' matches two favorites, so the agent asks which one instead of guessing",
+  "caller": "margaret",
+  "household": {
+    "followup": false
+  },
+  "turns": [
+    {
+      "say": "Can I get some coffee?",
+      "expect": {
+        "toolsNotCalled": [
+          "place_order"
+        ],
+        "speechIncludes": [
+          "decaf",
+          "big can|regular|medium.roast coffee, big|usual|caffeinated"
+        ]
+      }
+    },
+    {
+      "say": "The decaf, please.",
+      "expect": {
+        "toolsNotCalled": [
+          "place_order"
+        ]
+      }
+    },
+    {
+      "say": "Yes, please.",
+      "expect": {
+        "toolsCalled": [
+          "place_order"
+        ]
+      }
+    },
+    {
+      "say": "That's all, thanks. Bye."
+    }
+  ],
+  "expect": {
+    "finalOrder": {
+      "status": "paid",
+      "totalCents": 1048,
+      "items": {
+        "demo-coffee-decaf": 1
+      }
+    },
+    "placeOrderOnlyAfterYes": true,
+    "outcome": "ordered"
+  },
+  "convex": {
+    "call": {
+      "outcome": "ordered"
+    },
+    "orders": {
+      "count": 1,
+      "last": {
+        "status": "paid",
+        "totalCents": 1048,
+        "items": {
+          "demo-coffee-decaf": 1
+        }
+      }
+    }
+  }
+}

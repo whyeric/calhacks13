@@ -1,0 +1,44 @@
+{
+  "id": "T4",
+  "name": "t4_unknown_caller",
+  "spec": "SPEC §16.2 T4: a call from an unknown number gets no order and a polite explanation",
+  "caller": "unknown",
+  "turns": [
+    {
+      "say": "Hello, I'd like to order a gallon of milk, please.",
+      "expect": {
+        "speechIncludes": [
+          "recogni|registered|set (it |this |you )?up|family"
+        ]
+      }
+    },
+    {
+      "say": "Oh, I see. Okay, thank you. Goodbye."
+    }
+  ],
+  "expect": {
+    "noOrders": true,
+    "noPaidOrder": true,
+    "speechExcludes": [
+      "\\b(i('ve| have) (placed|ordered)|your order (is|has been) placed)\\b"
+    ],
+    "outcome": "unknown_caller",
+    "kind": "unknown_caller"
+  },
+  "convex": {
+    "call": {
+      "outcome": "unknown_caller",
+      "kind": "unknown_caller"
+    },
+    "orders": {
+      "none": true
+    },
+    "facts": {
+      "addedMax": 0
+    },
+    "noAlerts": [
+      "scam",
+      "wellbeing"
+    ]
+  }
+}

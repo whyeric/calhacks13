@@ -1,0 +1,231 @@
+{
+  "id": "C4",
+  "name": "c4_long_chat",
+  "spec": "SPEC §16.2 C4: a long chat (25 caller turns, the context size of a 10+ minute call); latency over the last 10 turns stays within §12.1 (projected: LLM stage + the §12.2 500 ms non-LLM budget). On a real phone, pace it over 10 minutes and read the turns timings instead.",
+  "caller": "margaret",
+  "household": {
+    "followup": false
+  },
+  "turns": [
+    {
+      "say": "Hello dear, I just wanted some company this afternoon.",
+      "expect": {
+        "toolsNotCalled": [
+          "place_order"
+        ]
+      }
+    },
+    {
+      "say": "It's a grey day here. I've been sitting by the window with my tea.",
+      "expect": {
+        "toolsNotCalled": [
+          "place_order"
+        ]
+      }
+    },
+    {
+      "say": "I was thinking about when Dana was little. She used to love the swings at the park.",
+      "expect": {
+        "toolsNotCalled": [
+          "place_order"
+        ]
+      }
+    },
+    {
+      "say": "Oh, she'd go higher and higher, and I'd be so nervous!",
+      "expect": {
+        "toolsNotCalled": [
+          "place_order"
+        ]
+      }
+    },
+    {
+      "say": "Her father used to push her. He passed away six years ago now.",
+      "expect": {
+        "toolsNotCalled": [
+          "place_order"
+        ]
+      }
+    },
+    {
+      "say": "Thank you. He was a good man. He loved gardening, like me.",
+      "expect": {
+        "toolsNotCalled": [
+          "place_order"
+        ]
+      }
+    },
+    {
+      "say": "This year I'm growing tomatoes and a little basil.",
+      "expect": {
+        "toolsNotCalled": [
+          "place_order"
+        ]
+      }
+    },
+    {
+      "say": "The basil is doing better than the tomatoes, to be honest.",
+      "expect": {
+        "toolsNotCalled": [
+          "place_order"
+        ]
+      }
+    },
+    {
+      "say": "Do you know any tricks for tomatoes when it's been so rainy?",
+      "expect": {
+        "toolsNotCalled": [
+          "place_order"
+        ]
+      }
+    },
+    {
+      "say": "That's helpful. I'll try that when it dries out.",
+      "expect": {
+        "toolsNotCalled": [
+          "place_order"
+        ]
+      }
+    },
+    {
+      "say": "Lily has her piano lessons on Thursdays. She's getting quite good.",
+      "expect": {
+        "toolsNotCalled": [
+          "place_order"
+        ]
+      }
+    },
+    {
+      "say": "She played a bit of Chopin for me last time she visited.",
+      "expect": {
+        "toolsNotCalled": [
+          "place_order"
+        ]
+      }
+    },
+    {
+      "say": "I used to play too, a long time ago. My hands aren't what they were.",
+      "expect": {
+        "toolsNotCalled": [
+          "place_order"
+        ]
+      }
+    },
+    {
+      "say": "Maybe I'll try again. My doctor says it's good for the hands.",
+      "expect": {
+        "toolsNotCalled": [
+          "place_order"
+        ]
+      }
+    },
+    {
+      "say": "I watched a cooking show this morning. They made a lemon cake.",
+      "expect": {
+        "toolsNotCalled": [
+          "place_order"
+        ]
+      }
+    },
+    {
+      "say": "I used to bake every Sunday. Dana's favorite was banana bread.",
+      "expect": {
+        "toolsNotCalled": [
+          "place_order"
+        ]
+      }
+    },
+    {
+      "say": "Perhaps I'll make some when she visits next.",
+      "expect": {
+        "toolsNotCalled": [
+          "place_order"
+        ]
+      }
+    },
+    {
+      "say": "Tyler is coming home from college for the holidays, too.",
+      "expect": {
+        "toolsNotCalled": [
+          "place_order"
+        ]
+      }
+    },
+    {
+      "say": "He's studying engineering. Very clever boy.",
+      "expect": {
+        "toolsNotCalled": [
+          "place_order"
+        ]
+      }
+    },
+    {
+      "say": "He calls me on Sundays, usually. Such a sweet boy.",
+      "expect": {
+        "toolsNotCalled": [
+          "place_order"
+        ]
+      }
+    },
+    {
+      "say": "Do you think it will rain again tomorrow?",
+      "expect": {
+        "toolsNotCalled": [
+          "place_order"
+        ]
+      }
+    },
+    {
+      "say": "Well, I'll keep my umbrella handy then.",
+      "expect": {
+        "toolsNotCalled": [
+          "place_order"
+        ]
+      }
+    },
+    {
+      "say": "I've enjoyed our chat. It makes the afternoon go faster.",
+      "expect": {
+        "toolsNotCalled": [
+          "place_order"
+        ]
+      }
+    },
+    {
+      "say": "You're very kind. I think I'll make another cup of tea.",
+      "expect": {
+        "toolsNotCalled": [
+          "place_order"
+        ]
+      }
+    },
+    {
+      "say": "Thank you, dear. Goodbye for now.",
+      "expect": {
+        "toolsNotCalled": [
+          "place_order"
+        ]
+      }
+    }
+  ],
+  "expect": {
+    "toolsNotCalled": [
+      "place_order"
+    ],
+    "latencyLastTurns": {
+      "turns": 10,
+      "p50Ms": 800,
+      "p95Ms": 1500
+    }
+  },
+  "convex": {
+    "turns": {
+      "minTurns": 50
+    },
+    "latency": {
+      "metric": "llm",
+      "p50Ms": 300,
+      "minTurns": 10
+    }
+  }
+}

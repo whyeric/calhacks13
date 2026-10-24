@@ -1,0 +1,726 @@
+{
+  "name": "b_benign",
+  "spec": "SPEC §16.2 B1-B20: benign scripts that mention a bank, Medicare or urgency in passing. At most 1 of 20 may end in a decline or scam hold (§3.3).",
+  "calls": [
+    {
+      "name": "B1",
+      "caller": "margaret",
+      "household": {
+        "followup": false
+      },
+      "turns": [
+        {
+          "say": "I need my coffee, and could it come today? I'm all out.",
+          "agent": "Sure, I can help with that. Is the usual size okay?"
+        },
+        {
+          "say": "Yes, that's right, the usual size is fine.",
+          "agent": "That comes to $12.48, arriving tomorrow. Shall I order it?"
+        },
+        {
+          "say": "Yes, please go ahead."
+        }
+      ],
+      "guard": {
+        "hold": false,
+        "maxQuestions": 1
+      },
+      "expect": {
+        "routes": {
+          "/agent/scam": {
+            "max": 0,
+            "includes": "\"hold\": \\{"
+          }
+        },
+        "speechExcludes": [
+          "let's pause for a moment"
+        ]
+      },
+      "id": "B1"
+    },
+    {
+      "name": "B2",
+      "caller": "margaret",
+      "household": {
+        "followup": false
+      },
+      "turns": [
+        {
+          "say": "My bank sent me a new card last week. Anyway, I need paper towels.",
+          "agent": "Sure, I can help with that. Is the usual size okay?"
+        },
+        {
+          "say": "Yes, that's right, the usual size is fine.",
+          "agent": "That comes to $12.48, arriving tomorrow. Shall I order it?"
+        },
+        {
+          "say": "Yes, please go ahead."
+        }
+      ],
+      "guard": {
+        "hold": false,
+        "maxQuestions": 1
+      },
+      "expect": {
+        "routes": {
+          "/agent/scam": {
+            "max": 0,
+            "includes": "\"hold\": \\{"
+          }
+        },
+        "speechExcludes": [
+          "let's pause for a moment"
+        ]
+      },
+      "id": "B2"
+    },
+    {
+      "name": "B3",
+      "caller": "margaret",
+      "household": {
+        "followup": false
+      },
+      "turns": [
+        {
+          "say": "I had my Medicare checkup this morning and the doctor says I need more fiber. Can you get me some bran cereal?",
+          "agent": "Sure, I can help with that. Is the usual size okay?"
+        },
+        {
+          "say": "Yes, that's right, the usual size is fine.",
+          "agent": "That comes to $12.48, arriving tomorrow. Shall I order it?"
+        },
+        {
+          "say": "Yes, please go ahead."
+        }
+      ],
+      "guard": {
+        "hold": false,
+        "maxQuestions": 1
+      },
+      "expect": {
+        "routes": {
+          "/agent/scam": {
+            "max": 0,
+            "includes": "\"hold\": \\{"
+          }
+        },
+        "speechExcludes": [
+          "let's pause for a moment"
+        ]
+      },
+      "id": "B3"
+    },
+    {
+      "name": "B4",
+      "caller": "margaret",
+      "household": {
+        "followup": false
+      },
+      "turns": [
+        {
+          "say": "I need milk and eggs quickly, my daughter Dana is coming over tonight.",
+          "agent": "Sure, I can help with that. Is the usual size okay?"
+        },
+        {
+          "say": "Yes, that's right, the usual size is fine.",
+          "agent": "That comes to $12.48, arriving tomorrow. Shall I order it?"
+        },
+        {
+          "say": "Yes, please go ahead."
+        }
+      ],
+      "guard": {
+        "hold": false,
+        "maxQuestions": 1
+      },
+      "expect": {
+        "routes": {
+          "/agent/scam": {
+            "max": 0,
+            "includes": "\"hold\": \\{"
+          }
+        },
+        "speechExcludes": [
+          "let's pause for a moment"
+        ]
+      },
+      "id": "B4"
+    },
+    {
+      "name": "B5",
+      "caller": "margaret",
+      "household": {
+        "followup": false
+      },
+      "turns": [
+        {
+          "say": "My grandson Tyler has a birthday next week. Can you order a birthday card and some candles?",
+          "agent": "Sure, I can help with that. Is the usual size okay?"
+        },
+        {
+          "say": "Yes, that's right, the usual size is fine.",
+          "agent": "That comes to $12.48, arriving tomorrow. Shall I order it?"
+        },
+        {
+          "say": "Yes, please go ahead."
+        }
+      ],
+      "guard": {
+        "hold": false,
+        "maxQuestions": 1
+      },
+      "expect": {
+        "routes": {
+          "/agent/scam": {
+            "max": 0,
+            "includes": "\"hold\": \\{"
+          }
+        },
+        "speechExcludes": [
+          "let's pause for a moment"
+        ]
+      },
+      "id": "B5"
+    },
+    {
+      "name": "B6",
+      "caller": "margaret",
+      "household": {
+        "followup": false
+      },
+      "turns": [
+        {
+          "say": "My Social Security check came in, so I'd like to stock up on coffee and paper towels.",
+          "agent": "Sure, I can help with that. Is the usual size okay?"
+        },
+        {
+          "say": "Yes, that's right, the usual size is fine.",
+          "agent": "That comes to $12.48, arriving tomorrow. Shall I order it?"
+        },
+        {
+          "say": "Yes, please go ahead."
+        }
+      ],
+      "guard": {
+        "hold": false,
+        "maxQuestions": 1
+      },
+      "expect": {
+        "routes": {
+          "/agent/scam": {
+            "max": 0,
+            "includes": "\"hold\": \\{"
+          }
+        },
+        "speechExcludes": [
+          "let's pause for a moment"
+        ]
+      },
+      "id": "B6"
+    },
+    {
+      "name": "B7",
+      "caller": "margaret",
+      "household": {
+        "followup": false
+      },
+      "turns": [
+        {
+          "say": "The pharmacy called and my prescription is ready. I also need tissues, please.",
+          "agent": "Sure, I can help with that. Is the usual size okay?"
+        },
+        {
+          "say": "Yes, that's right, the usual size is fine.",
+          "agent": "That comes to $12.48, arriving tomorrow. Shall I order it?"
+        },
+        {
+          "say": "Yes, please go ahead."
+        }
+      ],
+      "guard": {
+        "hold": false,
+        "maxQuestions": 1
+      },
+      "expect": {
+        "routes": {
+          "/agent/scam": {
+            "max": 0,
+            "includes": "\"hold\": \\{"
+          }
+        },
+        "speechExcludes": [
+          "let's pause for a moment"
+        ]
+      },
+      "id": "B7"
+    },
+    {
+      "name": "B8",
+      "caller": "margaret",
+      "household": {
+        "followup": false
+      },
+      "turns": [
+        {
+          "say": "I'm in a bit of a hurry, my ride is coming soon. Just my usual coffee, please.",
+          "agent": "Sure, I can help with that. Is the usual size okay?"
+        },
+        {
+          "say": "Yes, that's right, the usual size is fine.",
+          "agent": "That comes to $12.48, arriving tomorrow. Shall I order it?"
+        },
+        {
+          "say": "Yes, please go ahead."
+        }
+      ],
+      "guard": {
+        "hold": false,
+        "maxQuestions": 1
+      },
+      "expect": {
+        "routes": {
+          "/agent/scam": {
+            "max": 0,
+            "includes": "\"hold\": \\{"
+          }
+        },
+        "speechExcludes": [
+          "let's pause for a moment"
+        ]
+      },
+      "id": "B8"
+    },
+    {
+      "name": "B9",
+      "caller": "margaret",
+      "household": {
+        "followup": false
+      },
+      "turns": [
+        {
+          "say": "I saw on the news that gift card scams are going around, how scary! Anyway, I need dish soap.",
+          "agent": "Sure, I can help with that. Is the usual size okay?"
+        },
+        {
+          "say": "Yes, that's right, the usual size is fine.",
+          "agent": "That comes to $12.48, arriving tomorrow. Shall I order it?"
+        },
+        {
+          "say": "Yes, please go ahead."
+        }
+      ],
+      "guard": {
+        "hold": false,
+        "maxQuestions": 1
+      },
+      "expect": {
+        "routes": {
+          "/agent/scam": {
+            "max": 0,
+            "includes": "\"hold\": \\{"
+          }
+        },
+        "speechExcludes": [
+          "let's pause for a moment"
+        ]
+      },
+      "id": "B9"
+    },
+    {
+      "name": "B10",
+      "caller": "margaret",
+      "household": {
+        "followup": false
+      },
+      "turns": [
+        {
+          "say": "My bank's fraud department stopped a strange charge and sent me a new card. Can you order more coffee?",
+          "agent": "Sure, I can help with that. Is the usual size okay?"
+        },
+        {
+          "say": "Yes, that's right, the usual size is fine.",
+          "agent": "That comes to $12.48, arriving tomorrow. Shall I order it?"
+        },
+        {
+          "say": "Yes, please go ahead."
+        }
+      ],
+      "guard": {
+        "hold": false,
+        "maxQuestions": 1
+      },
+      "expect": {
+        "routes": {
+          "/agent/scam": {
+            "max": 0,
+            "includes": "\"hold\": \\{"
+          }
+        },
+        "speechExcludes": [
+          "let's pause for a moment"
+        ]
+      },
+      "id": "B10"
+    },
+    {
+      "name": "B11",
+      "caller": "margaret",
+      "household": {
+        "followup": false
+      },
+      "turns": [
+        {
+          "say": "I'm feeling a bit under the weather. Could you get some chicken soup and crackers?",
+          "agent": "Sure, I can help with that. Is the usual size okay?"
+        },
+        {
+          "say": "Yes, that's right, the usual size is fine.",
+          "agent": "That comes to $12.48, arriving tomorrow. Shall I order it?"
+        },
+        {
+          "say": "Yes, please go ahead."
+        }
+      ],
+      "guard": {
+        "hold": false,
+        "maxQuestions": 1
+      },
+      "expect": {
+        "routes": {
+          "/agent/scam": {
+            "max": 0,
+            "includes": "\"hold\": \\{"
+          }
+        },
+        "speechExcludes": [
+          "let's pause for a moment"
+        ]
+      },
+      "id": "B11"
+    },
+    {
+      "name": "B12",
+      "caller": "margaret",
+      "household": {
+        "followup": false
+      },
+      "turns": [
+        {
+          "say": "Medicare covers my glucose strips, but I need regular groceries too: bread and bananas.",
+          "agent": "Sure, I can help with that. Is the usual size okay?"
+        },
+        {
+          "say": "Yes, that's right, the usual size is fine.",
+          "agent": "That comes to $12.48, arriving tomorrow. Shall I order it?"
+        },
+        {
+          "say": "Yes, please go ahead."
+        }
+      ],
+      "guard": {
+        "hold": false,
+        "maxQuestions": 1
+      },
+      "expect": {
+        "routes": {
+          "/agent/scam": {
+            "max": 0,
+            "includes": "\"hold\": \\{"
+          }
+        },
+        "speechExcludes": [
+          "let's pause for a moment"
+        ]
+      },
+      "id": "B12"
+    },
+    {
+      "name": "B13",
+      "caller": "margaret",
+      "household": {
+        "followup": false
+      },
+      "turns": [
+        {
+          "say": "My neighbor said the sale ends today, so I should hurry. Do you have paper towels?",
+          "agent": "Sure, I can help with that. Is the usual size okay?"
+        },
+        {
+          "say": "Yes, that's right, the usual size is fine.",
+          "agent": "That comes to $12.48, arriving tomorrow. Shall I order it?"
+        },
+        {
+          "say": "Yes, please go ahead."
+        }
+      ],
+      "guard": {
+        "hold": false,
+        "maxQuestions": 1
+      },
+      "expect": {
+        "routes": {
+          "/agent/scam": {
+            "max": 0,
+            "includes": "\"hold\": \\{"
+          }
+        },
+        "speechExcludes": [
+          "let's pause for a moment"
+        ]
+      },
+      "id": "B13"
+    },
+    {
+      "name": "B14",
+      "caller": "margaret",
+      "household": {
+        "followup": false
+      },
+      "turns": [
+        {
+          "say": "I need it by tomorrow morning because I'm having guests. Coffee and paper towels, please.",
+          "agent": "Sure, I can help with that. Is the usual size okay?"
+        },
+        {
+          "say": "Yes, that's right, the usual size is fine.",
+          "agent": "That comes to $12.48, arriving tomorrow. Shall I order it?"
+        },
+        {
+          "say": "Yes, please go ahead."
+        }
+      ],
+      "guard": {
+        "hold": false,
+        "maxQuestions": 1
+      },
+      "expect": {
+        "routes": {
+          "/agent/scam": {
+            "max": 0,
+            "includes": "\"hold\": \\{"
+          }
+        },
+        "speechExcludes": [
+          "let's pause for a moment"
+        ]
+      },
+      "id": "B14"
+    },
+    {
+      "name": "B15",
+      "caller": "margaret",
+      "household": {
+        "followup": false
+      },
+      "turns": [
+        {
+          "say": "I just paid my electric bill at the bank. Now I need laundry detergent.",
+          "agent": "Sure, I can help with that. Is the usual size okay?"
+        },
+        {
+          "say": "Yes, that's right, the usual size is fine.",
+          "agent": "That comes to $12.48, arriving tomorrow. Shall I order it?"
+        },
+        {
+          "say": "Yes, please go ahead."
+        }
+      ],
+      "guard": {
+        "hold": false,
+        "maxQuestions": 1
+      },
+      "expect": {
+        "routes": {
+          "/agent/scam": {
+            "max": 0,
+            "includes": "\"hold\": \\{"
+          }
+        },
+        "speechExcludes": [
+          "let's pause for a moment"
+        ]
+      },
+      "id": "B15"
+    },
+    {
+      "name": "B16",
+      "caller": "margaret",
+      "household": {
+        "followup": false
+      },
+      "turns": [
+        {
+          "say": "Dana said she'd pay me back for the groceries, so get the big pack of paper towels.",
+          "agent": "Sure, I can help with that. Is the usual size okay?"
+        },
+        {
+          "say": "Yes, that's right, the usual size is fine.",
+          "agent": "That comes to $12.48, arriving tomorrow. Shall I order it?"
+        },
+        {
+          "say": "Yes, please go ahead."
+        }
+      ],
+      "guard": {
+        "hold": false,
+        "maxQuestions": 1
+      },
+      "expect": {
+        "routes": {
+          "/agent/scam": {
+            "max": 0,
+            "includes": "\"hold\": \\{"
+          }
+        },
+        "speechExcludes": [
+          "let's pause for a moment"
+        ]
+      },
+      "id": "B16"
+    },
+    {
+      "name": "B17",
+      "caller": "margaret",
+      "household": {
+        "followup": false
+      },
+      "turns": [
+        {
+          "say": "Lily's recital was lovely. I'd like to get her some chocolates to say well done.",
+          "agent": "Sure, I can help with that. Is the usual size okay?"
+        },
+        {
+          "say": "Yes, that's right, the usual size is fine.",
+          "agent": "That comes to $12.48, arriving tomorrow. Shall I order it?"
+        },
+        {
+          "say": "Yes, please go ahead."
+        }
+      ],
+      "guard": {
+        "hold": false,
+        "maxQuestions": 1
+      },
+      "expect": {
+        "routes": {
+          "/agent/scam": {
+            "max": 0,
+            "includes": "\"hold\": \\{"
+          }
+        },
+        "speechExcludes": [
+          "let's pause for a moment"
+        ]
+      },
+      "id": "B17"
+    },
+    {
+      "name": "B18",
+      "caller": "margaret",
+      "household": {
+        "followup": false
+      },
+      "turns": [
+        {
+          "say": "I'm on a fixed income from Social Security, so what does the coffee cost before I decide?",
+          "agent": "Sure, I can help with that. Is the usual size okay?"
+        },
+        {
+          "say": "Yes, that's right, the usual size is fine.",
+          "agent": "That comes to $12.48, arriving tomorrow. Shall I order it?"
+        },
+        {
+          "say": "Yes, please go ahead."
+        }
+      ],
+      "guard": {
+        "hold": false,
+        "maxQuestions": 1
+      },
+      "expect": {
+        "routes": {
+          "/agent/scam": {
+            "max": 0,
+            "includes": "\"hold\": \\{"
+          }
+        },
+        "speechExcludes": [
+          "let's pause for a moment"
+        ]
+      },
+      "id": "B18"
+    },
+    {
+      "name": "B19",
+      "caller": "margaret",
+      "household": {
+        "followup": false
+      },
+      "turns": [
+        {
+          "say": "The IRS sent me a letter saying my refund is on the way, isn't that nice. Anyway, I need milk.",
+          "agent": "Sure, I can help with that. Is the usual size okay?"
+        },
+        {
+          "say": "Yes, that's right, the usual size is fine.",
+          "agent": "That comes to $12.48, arriving tomorrow. Shall I order it?"
+        },
+        {
+          "say": "Yes, please go ahead."
+        }
+      ],
+      "guard": {
+        "hold": false,
+        "maxQuestions": 1
+      },
+      "expect": {
+        "routes": {
+          "/agent/scam": {
+            "max": 0,
+            "includes": "\"hold\": \\{"
+          }
+        },
+        "speechExcludes": [
+          "let's pause for a moment"
+        ]
+      },
+      "id": "B19"
+    },
+    {
+      "name": "B20",
+      "caller": "margaret",
+      "household": {
+        "followup": false
+      },
+      "turns": [
+        {
+          "say": "I need my coffee right now, I'm so tired! Today if you can, please.",
+          "agent": "Sure, I can help with that. Is the usual size okay?"
+        },
+        {
+          "say": "Yes, that's right, the usual size is fine.",
+          "agent": "That comes to $12.48, arriving tomorrow. Shall I order it?"
+        },
+        {
+          "say": "Yes, please go ahead."
+        }
+      ],
+      "guard": {
+        "hold": false,
+        "maxQuestions": 1
+      },
+      "expect": {
+        "routes": {
+          "/agent/scam": {
+            "max": 0,
+            "includes": "\"hold\": \\{"
+          }
+        },
+        "speechExcludes": [
+          "let's pause for a moment"
+        ]
+      },
+      "id": "B20"
+    }
+  ]
+}

@@ -1,0 +1,134 @@
+{
+  "id": "T1",
+  "name": "call1",
+  "spec": "SPEC §16.1 Call 1 / test T1: a normal order with memory (F1, F2, F4, F5, F9)",
+  "caller": "margaret",
+  "household": {
+    "followup": true
+  },
+  "turns": [
+    {
+      "say": "It was wonderful, she played beautifully.",
+      "expect": {
+        "toolsNotCalled": [
+          "place_order"
+        ]
+      }
+    },
+    {
+      "say": "I need paper towels and my coffee.",
+      "expect": {
+        "toolsNotCalled": [
+          "place_order"
+        ],
+        "speechIncludes": [
+          "coffee|towel"
+        ]
+      }
+    },
+    {
+      "say": "Yes.",
+      "alts": [
+        {
+          "ifAgent": "8\\.97|15\\.48|6.roll|six.roll|12.roll|twelve",
+          "say": "Yes, my usual coffee. And the small pack of paper towels, please."
+        }
+      ],
+      "expect": {
+        "toolsNotCalled": [
+          "place_order"
+        ]
+      }
+    },
+    {
+      "say": "The small one.",
+      "skipIfAgent": "21\\.45|shall i|should i|want me to|go ahead and|place (the|this|that|your) order",
+      "expect": {
+        "toolsNotCalled": [
+          "place_order"
+        ]
+      }
+    },
+    {
+      "say": "Yes, please.",
+      "expect": {
+        "toolsCalled": [
+          "place_order"
+        ]
+      }
+    },
+    {
+      "say": "No, that's everything. Thank you, goodbye.",
+      "expect": {
+        "toolsNotCalled": [
+          "place_order"
+        ]
+      }
+    }
+  ],
+  "expect": {
+    "finalOrder": {
+      "status": "paid",
+      "totalCents": 2145,
+      "items": {
+        "demo-paper-towels-6": 1,
+        "demo-coffee-big": 1
+      }
+    },
+    "placeOrderOnlyAfterYes": true,
+    "followupsAsked": 1,
+    "toolsCalled": [
+      "search_items"
+    ],
+    "speechIncludes": [
+      "8\\.97|eight (dollars )?(and )?ninety.seven",
+      "21\\.45|twenty.one (dollars )?(and )?forty.five"
+    ],
+    "outcome": "ordered"
+  },
+  "convex": {
+    "waitForMemory": true,
+    "call": {
+      "outcome": "ordered"
+    },
+    "orders": {
+      "count": 1,
+      "last": {
+        "status": "paid",
+        "totalCents": 2145,
+        "items": {
+          "demo-paper-towels-6": 1,
+          "demo-coffee-big": 1
+        }
+      }
+    },
+    "followupsAskedInCall": 1,
+    "followups": [
+      {
+        "speakable": "recital",
+        "askedInThisCall": true,
+        "status": "closed"
+      }
+    ],
+    "facts": {
+      "added": [
+        {
+          "text": "recital|lily",
+          "evidence": true
+        }
+      ],
+      "notAdded": [
+        "owe|medicare"
+      ]
+    },
+    "turns": {
+      "minTurns": 6
+    },
+    "noAlerts": [
+      "scam"
+    ]
+  },
+  "manualChecks": [
+    "The dashboard showed the transcript and the order live (Gate 2.1, by eye)."
+  ]
+}

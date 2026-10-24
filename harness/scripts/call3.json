@@ -1,0 +1,101 @@
+{
+  "id": "C1",
+  "name": "call3",
+  "spec": "SPEC §16.1 Call 3 / test C1: just to chat (F2, F3). No product offered, exactly one memory follow-up, the nudge to Dana only after the caller's yes, a summary written. Caller lines are §16.1 verbatim.",
+  "caller": "margaret",
+  "household": {
+    "followup": "How are your tomatoes doing?"
+  },
+  "liveNote": "Live Convex: the demo seed's follow-up is the recital, not the tomatoes; reseed a tomato follow-up first or expect the follow-up checks to fail.",
+  "turns": [
+    {
+      "say": "Oh, you remembered! They're fine, but it's been raining so I haven't been out much. I don't need anything today, I just felt like talking.",
+      "expect": {
+        "toolsNotCalled": [
+          "search_items",
+          "match_favorite",
+          "place_order",
+          "connect_family"
+        ]
+      }
+    },
+    {
+      "say": "Not much. Dana's been so busy, I haven't heard from her in a while.",
+      "expect": {
+        "toolsNotCalled": [
+          "connect_family",
+          "search_items",
+          "match_favorite",
+          "place_order"
+        ],
+        "speechIncludes": [
+          "dana"
+        ]
+      }
+    },
+    {
+      "say": "That would be nice.",
+      "expect": {
+        "toolsCalled": [
+          "connect_family"
+        ],
+        "toolsNotCalled": [
+          "search_items",
+          "match_favorite",
+          "place_order"
+        ]
+      }
+    }
+  ],
+  "expect": {
+    "toolsNotCalled": [
+      "search_items",
+      "match_favorite",
+      "place_order"
+    ],
+    "toolOnlyAfterYes": [
+      "connect_family"
+    ],
+    "followupsAsked": 1,
+    "speechIncludes": [
+      "tomato"
+    ],
+    "speechExcludes": [
+      "shall i order|would you like (me )?to order|can i (order|get) you|paper towels|coffee"
+    ],
+    "outcome": "no_order",
+    "kind": "chat",
+    "routes": {
+      "/agent/connect": {
+        "min": 1,
+        "max": 1
+      }
+    }
+  },
+  "convex": {
+    "waitForMemory": true,
+    "call": {
+      "outcome": "no_order",
+      "kind": "chat"
+    },
+    "orders": {
+      "none": true
+    },
+    "followupsAskedInCall": 1,
+    "alerts": [
+      {
+        "type": "connect_nudge",
+        "count": 1
+      }
+    ],
+    "noAlerts": [
+      "scam"
+    ],
+    "callSummary": {
+      "value": true
+    }
+  },
+  "manualChecks": [
+    "The transcript is hidden from the dashboard unless chat sharing is on: dashboard/convex/dashboard.test.ts 'transcript sharing'."
+  ]
+}

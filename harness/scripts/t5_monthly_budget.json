@@ -1,0 +1,95 @@
+{
+  "id": "T5",
+  "name": "t5_monthly_budget",
+  "spec": "SPEC §16.2 T5 (budget): this order would go over the monthly budget, so it goes to approval exactly as in T3; nothing is paid.",
+  "caller": "margaret",
+  "household": {
+    "followup": false,
+    "monthSpentCents": 19800
+  },
+  "liveSetup": [
+    [
+      "households:setLimits",
+      {
+        "monthlyBudgetCents": 100
+      }
+    ]
+  ],
+  "liveTeardown": [
+    [
+      "households:setLimits",
+      {
+        "monthlyBudgetCents": 20000
+      }
+    ]
+  ],
+  "turns": [
+    {
+      "say": "Could I get a dozen eggs, please?",
+      "expect": {
+        "toolsNotCalled": [
+          "place_order"
+        ]
+      }
+    },
+    {
+      "say": "Yes, please.",
+      "alts": [
+        {
+          "ifAgent": "shall i|should i|want me to|would you like me to|go ahead",
+          "say": "Yes, please."
+        },
+        {
+          "ifAgent": "which",
+          "say": "The first one, please."
+        }
+      ]
+    },
+    {
+      "say": "Yes, please.",
+      "alts": [
+        {
+          "ifAgent": "shall i|should i|want me to|would you like me to|go ahead",
+          "say": "Yes, please."
+        },
+        {
+          "ifAgent": "which",
+          "say": "The first one, please."
+        }
+      ],
+      "skipIfAgent": "nothing (has been|was|is) charged|asked dana|sent it to dana|done|placed|on (its|the) way"
+    },
+    {
+      "say": "Okay, thank you. Goodbye."
+    }
+  ],
+  "expect": {
+    "finalOrder": {
+      "status": "needs_approval",
+      "totalCents": 298
+    },
+    "noPaidOrder": true,
+    "placeOrderOnlyAfterYes": true,
+    "speechIncludes": [
+      "approv|budget|month|dana"
+    ],
+    "outcome": "awaiting_approval"
+  },
+  "convex": {
+    "call": {
+      "outcome": "awaiting_approval"
+    },
+    "orders": {
+      "nonePaid": true,
+      "last": {
+        "status": "awaiting_approval",
+        "totalCents": 298
+      }
+    },
+    "alerts": [
+      {
+        "type": "approval_needed"
+      }
+    ]
+  }
+}

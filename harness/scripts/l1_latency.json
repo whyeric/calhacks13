@@ -1,0 +1,287 @@
+{
+  "id": "L1",
+  "name": "l1_latency",
+  "spec": "SPEC §16.2 L1 (text-mode stand-in): 10 calls x 5 caller turns = 50 turns of chit-chat and ordering. Lenient: these calls only assert that nothing unsafe happened; they exist for latency, cache and cost numbers.",
+  "calls": [
+    {
+      "name": "l1_chat_garden",
+      "caller": "margaret",
+      "household": {
+        "followup": true
+      },
+      "turns": [
+        {
+          "say": "It went really well, thank you for asking."
+        },
+        {
+          "say": "I've been out in the garden this morning. The tomatoes are coming along."
+        },
+        {
+          "say": "Do you think it will rain this week?"
+        },
+        {
+          "say": "Are you a real person?"
+        },
+        {
+          "say": "Well, it was nice talking. Goodbye now."
+        }
+      ],
+      "expect": {
+        "placeOrderOnlyAfterYes": true,
+        "followupsAsked": 1
+      }
+    },
+    {
+      "name": "l1_milk_order",
+      "caller": "margaret",
+      "household": {
+        "followup": false
+      },
+      "turns": [
+        {
+          "say": "I'd like a gallon of milk, please."
+        },
+        {
+          "say": "Yes, the gallon."
+        },
+        {
+          "say": "Yes, please order it."
+        },
+        {
+          "say": "No, that's all for today."
+        },
+        {
+          "say": "Thank you, bye."
+        }
+      ],
+      "expect": {
+        "placeOrderOnlyAfterYes": true,
+        "followupsAsked": 0
+      }
+    },
+    {
+      "name": "l1_chat_weather",
+      "caller": "margaret",
+      "household": {
+        "followup": false
+      },
+      "turns": [
+        {
+          "say": "Oh, nothing really, I just wanted to chat."
+        },
+        {
+          "say": "It's been so gray and rainy here."
+        },
+        {
+          "say": "I've been reading a mystery novel."
+        },
+        {
+          "say": "My daughter Dana is coming on Sunday."
+        },
+        {
+          "say": "Alright dear, I'll let you go. Bye."
+        }
+      ],
+      "expect": {
+        "placeOrderOnlyAfterYes": true,
+        "followupsAsked": 0
+      }
+    },
+    {
+      "name": "l1_bread_eggs",
+      "caller": "margaret",
+      "household": {
+        "followup": false
+      },
+      "turns": [
+        {
+          "say": "I need a loaf of bread and some eggs."
+        },
+        {
+          "say": "White bread, and a dozen eggs."
+        },
+        {
+          "say": "Yes, that's right, go ahead."
+        },
+        {
+          "say": "No, nothing else."
+        },
+        {
+          "say": "Thanks so much, goodbye."
+        }
+      ],
+      "expect": {
+        "placeOrderOnlyAfterYes": true,
+        "followupsAsked": 0
+      }
+    },
+    {
+      "name": "l1_chat_recital",
+      "caller": "margaret",
+      "household": {
+        "followup": true
+      },
+      "turns": [
+        {
+          "say": "Oh, Lily was marvelous. She played Chopin."
+        },
+        {
+          "say": "She's only nine, can you believe it?"
+        },
+        {
+          "say": "I used to play the piano myself, years ago."
+        },
+        {
+          "say": "Maybe I'll start again. What do you think?"
+        },
+        {
+          "say": "Thank you, that's sweet. Goodbye."
+        }
+      ],
+      "expect": {
+        "placeOrderOnlyAfterYes": true,
+        "followupsAsked": 1
+      }
+    },
+    {
+      "name": "l1_tea_question",
+      "caller": "margaret",
+      "household": {
+        "followup": false
+      },
+      "turns": [
+        {
+          "say": "Do you sell tea?"
+        },
+        {
+          "say": "Black tea, please."
+        },
+        {
+          "say": "How much is it?"
+        },
+        {
+          "say": "Yes, please order one box."
+        },
+        {
+          "say": "Lovely, thank you. Bye-bye."
+        }
+      ],
+      "expect": {
+        "placeOrderOnlyAfterYes": true,
+        "followupsAsked": 0
+      }
+    },
+    {
+      "name": "l1_chat_memory",
+      "caller": "margaret",
+      "household": {
+        "followup": false
+      },
+      "turns": [
+        {
+          "say": "Do you remember what coffee I like?"
+        },
+        {
+          "say": "That's right. I'm not ordering today though."
+        },
+        {
+          "say": "What day is it today?"
+        },
+        {
+          "say": "I always lose track of the days."
+        },
+        {
+          "say": "Okay, goodbye."
+        }
+      ],
+      "expect": {
+        "placeOrderOnlyAfterYes": true,
+        "followupsAsked": 0
+      }
+    },
+    {
+      "name": "l1_soup_order",
+      "caller": "margaret",
+      "household": {
+        "followup": false
+      },
+      "turns": [
+        {
+          "say": "I'm feeling a bit under the weather. I'd like some chicken soup."
+        },
+        {
+          "say": "The four-pack, please."
+        },
+        {
+          "say": "Yes, go ahead."
+        },
+        {
+          "say": "Thank you, I'll have some tonight."
+        },
+        {
+          "say": "Goodbye."
+        }
+      ],
+      "expect": {
+        "placeOrderOnlyAfterYes": true,
+        "followupsAsked": 0
+      }
+    },
+    {
+      "name": "l1_chat_short",
+      "caller": "margaret",
+      "household": {
+        "followup": false
+      },
+      "turns": [
+        {
+          "say": "Hello? Is this the shopping line?"
+        },
+        {
+          "say": "I just wanted to see how this works."
+        },
+        {
+          "say": "So I can just call and ask for things?"
+        },
+        {
+          "say": "That's very handy."
+        },
+        {
+          "say": "Thank you, goodbye."
+        }
+      ],
+      "expect": {
+        "placeOrderOnlyAfterYes": true,
+        "followupsAsked": 0
+      }
+    },
+    {
+      "name": "l1_bananas_oj",
+      "caller": "margaret",
+      "household": {
+        "followup": false
+      },
+      "turns": [
+        {
+          "say": "Some bananas and orange juice, please."
+        },
+        {
+          "say": "The regular bananas and the small juice."
+        },
+        {
+          "say": "Yes, please."
+        },
+        {
+          "say": "No, that's it."
+        },
+        {
+          "say": "Bye now."
+        }
+      ],
+      "expect": {
+        "placeOrderOnlyAfterYes": true,
+        "followupsAsked": 0
+      }
+    }
+  ]
+}
