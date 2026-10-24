@@ -17,6 +17,7 @@ const routes = [
   "/agent/household",
   "/agent/turn",
   "/agent/order",
+  "/agent/followup",
   "/agent/forget",
   "/agent/alert",
   "/agent/call-end",
@@ -79,10 +80,11 @@ describe("service authentication", () => {
     });
     expect(response.status).toBe(400);
   });
-  test("future money and forget routes explicitly reject execution", async () => {
+  test("an empty forget or order request is invalid", async () => {
     const t = convexTest(schema, modules);
-    for (const route of ["/agent/order", "/agent/forget"])
-      expect((await request(t, route, {}, AGENT)).status).toBe(501);
+    // #47 implemented /agent/forget; it still validates its body.
+    expect((await request(t, "/agent/forget", {}, AGENT)).status).toBe(400);
+    expect((await request(t, "/agent/order", {}, AGENT)).status).toBe(400);
     expect(await t.run((ctx) => ctx.db.query("orders").collect())).toEqual([]);
   });
 });
@@ -157,7 +159,20 @@ describe("seed and call lifecycle", () => {
       await request(t, "/agent/household", body, AGENT)
     ).json();
     expect(first.callId).toBe(retry.callId);
-    expect(first.context.household.callerPhone).toBe(seed.callerPhone);
+    expect(first.context.household.preferredName).toBe("Margaret");
+    // The agent gets an allow-listed household: no phones, address or auth subjects.
+    expect(Object.keys(first.context.household).sort()).toEqual([
+      "callerName",
+      "familyContacts",
+      "introduced",
+      "preferredName",
+      "sharing",
+      "timezone",
+    ]);
+    expect(first.context.household.familyContacts).toEqual([
+      { name: "Dana", relation: "daughter" },
+    ]);
+    expect(JSON.stringify(first.context.household)).not.toContain("+1415");
     expect(
       (
         await request(
@@ -177,6 +192,70 @@ describe("seed and call lifecycle", () => {
       )
     ).json();
     expect(unknown.context).toBeNull();
+  });
+  test("#62: lookup returns ended calls' summaries and recent transcripts, never the live call", async () => {
+    const t = convexTest(schema, modules);
+    await t.mutation(internal.seed.demo, seed);
+    const lookup = () =>
+      t.query(internal.households.lookup, { callerPhone: seed.callerPhone });
+    const seeded = await lookup();
+    expect(seeded?.callSummaries).toEqual([
+      expect.objectContaining({
+        kind: "chat",
+        outcome: "no_order",
+        summary: "Seeded demo conversation about family, coffee and tomatoes.",
+      }),
+    ]);
+    expect(seeded?.recentTranscripts).toHaveLength(1);
+    expect(seeded!.recentTranscripts[0].turns).toHaveLength(5);
+    expect(Object.keys(seeded!.recentTranscripts[0].turns[0]).sort()).toEqual([
+      "speaker",
+      "text",
+    ]);
+    // A call in progress is not memory yet.
+    const { callId } = await (
+      await request(
+        t,
+        "/agent/household",
+        { callerPhone: seed.callerPhone, providerCallId: "live-1" },
+        AGENT,
+      )
+    ).json();
+    for (const [idx, text] of ["I'd like the same coffee", "secret"].entries())
+      await request(
+        t,
+        "/agent/turn",
+        {
+          callId,
+          idx,
+          speaker: "user",
+          text,
+          at: Date.now(),
+          timings: {},
+          usage: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
+        },
+        AGENT,
+      );
+    expect((await lookup())?.recentTranscripts).toHaveLength(1);
+    await t.run(async (ctx) => {
+      const turn = await ctx.db
+        .query("turns")
+        .withIndex("by_call_idx", (q) => q.eq("callId", callId).eq("idx", 1))
+        .unique();
+      await ctx.db.patch(turn!._id, { redacted: true });
+      await ctx.db.patch(callId, { summary: "Asked about coffee." });
+    });
+    await request(t, "/agent/call-end", { callId, kind: "chat" }, AGENT);
+    const after = await lookup();
+    expect(after?.callSummaries.map((c) => c.summary)).toEqual([
+      "Asked about coffee.",
+      "Seeded demo conversation about family, coffee and tomatoes.",
+    ]);
+    // Redacted turns are never handed to the agent.
+    expect(after?.recentTranscripts[0].turns).toEqual([
+      { speaker: "user", text: "I'd like the same coffee" },
+    ]);
+    expect(JSON.stringify(after)).toBe(JSON.stringify(await lookup()));
   });
   test("turn writes and call-end retries are idempotent", async () => {
     const t = convexTest(schema, modules);

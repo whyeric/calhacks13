@@ -82,6 +82,8 @@ export const demo = internalMutation({
           ]
         : [],
       sharing: { chatTranscripts: false, moodNotes: false },
+      // The seeded household already had its first-call introduction (#69).
+      introducedAt: Date.now() - 86400000,
     });
     await ctx.db.insert("limits", { householdId, ...fixture.limits });
     for (const favorite of fixture.favorites)

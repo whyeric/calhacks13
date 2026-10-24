@@ -2,12 +2,15 @@ import {
   internalAction,
   internalMutation,
   internalQuery,
+  mutation,
   query,
 } from "./_generated/server";
 import { internal } from "./_generated/api";
 import { v, ConvexError } from "convex/values";
 import { alertType, decision, delivery } from "./schema";
 import { requireFamily } from "./auth";
+import { actorArgs, resolveActor, resolveHousehold } from "./access";
+import { decide } from "./orders";
 
 const alertArgs = {
   householdId: v.id("households"),
@@ -236,17 +239,46 @@ export const recordDecision = internalMutation({
         decision: alert.decision,
         alreadyResolved: true,
       };
-    await ctx.db.patch(alert._id, {
-      decision: args.decision,
-      delivery: "answered",
-      decidedAt: Date.now(),
-      decidedBy: alert.recipient,
-    });
-    // Order approval/payment wiring is Phase 2 (#92). Recording a decision never charges money.
+    if (!alert.orderId) {
+      // No order attached (a test or manual alert): record the answer; nothing to pay.
+      await ctx.db.patch(alert._id, {
+        decision: args.decision,
+        delivery: "answered",
+        decidedAt: Date.now(),
+        decidedBy: alert.recipient,
+      });
+      return {
+        alertId: alert._id,
+        decision: args.decision,
+        alreadyResolved: false,
+        decidedBy: alert.recipient,
+      };
+    }
+    if (alert.delivery !== "answered")
+      await ctx.db.patch(alert._id, { delivery: "answered" });
+    const household = await ctx.db.get(alert.householdId);
+    const contact = household?.familyContacts.find(
+      (c) => c.phone === alert.recipient,
+    );
+    // #92 APR-3: the same first-response-wins decision as the dashboard buttons. It marks
+    // every approval alert on the order (this one included) and, on yes, schedules payment.
+    const result = await decide(
+      ctx,
+      alert.orderId,
+      `${contact?.name ?? "Family"} (alert call)`,
+      args.decision,
+    );
     return {
       alertId: alert._id,
-      decision: args.decision,
-      alreadyResolved: false,
+      // When the dashboard answered first, report the decision that stands.
+      decision:
+        result.status === "approved" || result.status === "paid"
+          ? ("approved" as const)
+          : result.status === "declined"
+            ? ("declined" as const)
+            : args.decision,
+      alreadyResolved: result.alreadyResolved,
+      decidedBy: result.decidedBy,
     };
   },
 });
@@ -260,5 +292,24 @@ export const list = query({
       .withIndex("by_household", (q) => q.eq("householdId", householdId))
       .order("desc")
       .take(100);
+  },
+});
+
+/** #94: a family member has seen this alert. Idempotent; the first acknowledgement stands. */
+export const acknowledge = mutation({
+  args: { ...actorArgs, alertId: v.id("alerts") },
+  handler: async (ctx, args) => {
+    const household = await resolveHousehold(ctx, args);
+    const alert = await ctx.db.get(args.alertId);
+    if (!alert || alert.householdId !== household._id)
+      throw new ConvexError("Alert not found");
+    const who = await resolveActor(ctx, household, args);
+    if (alert.acknowledgedAt !== undefined)
+      return { alertId: alert._id, alreadyAcknowledged: true };
+    await ctx.db.patch(alert._id, {
+      acknowledgedAt: Date.now(),
+      acknowledgedBy: who,
+    });
+    return { alertId: alert._id, alreadyAcknowledged: false };
   },
 });
