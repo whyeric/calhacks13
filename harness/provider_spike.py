@@ -7,9 +7,10 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "agent"))
 from anthropic import APIStatusError, AsyncAnthropic
+from dotenv import load_dotenv
+
 from claude import ClaudeConversation
 from context import system_blocks
-from dotenv import load_dotenv
 
 
 async def main():

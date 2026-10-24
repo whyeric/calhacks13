@@ -5,9 +5,6 @@ import time
 from contextlib import asynccontextmanager
 
 from anthropic import AsyncAnthropic
-from claude import ClaudeConversation
-from context import system_blocks
-from convex_api import ConvexAPI
 from dotenv import load_dotenv
 from line.events import (
     AgentSendText,
@@ -18,6 +15,10 @@ from line.events import (
     UserTurnStarted,
 )
 from line.voice_agent_app import VoiceAgentApp
+
+from claude import ClaudeConversation
+from context import system_blocks
+from convex_api import ConvexAPI
 
 load_dotenv()
 log = logging.getLogger(__name__)

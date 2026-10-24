@@ -4,15 +4,17 @@ from unittest.mock import AsyncMock
 
 import httpx
 import pytest
+from line.events import AgentSendText, CallEnded, CallStarted, UserTextSent, UserTurnEnded
+
 from claude import ClaudeConversation
 from convex_api import ConvexAPI
-from line.events import AgentSendText, CallEnded, CallStarted, UserTextSent, UserTurnEnded
 from main import ErrandAgent
 
 
 def test_service_lifespan_starts_and_health_check_requires_no_provider_requests(monkeypatch):
-    import main
     from fastapi.testclient import TestClient
+
+    import main
 
     monkeypatch.setenv("ANTHROPIC_API_KEY", "test-only-credential")
     monkeypatch.setenv("CARTESIA_API_KEY", "test-only-credential")
