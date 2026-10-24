@@ -2,13 +2,14 @@
 
 | | |
 |---|---|
-| **Status** | Draft v2, for team review |
+| **Status** | Draft v2.1, for team review |
 | **Event** | Cal Hacks 13.0 · submission due Sun Oct 25, 2026, 09:00 PT |
 | **Branch** | `errand-line` |
 | **Last updated** | Fri Oct 23, 2026 |
 | **Source** | *Errand Line: Product Proposal* (Oct 23, 2026) |
 
 **New in v2:** memory across calls using Claude's long context window, companionship as a core pillar (older-adult loneliness), a latency budget, a full build plan, and the prize map with an Anthropic row.
+**New in v2.1:** Claude Haiku 5.5 (`claude-haiku-5-5`, released Oct 7, 2026) is the default model everywhere, to minimize cost and latency (§12.4, §15). The estimate falls from about $0.94 of Claude per call on Opus 5.5 to about $0.03, with the 60K-token memory cap kept.
 
 ## Contents
 
@@ -105,6 +106,7 @@ Two requirements apply across all three pillars:
 | Memory accuracy | Zero invented memories, and every memory reference traces to a stored fact | Test M4 |
 | Memory follow-up | Seeded follow-up raised in ≥ 9 of 10 calls | Test M1 |
 | Cut-offs | The agent talks over a caller mid-sentence in fewer than 1 in 10 calls | Test L4 |
+| Claude cost per call | ≤ $0.05 on average across rehearsal calls | Token `usage` logged on every request (§12.5) |
 
 ### 3.4 Product metrics (after the hackathon)
 - Orders completed per household per month, and the share that needed approval.
@@ -209,6 +211,7 @@ All requirements are P0 unless marked otherwise. Each feature lists the tests in
 | VO-5 | For an item that isn't a favorite, search and read back **two options** with size and price, then ask which one. |
 | VO-6 | Before ordering, read back every item, the total and the expected arrival, then require an explicit "yes." |
 | VO-7 | After an order, ask "Anything else?" and end the call warmly (§9.4). |
+| VO-8 | Handle `stop_reason: "refusal"` on every Claude request. Haiku 5.5 runs safety classifiers and has no server-side fallback. On a refusal, speak a templated recovery line ("Sorry, could you say that another way?"), log it and continue. If the turn touched on harm, speak the templated safety line instead (WB-5). |
 
 **Tests:** T1, T2, T4.
 
@@ -286,7 +289,7 @@ The guard checks how a request is framed, not only what is being bought.
 
 | ID | Requirement |
 |---|---|
-| SCM-1 | Score **every caller turn** with Claude, returning `{ score, signals[], reasons }`. Scoring runs in parallel with the reply and never delays a conversational turn (§12.3). |
+| SCM-1 | Score **every caller turn** with Claude, returning `{ score, signals[], reasons }`. Scoring runs in parallel with the reply and never delays a conversational turn (§12.3). To keep it cheap, the classifier gets only the static guard prompt, a compact household digest (family names, usual spend, under 500 tokens) and the last six turns. It never gets the full memory block. |
 | SCM-2 | **Hard rule:** gift cards, wire transfers and crypto are blocked no matter what the model says. A Cartesia deterministic passthrough tool enforces it, and `place_order` checks it again. |
 | SCM-3 | **Response ladder.** One weak signal: ask a gentle question ("Is someone asking you to buy this?"). One strong signal, or two weak ones: the guard puts the call on a scam hold, and the agent declines, explains in plain words, and the family is alerted. In every case, stay kind, never argue, and offer to connect the caller with family. |
 | SCM-4 | **Memory-aware:** compare claims against memory (e.g. "grandson in jail" against a remembered "Tyler is at college in Ohio") and against order history to detect out-of-pattern requests. |
@@ -294,7 +297,7 @@ The guard checks how a request is framed, not only what is being bought.
 | SCM-6 | A family member can override a block from the dashboard. Every override is logged. |
 | SCM-7 | Claims made during a flagged scam call are kept out of memory as facts (§11.6). |
 
-The guard decides and the model does the talking. A scam hold is set in code, which then tells the model through a mid-conversation system message to decline using the ladder above. The model never decides on its own whether a payment is allowed.
+The guard decides and the model does the talking. A scam hold is set in code, which then adds a `<guard>` note to the next user turn telling the model to decline using the ladder above. Adding it to a new turn, rather than editing the system prompt, keeps the conversation append-only, which Haiku 5.5 requires (§12.4). Transcribed speech is sanitized so a caller can't produce a guard note. The model never decides on its own whether a payment is allowed.
 
 **Tests:** Call 2, S1–S5, set B.
 
@@ -306,6 +309,7 @@ The guard decides and the model does the talking. A scam hold is set in code, wh
 | WB-2 | **Self-harm or wanting to die:** respond with care, share the 988 Suicide & Crisis Lifeline (call or text 988), urge 911 if they are in immediate danger, and alert family, telling the caller it is doing so. |
 | WB-3 | **Non-urgent concern** (low mood, not eating, a minor fall last week): respond with care and offer to let family know (CMP-4). Add a mood note to the dashboard only if the caller agreed to share them. |
 | WB-4 | Never give medical advice or present Errand Line as an emergency service. |
+| WB-5 | The 911 and 988 lines in WB-1 and WB-2 are **templated text**, triggered by the classifier or a refusal (VO-8), so they never depend on what the model generates. |
 
 **Tests:** W1, W2.
 
@@ -317,7 +321,7 @@ The guard decides and the model does the talking. A scam hold is set in code, wh
 | DSH-2 | **Screens:** Live calls (streaming transcript, scam score, per-turn latency), Orders, Alerts, Approvals, **Memory** (facts with evidence and source call, open follow-ups, delete), and Settings (limits, stores, favorites, contacts, sharing). |
 | DSH-3 | Visible only to family members the parent approved. The minimum gate for the weekend is an open question (§21). |
 | DSH-4 | Design the screens in Figma first. |
-| DSH-5 | A developer panel shows p50 and p95 latency and the cache hit rate. It is also used in the demo. |
+| DSH-5 | A developer panel shows p50 and p95 latency, the cache hit rate and the Claude cost per call. It is also used in the demo. |
 
 **Tests:** T1 (the dashboard updates live during Call 1).
 
@@ -366,10 +370,10 @@ The household memory block comes after the static sections. Nothing that changes
 | Component | Tech | Responsibility |
 |---|---|---|
 | Phone line | Twilio number | Routes inbound calls to Cartesia, and sends and receives SMS |
-| Voice agent | Python, Cartesia Line SDK, Claude | Speech-to-text, text-to-speech, turn-taking, conversation and tool calls |
+| Voice agent | Python, Cartesia Line SDK, Claude Haiku 5.5 | Speech-to-text, text-to-speech, turn-taking, conversation and tool calls |
 | Context builder | Python, inside the agent | Assembles the memory block and pre-warms the prompt cache |
-| Scam guard | Claude classifier + deterministic passthrough tool | Scores every turn and enforces the hard payment rule |
-| Memory writer | Claude, run as a post-call Convex action | Writes summaries, evidence-backed facts and follow-ups |
+| Scam guard | Claude Haiku 5.5 classifier + deterministic passthrough tool | Scores every turn and enforces the hard payment rule |
+| Memory writer | Claude Haiku 5.5, run as a post-call Convex action | Writes summaries, evidence-backed facts and follow-ups |
 | Item search | Apify Walmart search Actor | Returns options and prices. **Results are cached for the demo**, because Walmart blocks scrapers without residential proxies |
 | Payments | Visa Intelligent Commerce sandbox | Pays with an agent token. **Fallback:** Capital One Nessie, or a mock with the same limits |
 | Database and functions | Convex | Stores the nine tables (§13), runs `place_order` and serves reactive queries |
@@ -470,18 +474,23 @@ The render order is `tools → system → messages`, and prompt caching matches 
 |---|---|---|---|---|
 | 1 | Tools | Fixed tool definitions in a deterministic order | ~2K | Covered by breakpoint A |
 | 2 | System, static | Persona, rules, ladders and protocols (§9.5) | ~4K | **Breakpoint A**, 1-hour TTL, shared by all households |
-| 3 | System, household memory | Profile, follow-ups, summaries, recent orders, recent transcripts | 10–60K | **Breakpoint B**, 5-minute TTL, pre-warmed at call start |
-| 4 | Per-call context | Today's date and time in the caller's timezone | < 100 | Not cached. Sent as a mid-conversation system message after the first user turn |
+| 3 | System, household memory | Profile, follow-ups, summaries, recent orders, recent transcripts | Up to the 60K cap | **Breakpoint B**, 5-minute TTL, pre-warmed at call start |
+| 4 | Per-call context | Today's date and time in the caller's timezone | < 100 | Not cached. Sent as a server-written `<call_context>` block at the start of the first user turn, so the system prompt never changes during a call |
 | 5 | Live conversation | This call's turns and tool results | Grows | Automatic caching of the conversation tail |
 
-**Long context.** Claude Opus 5.5 and Claude Sonnet 5.5 have 1M-token context windows (Claude Haiku 4.5 has 200K), so a household's memory fits comfortably.
-- **Starting budget:** 60K tokens for the memory block. A 10-minute call is roughly 1.5–2K tokens of transcript, so this covers about the last 30 full calls plus summaries of everything older.
-- **When to raise it:** only if measurement shows the pre-warm still finishes before the caller's first reply. A bigger prefix makes a slower cache write.
+**Long context, sized to the price tier.** Claude Haiku 5.5 has a 1M-token context window, so the window is never the limit. The limit is Haiku 5.5's pricing: prompts over 100K tokens cost 5× more per token (§15).
+- **Default cap: 60K tokens.** That covers profile facts, open follow-ups, a summary of *every* past call, recent orders, and full transcripts of the most recent calls in whatever room is left. Haiku 5.5's tokenizer counts about 30% more tokens than Haiku 4.5's, so a 10-minute call is roughly 2–2.5K tokens. That's about the last 15–20 calls in full.
+- **Why 60K:** a 6K static prefix, a 60K memory block and an hour-long call still fit under 100K. A longer call simply pays the higher tier, which is still cents.
+- **Memory is cheap to keep.** Cache reads on Haiku 5.5 cost $0.01 per million tokens, so re-reading the 60K block on every turn of a 20-turn call costs about a cent.
+- **Real costs start lower.** A new household's block is only a few thousand tokens.
+- **Speed:** a bigger block also means a slower cache write. The pre-warm must finish before the caller's first reply.
 
 **Cache hygiene** (any byte change in the prefix invalidates the cache):
 - Serialize the memory block deterministically: sort facts by creation time and use fixed formatting.
 - Never put "now" timestamps, call IDs or request IDs in blocks 1–3.
 - Keep the tool list fixed for every call.
+- **Append-only within a call.** Never change `system`, `tools` or earlier messages mid-call. Haiku 5.5 returns a 400 error when thinking blocks are sent back after such a change, and any edit also breaks the cache. Pass thinking blocks back unchanged. "Forget that" redactions apply to stored transcripts, not the live conversation.
+- The minimum cacheable prefix on Haiku 5.5 is 512 tokens, so every block above caches, including the small classifier prompt.
 - Rebuild the memory block only after the memory writer runs, so repeat calls within 5 minutes reuse the same cache.
 - Pre-warm with exactly the same tools, system prompt, thinking and effort settings as real turns, or the warm-up writes an entry real traffic never reads.
 - Log `cache_read_input_tokens` and `cache_creation_input_tokens` on every turn.
@@ -495,7 +504,7 @@ The render order is `tools → system → messages`, and prompt caching matches 
 ### 11.5 Write path (after hang-up)
 - **Trigger:** the call ends, which starts a Convex action.
 - **Input:** the full transcript, current facts, open follow-ups and the call's scam flag.
-- **Model:** Claude Opus 5.5 at a higher effort setting, since this runs off the critical path, with structured output:
+- **Model:** Claude Haiku 5.5 at its default `medium` effort, with structured output. Effort costs no latency here, because this runs after the call (§12.4).
 
 ```json
 {
@@ -547,7 +556,7 @@ The render order is `tools → system → messages`, and prompt caching matches 
 |---|---|---|
 | End-of-turn detection | 250 ms | The hardest trade-off, because older callers pause mid-sentence (§12.6) |
 | Final speech-to-text transcript | 100 ms | Streaming STT, with partial transcripts arriving while the caller talks |
-| Claude time to first token (warm cache) | 300 ms | Cached prefix, short replies, low effort |
+| Claude time to first token (warm cache) | 300 ms | Haiku 5.5 at `low` effort (thinks little or not at all on simple turns), cached prefix, short replies |
 | Text-to-speech first audio | 100 ms | Cartesia cites sub-90 ms latency for its speech models |
 | Network and telephony | 50 ms | Twilio ↔ Cartesia ↔ agent, all in one region |
 | **Total** | **800 ms** | These are budgets to measure against, not vendor guarantees |
@@ -557,24 +566,63 @@ The render order is `tools → system → messages`, and prompt caching matches 
 2. **Cache the long prefix.** Use the tools → static system → memory ordering and breakpoints in §11.3, and check cache hits on every turn.
 3. **Pre-warm at call start.** Send a `max_tokens: 0` request with the real turn's exact settings, in parallel with the greeting.
 4. **Template the opening.** The greeting and first follow-up are pre-written, so no LLM call sits between "hello" and the caller's first reply.
-5. **Keep each turn small.** Low effort, one or two sentences, no lists.
+5. **Keep each turn small.** `low` effort, one or two sentences, no lists.
 6. **Keep the scam scorer off the critical path.** It runs in parallel and gates only `place_order`. The hard-rule check is deterministic and instant.
 7. **Cover tool time.** Speak a filler line immediately, and prefetch favorites and cached search results at call start.
 8. **Do post-call work asynchronously.** Memory writing and summaries happen after hang-up.
 9. **Co-locate.** Run the agent server in a US region close to Twilio, Cartesia and the Claude API, and reuse connections to Claude, Convex and Apify.
 10. **Support barge-in.** Stop TTS as soon as the caller speaks.
 
-### 12.4 Model choice
-- **Conversation turns:** start with **Claude Opus 5.5 at `effort: "low"`**. Opus 5.5's thinking can't be turned off, but low effort keeps it brief.
-  - **Saturday 09:00 checkpoint:** if p50 time to first token with a warm cache is over 350 ms, benchmark Claude Sonnet 5.5 with thinking set to `between_tools` on the same harness and test sets. Switch only if it is faster *and* passes the scam, memory and companion tests equally.
-  - Opus 5.5 fast mode (Claude API only, up to 2.5× output speed at $8/$40 per million tokens) speeds up output, not time to first token, so it is a secondary lever.
-- **Scam classifier:** Claude at low effort with structured output, run in parallel.
-- **Memory writer:** Claude Opus 5.5 at a higher effort setting. Latency doesn't matter there.
-- **Cache note:** caches are per model, so switching the conversation model means re-warming. Pick the model before tuning.
+### 12.4 Model choice (cost and speed)
+**Default: Claude Haiku 5.5 (`claude-haiku-5-5`) for every role:** conversation, scam classifier and memory writer. It is the fastest current Claude model, built for high-volume, latency-sensitive work, and the least expensive.
+
+**Haiku 5.5 prices, per million tokens**
+
+| | Prompts up to 100K tokens | Prompts over 100K tokens |
+|---|---|---|
+| Input | $0.10 | $0.50 |
+| Output | $0.50 | $2.50 |
+| 5-minute cache write | $0.125 | $0.625 |
+| 1-hour cache write | $0.20 | $1.00 |
+| Cache read | $0.01 | $0.05 |
+
+**Settings per role**
+
+| Role | Effort | Why |
+|---|---|---|
+| Conversation | `low` | Thinking is on by default and adds time to first token. At `low` the model thinks little, and it can skip thinking entirely on simple turns. |
+| Scam classifier | `medium` (default) | It runs in parallel, so effort doesn't slow the reply. |
+| Memory writer | `medium` (default) | It runs after the call. |
+
+**API rules for Haiku 5.5**
+- **Thinking.** Leave `thinking` unset or set it to `{type: "adaptive"}`, and steer it with `output_config.effort`. `budget_tokens` returns a 400 error.
+- **Thinking counts toward `max_tokens`.** Leave room for it (e.g. `max_tokens: 1024` on conversation turns) so a turn doesn't stop before any text.
+- **Reading responses.** Select content blocks by `type`, not by position, because a response can start with a `thinking` block.
+- **Thinking blocks persist.** Thinking blocks from earlier turns stay in context and count as input. Pass them back unchanged, and keep the conversation append-only (§11.3).
+- **Removed parameters.** No `temperature`, `top_p` or `top_k`, and no assistant prefill. Every request ends with a user turn.
+- **Tool choice.** Use `tool_choice: auto`. A forced tool choice skips thinking.
+- **Refusals.** Handle `stop_reason: "refusal"`. Haiku 5.5 has no server-side fallback (VO-8, WB-5).
+- **Pre-warm.** It works with adaptive thinking. Send exactly the same thinking and effort settings as real turns, with streaming off.
+- **Structured outputs** for the classifier and memory writer.
+- **Context and caching.** The 1M-token window and 512-token caching minimum are both comfortable for this design (§11.3).
+
+**Why a small model is safe here.** Money rules, limits and the hard scam rule are enforced in code, not by the model (§14.1). Memory facts are validated against the transcript in code (§11.5), and the 911 and 988 safety lines are templated (WB-5). The model handles conversation, not permission.
+
+**Escalation rule (test-driven, one role at a time).** At the Sat 18:00 checkpoint, run the test sets in §16.2. For any role that fails:
+1. **Raise that role's effort on Haiku 5.5** (e.g. conversation `low` → `medium`). This costs almost nothing, but for the conversation, re-check latency.
+2. **If it still fails, move only that role to Claude Sonnet 5.5** and re-run its tests:
+
+| Role | Upgrade if | Upgrade to | Cost impact |
+|---|---|---|---|
+| Conversation | The companion (C) or memory-accuracy (M4) tests still fail | Sonnet 5.5, thinking `between_tools` | ≈ $0.02 → ≈ $0.32 per call; re-check latency |
+| Scam classifier | False declines still exceed the set B bar | Sonnet 5.5 | ≈ $0.005 → ≈ $0.08 per call |
+| Memory writer | M4 or M5 still fail | Sonnet 5.5 | ≈ $0.003 → ≈ $0.06 per call |
+
+Caches are per model, so switching the conversation model means re-warming the cache.
 
 ### 12.5 Measurement
-- **Every turn logs** `speechEndAt`, `sttFinalAt`, `llmRequestAt`, `llmFirstTokenAt` and `ttsFirstAudioAt`, plus the cache read and write token counts, to the `turns` table.
-- **The dashboard developer panel** shows p50/p95 per stage and the cache hit rate, live.
+- **Every turn logs** `speechEndAt`, `sttFinalAt`, `llmRequestAt`, `llmFirstTokenAt` and `ttsFirstAudioAt`, plus the token `usage` (input, output, cache read, cache write), to the `turns` table.
+- **The dashboard developer panel** shows p50/p95 per stage, the cache hit rate and the Claude cost per call, live.
 - **The harness** (`harness/`) places real calls that play recorded caller audio, then computes the percentiles. It runs before every rehearsal, and a latency regression blocks the demo build.
 
 ### 12.6 End-of-turn detection for older callers
@@ -594,7 +642,7 @@ All tables live in Convex. Money is stored as integer cents, phone numbers in E.
 | `limits` | `householdId`, `perOrderCapCents`, `monthlyBudgetCents`, `approvedStores[]` | `by_household` | `place_order` checks |
 | `favorites` | `householdId`, `name`, `aliases[]`, `store`, `storeItemId`, `usualQty` | `by_household` | "My usual" |
 | `calls` | `householdId?`, `callerPhone`, `startedAt`, `endedAt?`, `kind`, `outcome`, `summary?`, `scamScore`, `scamSignals[]`, `scamReasons`, `scamHold` | `by_household`, `by_startedAt` | Dashboard feed, memory summaries |
-| `turns` | `callId`, `idx`, `speaker`, `text`, `at`, `timings{...}`, `cacheReadTokens`, `cacheWriteTokens`, `scam{ score, signals[] }?`, `redacted` | `by_call` | Live transcript, latency metrics |
+| `turns` | `callId`, `idx`, `speaker`, `text`, `at`, `timings{...}`, `usage{ input, output, cacheRead, cacheWrite }`, `scam{ score, signals[] }?`, `redacted` | `by_call` | Live transcript, latency and cost metrics |
 | `orders` | `householdId`, `callId`, `items[{ name, storeItemId, qty, priceCents }]`, `totalCents`, `store`, `status`, `paymentTokenRef?`, `approvedBy?`, `createdAt` | `by_household`, `by_status` | Order history, approvals, monthly budget |
 | `alerts` | `householdId`, `callId?`, `orderId?`, `type`, `message`, `transcriptExcerpt?`, `recipient`, `sentAt`, `acknowledgedAt?` | `by_household` | Family notifications |
 | `memory_facts` | `householdId`, `text`, `category`, `evidence`, `sourceCallId`, `createdAt`, `status`, `supersededBy?` | `by_household_status` | Profile facts |
@@ -662,20 +710,35 @@ Chat privacy never hides a scam: scam alerts and their excerpts always go to the
 | Accessibility | Slower speech rate and repeats on request. Works on landlines and flip phones with no keypad input required |
 | Privacy | §14 |
 | Security | Secrets kept in the environment, Twilio signatures verified, and a dashboard gate (§21) |
-| Observability | Every turn and tool call is logged with timings in Convex |
-| Cost | See the rough estimate below |
+| Observability | Every turn and tool call is logged with timings and token usage in Convex |
+| Cost | ≤ $0.05 of Claude per call on average (see below) |
 
-**Rough Claude cost per call.** This uses Claude Opus 5.5 list prices: $4 per million input tokens, $20 per million output tokens, $0.20 per million for cache reads, and 1.25× the input price for 5-minute cache writes. Assume a 60K-token memory block and a 20-turn call:
+**Rough Claude cost per call.** These are list prices, in the under-100K-token tier for Haiku 5.5. The assumptions:
+- 20 Claude requests per call, about 3K output tokens in total, including thinking.
+- A 6K-token static prefix and a 60K-token memory block, both cached.
+- The scam classifier runs about 20 small calls.
+- The memory writer runs once, after hang-up.
 
-| Item | Calculation | Cost |
+| Part | Claude Opus 5.5 ($4 / $20, cache read $0.20) | **Claude Haiku 5.5 ($0.10 / $0.50, cache read $0.01)** |
 |---|---|---|
-| Cache write | 60K × $5/M | ≈ $0.30 |
-| Cache reads | 20 turns × 60K × $0.20/M | ≈ $0.24 |
-| Output | ~2K tokens | ≈ $0.04 |
-| Memory writer | One call after hang-up | A few cents |
-| **Total** | | **≈ $0.60 per call** |
+| Conversation: cache write, cache reads, output | ≈ $0.65 | **≈ $0.02** |
+| Scam classifier | ≈ $0.17 | **≈ $0.005** |
+| Memory writer | ≈ $0.12 | **≈ $0.003** |
+| **Total per call** | **≈ $0.94** | **≈ $0.03** |
 
-Speech and telephony costs are extra. The size of the memory budget is the main cost lever.
+**Cost levers, biggest first**
+1. **Model.** Haiku 5.5 for every role is about 30× cheaper than Opus 5.5 for this workload (§12.4).
+2. **Stay under 100K tokens per prompt.** Above that, every Haiku 5.5 price rises 5×. The 60K memory cap leaves room for an hour-long call (§11.3).
+3. **Cache everything stable.**
+   - Cache reads cost a tenth of the input price, so re-reading the memory block every turn is nearly free.
+   - The static prefix uses a 1-hour TTL and is shared by every household. The memory block uses a 5-minute TTL.
+   - Pre-warming adds no real cost, because it only moves the cache write that the first real turn would have made anyway.
+4. **Low effort on live turns.** Thinking tokens are billed as output and then stay in context as input on later turns.
+5. **Keep the classifier small.** Give it a compact digest and the last six turns, never the full memory block (SCM-1).
+6. **No LLM for fixed lines.** Greetings, follow-up openers, filler lines and safety lines are templated.
+7. **Short replies.** The speech rules (§9.2) keep output tokens low.
+
+Speech and telephony costs (Cartesia, Twilio) are extra, and at about 3 cents of Claude per call they will probably cost more than Claude does. Check their per-minute rates before setting a subscription price.
 
 ## 16. Test plan
 
@@ -796,6 +859,7 @@ Record the whole demo as a video too. Devpost requires one for sponsors judging 
 - **"Aren't you replacing family with an AI?"** The opposite. It nudges family to call, and it never pretends to be human.
 - **"How is it this fast with that much memory?"** The memory is a cached prompt prefix, warmed while the greeting plays, and every turn streams.
 - **"What if it remembers wrong?"** Every fact carries the caller's exact words, and when unsure the agent asks instead of asserting. Corrections take effect immediately.
+- **"What does a call cost to run?"** About 3 cents of Claude per call at list prices, using Claude Haiku 5.5 with cached memory (§15), plus speech and phone minutes.
 
 ## 18. Prize map
 
@@ -832,8 +896,8 @@ One project, entered for about a dozen prizes, with each sponsor doing a real jo
 | Phase | When | Deliverables | Checkpoint |
 |---|---|---|---|
 | **0. Foundations** | Fri 21:00 – Sat 01:00 | Accounts and keys (Twilio, Cartesia, Anthropic, Apify, Visa, Convex); repo scaffold; Convex schema; seeded household and memory; the agent answers the phone; Figma wireframes; sponsor questions settled (§21) | A call rings through to our agent |
-| **1. Core loop** | Sat 01:00 – 12:00 | F1 with cached search; `place_order` with limits and sandbox or mock payment; memory read path with caching and pre-warm; templated opening; turn logging; dashboard Live calls and Orders | **Sat 09:00:** latency baseline and model decision (§12.4). **Sat 12:00:** one order works start to finish, with the memory opener |
-| **2. Safety and memory** | Sat 12:00 – 18:00 | Scam guard (hard rule, classifier, ladder, alerts); approvals by SMS and dashboard; memory writer and forget; companion behaviors and connect nudge; wellbeing protocol | Every P0 feature exists |
+| **1. Core loop** | Sat 01:00 – 12:00 | F1 with cached search; `place_order` with limits and sandbox or mock payment; memory read path with caching and pre-warm; templated opening; turn logging; dashboard Live calls and Orders | **Sat 09:00:** latency and cost baseline on Haiku 5.5 (§12.5). **Sat 12:00:** one order works start to finish, with the memory opener |
+| **2. Safety and memory** | Sat 12:00 – 18:00 | Scam guard (hard rule, classifier, ladder, alerts); approvals by SMS and dashboard; memory writer and forget; companion behaviors and connect nudge; wellbeing protocol | **Sat 18:00:** every P0 feature exists; test sets run on Haiku, and the escalation rule (§12.4) is applied per role |
 | **3. Speed and polish** | Sat 18:00 – 22:00 | Latency tuned to targets; Memory and latency panels; Figma polish; first pass of the full test matrix; hosted deployment | **Sat 22:00:** the full demo works (Calls 1–3) |
 | **4. Harden** | Sat 22:00 – Sun 06:00 | Fix failures; 10 of 10 rehearsals; stretch goals only if everything is green; record the video | **Sun 06:00:** video recorded |
 | **5. Submit** | Sun 06:00 – 08:30 | Devpost write-up, screenshots, repo cleanup | **Sun 08:30:** submitted, ahead of the 09:00 deadline |
@@ -851,7 +915,11 @@ One project, entered for about a dozen prizes, with each sponsor doing a real jo
 | Visa sandbox access arrives late | Medium | High | Nessie or a mock with the same limits, built in parallel | B |
 | Cartesia inbound calls fail on a number imported from Twilio | Low | High | Verify Friday night; fall back to a Cartesia-provided number; backup video | A |
 | The Line SDK's Claude integration doesn't expose `cache_control` or the `max_tokens: 0` pre-warm | Medium | High | Call Claude through the Anthropic Python SDK from our own agent logic | A |
-| Latency misses the target with long memory | Medium | High | Shrink the memory budget (summaries instead of full transcripts), apply the model rule in §12.4, fillers, templated openers | A |
+| Latency misses the target with long memory | Medium | High | Lower the memory cap (summaries instead of full transcripts), fillers, templated openers | A |
+| Haiku 5.5 handles nuanced turns (scam framing, companionship, memory references) less well than larger models | Medium | Medium | Rules, limits, memory validation and safety lines are in code or templated; test sets S, B, C and M; raise effort first, then upgrade only the failing role to Sonnet 5.5 (§12.4) | D |
+| Haiku 5.5's safety classifiers refuse a turn mid-call (there is no server-side fallback) | Low | Medium | Templated recovery and safety lines (VO-8, WB-5); include refusal cases in W1 and W2 | A |
+| Thinking at `low` effort still pushes time to first token past budget | Medium | Medium | Measure at the Sat 09:00 baseline; tighten the prompt toward direct answers; fillers on tool turns | A |
+| A long call pushes the prompt past 100K tokens (the 5× price tier) | Low | Low | 60K memory cap; log input tokens per request; even the higher tier costs cents | A |
 | End-of-turn detection cuts off slow speakers | Medium | High | Tune on real recordings and track the cut-off metric; favor patience over speed | A |
 | Walmart blocks scraping | High | Medium | Cached search results for the demo | B |
 | Memory invents or garbles facts | Medium | High | Evidence-backed facts with validation in code; MEM-7; test M4 | D |
@@ -899,4 +967,4 @@ Settle these tonight or by the time listed, because each one can change the buil
 - [Visa opens one integration for AI agent payments](https://techinformed.com/visa-opens-one-integration-for-ai-agent-payments/) (TechInformed)
 - [Walmart Search Scraper](https://apify.com/xtracto/walmart-search-scraper.md) and [Walmart Scraper](https://apify.com/nexgendata/walmart-scraper) (Apify)
 - [Cartesia Twilio integration](https://docs.cartesia.ai/line/integrations/telephony/twilio/integration.md), [Cartesia Line SDK overview](https://docs.cartesia.ai/line/sdk/overview.md) and [cartesia-line on PyPI](https://pypi.org/project/cartesia-line/0.2.19/)
-- [Claude models overview](https://platform.claude.com/docs/en/about-claude/models/overview.md) and [Prompt caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching.md) (Anthropic)
+- [Claude models overview](https://platform.claude.com/docs/en/about-claude/models/overview.md), [Claude Haiku 5.5 overview](https://platform.claude.com/docs/en/models/haiku-5-5/overview), [Haiku 5.5 migration guide](https://platform.claude.com/docs/en/models/haiku-5-5/migration-guide), [Pricing](https://platform.claude.com/docs/en/about-claude/pricing.md) and [Prompt caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching.md) (Anthropic)
